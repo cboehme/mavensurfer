@@ -18,29 +18,37 @@ import java.io.IOException;
 
 public class PomParser {
 
-    private final XPathExpression groupIdPath;
-    private final XPathExpression artifactIdPath;
-    private final XPathExpression packagingPath;
+    private final XPath xPath;
 
     private Document pomDocument;
 
     public PomParser() throws XPathExpressionException {
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        groupIdPath = xpath.compile("//project/groupId/text()");
-        artifactIdPath = xpath.compile("//project/artifactId/text()");
-        packagingPath = xpath.compile("//project/packaging/text()");
+        xPath = XPathFactory.newInstance().newXPath();
     }
 
     public MavenProject parsePom(String pomFile, byte[] pom)
             throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
 
         prepareDomOfPom(pom);
-        MavenCoordinates coordinates = MavenCoordinates
-                .withArtifactId(extractFromPom(artifactIdPath))
-                .withGroupId(extractFromPom(groupIdPath))
-                .withPackaging(extractFromPom(packagingPath))
+
+        final MavenParentReference parent;
+        if (has("//project/parent")) {
+            parent = MavenParentReference.build()
+                .withGroupId("//project/parent/groupId/text()")
+                .withArtifactId("//project/parent/artifactId/text()")
+                .withVersion("//project/parent/version/text()")
+                .withRelativePath("//project/parent/relativePath/text()")
                 .create();
-        return new MavenProject(pomFile, coordinates);
+        } else {
+            parent = null;
+        }
+        final MavenCoordinates coordinates = MavenCoordinates
+                .withArtifactId(get("//project/artifactId/text()"))
+                .withGroupId(get("//project/groupId/text()"))
+                .withPackaging(get("//project/packaging/text()"))
+                .create();
+
+        return new MavenProject(pomFile, parent, coordinates);
     }
 
     private void prepareDomOfPom(byte[] pom) throws ParserConfigurationException, IOException, SAXException {
@@ -52,13 +60,22 @@ public class PomParser {
         pomDocument = builder.parse(inputSource);
     }
 
-    private String extractFromPom(XPathExpression itemPath) throws XPathExpressionException {
-        NodeList nodes = (NodeList) itemPath.evaluate(pomDocument, XPathConstants.NODESET);
-        StringBuilder text = new StringBuilder();
+    private String get(String path) throws XPathExpressionException {
+        final XPathExpression compiledPath = xPath.compile(path);
+        final NodeList nodes = (NodeList) compiledPath.evaluate(
+            pomDocument, XPathConstants.NODESET);
+        final StringBuilder text = new StringBuilder();
         for (int i = 0; i < nodes.getLength(); i++) {
             text.append(nodes.item(i).getNodeValue());
         }
         return text.toString();
+    }
+
+    private boolean has(String path) throws XPathExpressionException {
+        final XPathExpression compiledPath = xPath.compile(path);
+        final NodeList nodes = (NodeList) compiledPath.evaluate(
+            pomDocument, XPathConstants.NODESET);
+        return nodes.getLength() > 0;
     }
 
 }
