@@ -34,10 +34,10 @@ public class PomParser {
         final MavenParentReference parent;
         if (has("//project/parent")) {
             parent = MavenParentReference.build()
-                .withGroupId("//project/parent/groupId/text()")
-                .withArtifactId("//project/parent/artifactId/text()")
-                .withVersion("//project/parent/version/text()")
-                .withRelativePath("//project/parent/relativePath/text()")
+                .withGroupId(get("//project/parent/groupId/text()"))
+                .withArtifactId(get("//project/parent/artifactId/text()"))
+                .withVersion(get("//project/parent/version/text()"))
+                .withRelativePath(get("//project/parent/relativePath/text()"))
                 .create();
         } else {
             parent = null;
