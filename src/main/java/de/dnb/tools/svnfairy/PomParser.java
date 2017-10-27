@@ -45,6 +45,7 @@ public class PomParser {
         final MavenCoordinates coordinates = MavenCoordinates
                 .withArtifactId(get("//project/artifactId/text()"))
                 .withGroupId(get("//project/groupId/text()"))
+                .withVersion(get("//project/version/text()"))
                 .withPackaging(get("//project/packaging/text()"))
                 .create();
 

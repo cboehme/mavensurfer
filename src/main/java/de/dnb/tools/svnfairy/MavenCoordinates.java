@@ -5,19 +5,16 @@ public class MavenCoordinates {
     private final String groupId;
     private final String artifactId;
     private final String version;
-    private final String classifier;
     private final String packaging;
 
     private MavenCoordinates(String groupId,
                              String artifactId,
                              String version,
-                             String classifier,
                              String packaging) {
 
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
-        this.classifier = classifier;
         this.packaging = packaging;
     }
 
@@ -37,10 +34,6 @@ public class MavenCoordinates {
         return version;
     }
 
-    public String getClassifier() {
-        return classifier;
-    }
-
     public String getPackaging() {
         return packaging;
     }
@@ -51,7 +44,6 @@ public class MavenCoordinates {
 
         private String groupId = "";
         private String version = "";
-        private String classifier = "";
         private String packaging = "";
 
         private Builder(String artifactId) {
@@ -68,18 +60,13 @@ public class MavenCoordinates {
             return this;
         }
 
-        public Builder withClassifier(String classifier) {
-            this.classifier = classifier;
-            return this;
-        }
-
         public Builder withPackaging(String packaging) {
             this.packaging = packaging;
             return this;
         }
 
         public MavenCoordinates create() {
-            return new MavenCoordinates(groupId, artifactId, version, classifier, packaging);
+            return new MavenCoordinates(groupId, artifactId, version, packaging);
         }
 
     }
