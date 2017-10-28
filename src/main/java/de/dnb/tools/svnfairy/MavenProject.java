@@ -1,5 +1,7 @@
 package de.dnb.tools.svnfairy;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class MavenProject {
@@ -12,6 +14,8 @@ public class MavenProject {
     private ArtifactId artifactId;
     private Version version;
     private Packaging packaging;
+
+    private List<MavenDependency> dependencies;
 
     public MavenProject(String file) {
         this.file = file;
@@ -59,6 +63,14 @@ public class MavenProject {
 
     public void setPackaging(Packaging packaging) {
         this.packaging = packaging;
+    }
+
+    public List<MavenDependency> getDependencies() {
+        return Collections.unmodifiableList(dependencies);
+    }
+
+    public void addDependency(MavenDependency dependency) {
+        dependencies.add(dependency);
     }
 
 }
