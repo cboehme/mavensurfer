@@ -41,9 +41,9 @@ class PomParserTest extends Specification {
         then:
         project.parent.isPresent()
         with(project.parent.get()) {
-            groupId == "de.dnb.tools"
-            artifactId == "test"
-            version == "1.0"
+            groupId.equals(GroupId.of("de.dnb.tools"))
+            artifactId.equals(ArtifactId.of("test"))
+            version.equals(Version.of("1.0"))
         }
     }
 }

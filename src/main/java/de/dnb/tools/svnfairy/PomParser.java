@@ -31,25 +31,24 @@ public class PomParser {
 
         prepareDomOfPom(pom);
 
-        final MavenParentReference parent;
+        final MavenParent parent;
         if (has("//project/parent")) {
-            parent = MavenParentReference.build()
-                .withGroupId(get("//project/parent/groupId/text()"))
-                .withArtifactId(get("//project/parent/artifactId/text()"))
-                .withVersion(get("//project/parent/version/text()"))
-                .withRelativePath(get("//project/parent/relativePath/text()"))
-                .create();
+            parent = MavenParent.of(
+                    GroupId.of(get("//project/parent/groupId/text()")),
+                    ArtifactId.of(get("//project/parent/artifactId/text()")),
+                    Version.of(get("//project/parent/version/text()")));
         } else {
             parent = null;
         }
-        final MavenCoordinates coordinates = MavenCoordinates
-                .withArtifactId(get("//project/artifactId/text()"))
-                .withGroupId(get("//project/groupId/text()"))
-                .withVersion(get("//project/version/text()"))
-                .withPackaging(get("//project/packaging/text()"))
-                .create();
 
-        return new MavenProject(pomFile, parent, coordinates);
+        final MavenProject project = new MavenProject(pomFile);
+        project.setParent(parent);
+        project.setGroupId(GroupId.of(get("//project/groupId/text()")));
+        project.setArtifactId(ArtifactId.of(get("//project/artifactId/text()")));
+        project.setVersion(Version.of(get("//project/version/text()")));
+        project.setPackaging(Packaging.of(get("//project/packaging/text()")));
+
+        return project;
     }
 
     private void prepareDomOfPom(byte[] pom) throws ParserConfigurationException, IOException, SAXException {

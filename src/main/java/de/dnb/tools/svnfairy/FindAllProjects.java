@@ -84,11 +84,11 @@ public class FindAllProjects {
             for (MavenProject project : mavenProjects) {
                 projectsList.append(project.getFile());
                 projectsList.append(", ");
-                projectsList.append(project.getCoordinates().getGroupId());
+                projectsList.append(String.valueOf(project.getGroupId()));
                 projectsList.append(", ");
-                projectsList.append(project.getCoordinates().getArtifactId());
+                projectsList.append(String.valueOf(project.getArtifactId()));
                 projectsList.append(", ");
-                projectsList.append(project.getCoordinates().getPackaging());
+                projectsList.append(String.valueOf(project.getPackaging()));
                 projectsList.append('\n');
             }
         } catch (IOException e) {

@@ -1,36 +1,64 @@
 package de.dnb.tools.svnfairy;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class MavenProject {
 
     private final String file;
-    private final MavenParentReference parent;
-    private final MavenCoordinates coordinates;
 
-    public MavenProject(String file,
-                        MavenParentReference parent,
-                        MavenCoordinates coordinates) {
+    private MavenParent parent;
 
-        Objects.requireNonNull(file);
-        Objects.requireNonNull(coordinates);
+    private GroupId groupId;
+    private ArtifactId artifactId;
+    private Version version;
+    private Packaging packaging;
 
+    public MavenProject(String file) {
         this.file = file;
-        this.parent = parent;
-        this.coordinates = coordinates;
     }
 
     public String getFile() {
         return file;
     }
 
-    public Optional<MavenParentReference> getParent() {
+    public Optional<MavenParent> getParent() {
         return Optional.ofNullable(parent);
     }
 
-    public MavenCoordinates getCoordinates() {
-        return coordinates;
+    public void setParent(MavenParent parent) {
+        this.parent = parent;
+    }
+
+    public GroupId getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(GroupId groupId) {
+        this.groupId = groupId;
+    }
+
+    public ArtifactId getArtifactId() {
+        return artifactId;
+    }
+
+    public void setArtifactId(ArtifactId artifactId) {
+        this.artifactId = artifactId;
+    }
+
+    public Version getVersion() {
+        return version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
+    }
+
+    public Packaging getPackaging() {
+        return packaging;
+    }
+
+    public void setPackaging(Packaging packaging) {
+        this.packaging = packaging;
     }
 
 }
