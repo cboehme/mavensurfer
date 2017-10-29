@@ -26,10 +26,10 @@ public class PomParser {
         xPath = XPathFactory.newInstance().newXPath();
     }
 
-    public MavenProject parsePom(String pomFile, byte[] pom)
+    public MavenProject parsePom(PomFile pomFile)
             throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
 
-        prepareDomOfPom(pom);
+        prepareDomOfPom(pomFile.getContents());
 
         final MavenParent parent;
         if (has("//project/parent")) {
@@ -41,7 +41,7 @@ public class PomParser {
             parent = null;
         }
 
-        final MavenProject project = new MavenProject(pomFile);
+        final MavenProject project = new MavenProject(pomFile.getName());
         project.setParent(parent);
         project.setGroupId(GroupId.of(get("//project/groupId/text()")));
         project.setArtifactId(ArtifactId.of(get("//project/artifactId/text()")));

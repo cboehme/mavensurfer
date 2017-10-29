@@ -51,9 +51,9 @@ public class FindAllProjects {
             throws SAXException, ParserConfigurationException, XPathExpressionException, IOException {
         Collection<MavenProject> mavenProjects = new ArrayList<>();
         PomCollector pomCollector = new SubversionCollector(repositoryBaseUrl, "");
-        for (PomFile pom : pomCollector.getPoms()) {
-            log.info("Processing pom: " + pom.getName());
-            MavenProject project = pomParser.parsePom(pom.getName(), pom.getContents());
+        for (PomFile pomFile : pomCollector.getPoms()) {
+            log.info("Processing pom: " + pomFile.getName());
+            MavenProject project = pomParser.parsePom(pomFile);
             mavenProjects.add(project);
         }
 

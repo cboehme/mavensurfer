@@ -18,7 +18,7 @@ class PomParserTest extends Specification {
         </project>""".getBytes(StandardCharsets.UTF_8)
 
         when:
-        project = pomParser.parsePom("", xml)
+        project = pomParser.parsePom(new InMemoryPomFile("", xml))
 
         then:
         !project.parent.isPresent()
@@ -36,7 +36,7 @@ class PomParserTest extends Specification {
             </project>""".getBytes(StandardCharsets.UTF_8)
 
         when:
-        project = pomParser.parsePom("", xml)
+        project = pomParser.parsePom(new InMemoryPomFile("", xml))
 
         then:
         project.parent.isPresent()
