@@ -22,7 +22,7 @@ public class PomParser {
 
     private Document pomDocument;
 
-    public PomParser() throws XPathExpressionException {
+    public PomParser() {
         xPath = XPathFactory.newInstance().newXPath();
     }
 
