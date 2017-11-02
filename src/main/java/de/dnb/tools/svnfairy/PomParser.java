@@ -1,6 +1,9 @@
 package de.dnb.tools.svnfairy;
 
+import static javax.xml.xpath.XPathConstants.NODESET;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -21,6 +24,7 @@ public class PomParser {
     private final XPath xPath;
 
     private Document pomDocument;
+    private MavenProject project;
 
     public PomParser() {
         xPath = XPathFactory.newInstance().newXPath();
@@ -41,14 +45,39 @@ public class PomParser {
             parent = null;
         }
 
-        final MavenProject project = new MavenProject(pomFile.getName());
+        project = new MavenProject(pomFile.getName());
         project.setParent(parent);
         project.setGroupId(GroupId.of(get("//project/groupId/text()")));
         project.setArtifactId(ArtifactId.of(get("//project/artifactId/text()")));
         project.setVersion(Version.of(get("//project/version/text()")));
         project.setPackaging(Packaging.of(get("//project/packaging/text()")));
 
+        addDependencies();
+
         return project;
+    }
+
+    private void addDependencies() throws XPathExpressionException {
+        NodeList dependencyElements = getNodes("//project/dependencies/*");
+        for (int i = 0; i < dependencyElements.getLength(); i++) {
+            Node dependencyElement = dependencyElements.item(i);
+            MavenDependency dependency = new MavenDependency();
+            dependency.setGroupId(GroupId.of(
+                    get(dependencyElement, "//groupId/text()")));
+            dependency.setArtifactId(ArtifactId.of(
+                    get(dependencyElement, "//artifactId/text()")));
+            dependency.setVersion(VersionRequirement.of(
+                    get(dependencyElement, "//version/text()")));
+            dependency.setClassifier(Classifier.of(
+                    get(dependencyElement, "//classifier/text()")));
+            dependency.setType(Type.of(
+                    get(dependencyElement, "//type/text()")));
+            dependency.setScope(Scope.valueOf(
+                    get(dependencyElement, "//scope/text()").toUpperCase()));
+            dependency.setOptional(Boolean.valueOf(
+                    get(dependencyElement, "//optional/text()")));
+            project.addDependency(dependency);
+        }
     }
 
     private void prepareDomOfPom(byte[] pom) throws ParserConfigurationException, IOException, SAXException {
@@ -60,10 +89,10 @@ public class PomParser {
         pomDocument = builder.parse(inputSource);
     }
 
-    private String get(String path) throws XPathExpressionException {
+    private String get(Node contextNode, String path) throws XPathExpressionException {
         final XPathExpression compiledPath = xPath.compile(path);
         final NodeList nodes = (NodeList) compiledPath.evaluate(
-            pomDocument, XPathConstants.NODESET);
+                contextNode, NODESET);
         final StringBuilder text = new StringBuilder();
         for (int i = 0; i < nodes.getLength(); i++) {
             text.append(nodes.item(i).getNodeValue());
@@ -71,11 +100,20 @@ public class PomParser {
         return text.toString();
     }
 
+    private String get(String path) throws XPathExpressionException {
+        return get(pomDocument, path);
+    }
+
     private boolean has(String path) throws XPathExpressionException {
         final XPathExpression compiledPath = xPath.compile(path);
         final NodeList nodes = (NodeList) compiledPath.evaluate(
-            pomDocument, XPathConstants.NODESET);
+            pomDocument, NODESET);
         return nodes.getLength() > 0;
+    }
+
+    private NodeList getNodes(String path) throws XPathExpressionException {
+        final XPathExpression compiledPath = xPath.compile(path);
+        return (NodeList) compiledPath.evaluate(pomDocument, NODESET);
     }
 
 }

@@ -1,5 +1,6 @@
 package de.dnb.tools.svnfairy;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public class MavenProject {
     private Version version;
     private Packaging packaging;
 
-    private List<MavenDependency> dependencies;
+    private List<MavenDependency> dependencies = new ArrayList<>();
 
     public MavenProject(String file) {
         this.file = file;
