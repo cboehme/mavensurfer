@@ -76,7 +76,7 @@ class PomParserTest extends Specification {
             classifier.equals(Classifier.of("classy"))
             type.equals(Type.of("jar"))
             scope == Scope.COMPILE
-            optional == false
+            !optional
         }
     }
 
