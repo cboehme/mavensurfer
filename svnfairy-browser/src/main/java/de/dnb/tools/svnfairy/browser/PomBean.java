@@ -1,11 +1,21 @@
 package de.dnb.tools.svnfairy.browser;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+
+import de.dnb.tools.svnfairy.ArtifactId;
+import de.dnb.tools.svnfairy.GroupId;
+import de.dnb.tools.svnfairy.MavenProject;
+import de.dnb.tools.svnfairy.Version;
+import de.dnb.tools.svnfairy.browser.db.MavenProjectRepository;
 
 @Named("pom")
 @RequestScoped
 public class PomBean {
+
+    @Inject
+    private MavenProjectRepository repository;
 
     private String groupId;
 
@@ -38,7 +48,9 @@ public class PomBean {
     }
 
     public String getGav() {
-        return groupId + ":" + artifactId + ":" + version;
+        MavenProject project = repository.getByGav(GroupId.of(groupId),
+                ArtifactId.of(artifactId), Version.of(version));
+        return project.getFile();
     }
 
 }
