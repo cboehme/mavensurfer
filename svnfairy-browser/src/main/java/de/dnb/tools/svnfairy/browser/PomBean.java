@@ -1,5 +1,8 @@
 package de.dnb.tools.svnfairy.browser;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,9 +21,7 @@ public class PomBean {
     private MavenProjectRepository repository;
 
     private String groupId;
-
     private String artifactId;
-
     private String version;
 
     public String getGroupId() {
@@ -47,10 +48,22 @@ public class PomBean {
         this.version = version;
     }
 
+    public String getName() {
+        return artifactId;
+    }
+
     public String getGav() {
+        return groupId + ":" + artifactId + ":" + version;
+    }
+
+    public String getFile() {
         MavenProject project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version));
         return project.getFile();
+    }
+
+    public List<PomBean> getDependents() {
+        return Collections.emptyList();
     }
 
 }
