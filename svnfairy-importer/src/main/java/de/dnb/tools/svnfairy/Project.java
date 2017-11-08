@@ -1,8 +1,11 @@
 package de.dnb.tools.svnfairy;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Project {
@@ -34,8 +37,8 @@ public class Project {
         this.parent = parent;
     }
 
-    public GroupId getGroupId() {
-        return groupId;
+    public Optional<GroupId> getGroupId() {
+        return Optional.ofNullable(groupId);
     }
 
     public void setGroupId(GroupId groupId) {
@@ -47,15 +50,21 @@ public class Project {
     }
 
     public void setArtifactId(ArtifactId artifactId) {
+        requireNonNull(artifactId);
+
         this.artifactId = artifactId;
     }
 
-    public Version getVersion() {
-        return version;
+    public Optional<Version> getVersion() {
+        return Optional.ofNullable(version);
     }
 
     public void setVersion(Version version) {
         this.version = version;
+    }
+
+    public boolean hasIncompleteCoordinates() {
+        return groupId == null || version == null;
     }
 
     public Gav getGav() {

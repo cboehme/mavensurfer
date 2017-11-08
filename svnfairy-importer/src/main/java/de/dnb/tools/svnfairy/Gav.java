@@ -19,7 +19,6 @@ final public class Gav {
     public static Gav of(GroupId groupId,
                          ArtifactId artifactId,
                          Version version) {
-
         requireNonNull(groupId);
         requireNonNull(artifactId);
         requireNonNull(version);
