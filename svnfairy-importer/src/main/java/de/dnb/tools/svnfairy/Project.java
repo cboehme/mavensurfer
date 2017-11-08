@@ -5,20 +5,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class MavenProject {
+public class Project {
 
     private final String file;
 
-    private MavenParent parent;
+    private Parent parent;
 
     private GroupId groupId;
     private ArtifactId artifactId;
     private Version version;
     private Packaging packaging;
 
-    private List<MavenDependency> dependencies = new ArrayList<>();
+    private List<Dependency> dependencies = new ArrayList<>();
 
-    public MavenProject(String file) {
+    public Project(String file) {
         this.file = file;
     }
 
@@ -26,11 +26,11 @@ public class MavenProject {
         return file;
     }
 
-    public Optional<MavenParent> getParent() {
+    public Optional<Parent> getParent() {
         return Optional.ofNullable(parent);
     }
 
-    public void setParent(MavenParent parent) {
+    public void setParent(Parent parent) {
         this.parent = parent;
     }
 
@@ -66,11 +66,11 @@ public class MavenProject {
         this.packaging = packaging;
     }
 
-    public List<MavenDependency> getDependencies() {
+    public List<Dependency> getDependencies() {
         return Collections.unmodifiableList(dependencies);
     }
 
-    public void addDependency(MavenDependency dependency) {
+    public void addDependency(Dependency dependency) {
         dependencies.add(dependency);
     }
 

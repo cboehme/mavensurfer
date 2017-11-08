@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import de.dnb.tools.svnfairy.ArtifactId;
 import de.dnb.tools.svnfairy.GroupId;
-import de.dnb.tools.svnfairy.MavenProject;
+import de.dnb.tools.svnfairy.Project;
 import de.dnb.tools.svnfairy.Version;
 import de.dnb.tools.svnfairy.browser.db.MavenProjectRepository;
 
@@ -57,7 +57,7 @@ public class PomBean {
     }
 
     public String getFile() {
-        MavenProject project = repository.getByGav(GroupId.of(groupId),
+        Project project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version));
         return project.getFile();
     }

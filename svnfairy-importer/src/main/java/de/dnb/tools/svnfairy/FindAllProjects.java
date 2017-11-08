@@ -39,18 +39,18 @@ public class FindAllProjects {
 
     private void run()
             throws SAXException, ParserConfigurationException, XPathExpressionException, IOException {
-        Collection<MavenProject> mavenProjects = new ArrayList<>();
+        Collection<Project> projects = new ArrayList<>();
         PomCollector pomCollector = new SubversionCollector(repositoryBaseUrl, "");
         for (PomFile pomFile : pomCollector.getPoms()) {
             log.info("Processing pom: " + pomFile.getName());
-            MavenProject project = pomParser.parsePom(pomFile);
-            mavenProjects.add(project);
+            Project project = pomParser.parsePom(pomFile);
+            projects.add(project);
         }
 
         try (
                 FileWriter projectsList = new FileWriter("projects.txt");
         ) {
-            for (MavenProject project : mavenProjects) {
+            for (Project project : projects) {
                 projectsList.append(project.getFile());
                 projectsList.append(", ");
                 projectsList.append(String.valueOf(project.getGroupId()));

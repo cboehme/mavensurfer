@@ -2,26 +2,26 @@ package de.dnb.tools.svnfairy;
 
 import java.util.Objects;
 
-public final class MavenParent {
+public final class Parent {
 
     private final GroupId groupId;
     private final ArtifactId artifactId;
     private final Version version;
 
-    private MavenParent(GroupId groupId,
-                        ArtifactId artifactId,
-                        Version version) {
+    private Parent(GroupId groupId,
+                   ArtifactId artifactId,
+                   Version version) {
 
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
     }
 
-    public static MavenParent of(GroupId groupdId,
-                                 ArtifactId artifactId,
-                                 Version version) {
+    public static Parent of(GroupId groupdId,
+                            ArtifactId artifactId,
+                            Version version) {
 
-        return new MavenParent(groupdId, artifactId, version);
+        return new Parent(groupdId, artifactId, version);
     }
 
     public GroupId getGroupId() {

@@ -25,20 +25,20 @@ public class PomParser {
     private final XPath xPath;
 
     private Document pomDocument;
-    private MavenProject project;
+    private Project project;
 
     public PomParser() {
         xPath = XPathFactory.newInstance().newXPath();
     }
 
-    public MavenProject parsePom(PomFile pomFile)
+    public Project parsePom(PomFile pomFile)
             throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
 
         prepareDomOfPom(pomFile.getContents());
 
-        final MavenParent parent;
+        final Parent parent;
         if (has("//project/parent")) {
-            parent = MavenParent.of(
+            parent = Parent.of(
                     GroupId.of(get("//project/parent/groupId/text()")),
                     ArtifactId.of(get("//project/parent/artifactId/text()")),
                     Version.of(get("//project/parent/version/text()")));
@@ -46,7 +46,7 @@ public class PomParser {
             parent = null;
         }
 
-        project = new MavenProject(pomFile.getName());
+        project = new Project(pomFile.getName());
         project.setParent(parent);
         project.setGroupId(GroupId.of(get("//project/groupId/text()")));
         project.setArtifactId(ArtifactId.of(get("//project/artifactId/text()")));
@@ -62,7 +62,7 @@ public class PomParser {
         NodeList dependencyElements = getNodes("//project/dependencies/*");
         for (int i = 0; i < dependencyElements.getLength(); i++) {
             Node dependencyElement = dependencyElements.item(i);
-            MavenDependency dependency = new MavenDependency();
+            Dependency dependency = new Dependency();
             dependency.setGroupId(GroupId.of(
                     get(dependencyElement, "//groupId/text()")));
             dependency.setArtifactId(ArtifactId.of(

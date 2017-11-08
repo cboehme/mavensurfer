@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 
 import de.dnb.tools.svnfairy.ArtifactId;
 import de.dnb.tools.svnfairy.GroupId;
-import de.dnb.tools.svnfairy.MavenProject;
+import de.dnb.tools.svnfairy.Project;
 import de.dnb.tools.svnfairy.Packaging;
 import de.dnb.tools.svnfairy.Version;
 
@@ -19,9 +19,9 @@ public class MavenProjectRepository {
     private EntityManager entityManager;
 
     @Transactional
-    public MavenProject getByGav(GroupId groupId,
-                                 ArtifactId artifactId,
-                                 Version version) {
+    public Project getByGav(GroupId groupId,
+                            ArtifactId artifactId,
+                            Version version) {
 
         PomBean pomBean = findPomBeanByGav(groupId, artifactId, version);
         return mapPomBeanToMavenProject(pomBean);
@@ -39,9 +39,9 @@ public class MavenProjectRepository {
         return findByGav.getSingleResult();
     }
 
-    private MavenProject mapPomBeanToMavenProject(PomBean pomBean) {
+    private Project mapPomBeanToMavenProject(PomBean pomBean) {
 
-        MavenProject project = new MavenProject(pomBean.file);
+        Project project = new Project(pomBean.file);
         project.setGroupId(GroupId.of(pomBean.groupId));
         project.setArtifactId(ArtifactId.of(pomBean.artifactId));
         project.setVersion(Version.of(pomBean.version));
@@ -50,12 +50,12 @@ public class MavenProjectRepository {
     }
 
     @Transactional
-    public void create(MavenProject project) {
+    public void create(Project project) {
         PomBean pomBean = mapMavenProjectToPomBean(project);
         entityManager.persist(pomBean);
     }
 
-    private PomBean mapMavenProjectToPomBean(MavenProject project) {
+    private PomBean mapMavenProjectToPomBean(Project project) {
 
         PomBean pomBean = new PomBean();
         pomBean.file = project.getFile();

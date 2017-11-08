@@ -1,6 +1,6 @@
 package de.dnb.tools.svnfairy;
 
-public class MavenDependency {
+public class Dependency {
 
     private GroupId groupId;
     private ArtifactId artifactId;
