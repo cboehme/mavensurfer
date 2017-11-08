@@ -1,14 +1,15 @@
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.collectors;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public final class LocalPomFile implements PomFile {
+import de.dnb.tools.svnfairy.Util;
+
+final class LocalPomFile implements PomFile {
 
     private final Path path;
 

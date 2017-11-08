@@ -1,5 +1,6 @@
 package de.dnb.tools.svnfairy
 
+import de.dnb.tools.svnfairy.collectors.InMemoryPomFile
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets

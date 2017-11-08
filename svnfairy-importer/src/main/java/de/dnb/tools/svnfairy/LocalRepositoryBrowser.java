@@ -5,6 +5,9 @@ import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.collectors.LocalRepositoryCollector;
+import de.dnb.tools.svnfairy.collectors.PomCollector;
+
 public class LocalRepositoryBrowser {
 
     private static final Logger log = LoggerFactory.getLogger(

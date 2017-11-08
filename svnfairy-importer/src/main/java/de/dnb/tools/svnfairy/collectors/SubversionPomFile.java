@@ -1,4 +1,4 @@
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.collectors;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.io.UncheckedIOException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
-public class SubversionPomFile implements PomFile {
+class SubversionPomFile implements PomFile {
 
     private final SVNRepository repository;
     private final String path;

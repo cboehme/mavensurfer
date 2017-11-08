@@ -1,4 +1,4 @@
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.collectors;
 
 public interface PomCollector {
 

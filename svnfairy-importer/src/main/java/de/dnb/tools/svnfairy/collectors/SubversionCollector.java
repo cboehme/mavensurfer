@@ -1,9 +1,8 @@
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

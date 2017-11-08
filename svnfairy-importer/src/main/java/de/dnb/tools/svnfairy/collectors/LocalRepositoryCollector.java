@@ -1,11 +1,9 @@
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.collectors;
 
-import static java.util.stream.Collectors.maxBy;
 import static java.util.stream.Collectors.toList;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -13,7 +11,7 @@ public class LocalRepositoryCollector implements PomCollector {
 
     private final Path repositoryDir;
 
-    LocalRepositoryCollector(Path repositoryDir) {
+    public LocalRepositoryCollector(Path repositoryDir) {
         this.repositoryDir = repositoryDir;
     }
 

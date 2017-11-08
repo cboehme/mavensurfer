@@ -2,29 +2,19 @@ package de.dnb.tools.svnfairy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tmatesoft.svn.core.SVNDirEntry;
-import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNNodeKind;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
-import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
-import org.tmatesoft.svn.core.wc.SVNWCUtil;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.ByteArrayOutputStream;
+
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toSet;
+import de.dnb.tools.svnfairy.collectors.PomCollector;
+import de.dnb.tools.svnfairy.collectors.PomFile;
+import de.dnb.tools.svnfairy.collectors.SubversionCollector;
 
 /**
  * Searches the repository for Maven POMs and outputs group id, artifact id and version for each project found.
