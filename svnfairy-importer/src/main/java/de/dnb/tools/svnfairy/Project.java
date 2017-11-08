@@ -58,6 +58,10 @@ public class Project {
         this.version = version;
     }
 
+    public Gav getGav() {
+        return Gav.of(groupId, artifactId, version);
+    }
+
     public Packaging getPackaging() {
         return packaging;
     }
