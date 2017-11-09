@@ -3,13 +3,20 @@ package de.dnb.tools.svnfairy;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.dnb.tools.svnfairy.model.Gav;
 import de.dnb.tools.svnfairy.model.Parent;
 import de.dnb.tools.svnfairy.model.Project;
 
 public class ParentResolvingService {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(ParentResolvingService.class);
 
     public void resolveProjects(Collection<Project> projects) {
 
@@ -20,7 +27,8 @@ public class ParentResolvingService {
             final int initialCount = unresolvedProjects.size();
             tryResolveProjects(projects, unresolvedProjects);
             if (initialCount == unresolvedProjects.size()) {
-                // TODO: Add error handling
+                log.warn("Could not resolve all projects:");
+                unresolvedProjects.forEach(p -> log.info(p.toString()));
                 return;
             }
         }
@@ -29,10 +37,14 @@ public class ParentResolvingService {
     private void tryResolveProjects(Collection<Project> projects,
                                     Collection<Project> unresolvedProjects) {
 
-        for (Project project : unresolvedProjects) {
+        Iterator<Project> iter = unresolvedProjects.iterator();
+        while (iter.hasNext()) {
+            Project project = iter.next();
             if (!project.getParent().isPresent()) {
-                // TODO: Add error handling
-                unresolvedProjects.remove(project);
+                log.warn("Project has incomplete coordinates but defines no parent: {}",
+                        project);
+                projects.remove(project);
+                iter.remove();
             }
             Parent parent = project.getParent().get();
             Gav gav = Gav.of(parent.getGroupId(), parent.getArtifactId(),
@@ -45,7 +57,7 @@ public class ParentResolvingService {
                 if (!project.getVersion().isPresent()) {
                     project.setVersion(parentProject.get().getVersion().get());
                 }
-                unresolvedProjects.remove(project);
+                iter.remove();
             }
         }
     }
@@ -62,7 +74,7 @@ public class ParentResolvingService {
                                         Gav gav) {
 
         return projects.stream()
-                .filter(p -> gav.equals(p.getGav()))
+                .filter(p -> gav.equals(p.getGav().orElse(null)))
                 .findFirst();
     }
 

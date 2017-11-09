@@ -81,8 +81,11 @@ public class Project {
         return groupId == null || version == null;
     }
 
-    public Gav getGav() {
-        return Gav.of(groupId, artifactId, version);
+    public Optional<Gav> getGav() {
+        if (groupId == null || version == null) {
+            return Optional.empty();
+        }
+        return Optional.of(Gav.of(groupId, artifactId, version));
     }
 
     public Packaging getPackaging() {
@@ -99,6 +102,11 @@ public class Project {
 
     public void addDependency(Dependency dependency) {
         dependencies.add(dependency);
+    }
+
+    @Override
+    public String toString() {
+        return groupId + ":" + artifactId + ":" + version;
     }
 
 }

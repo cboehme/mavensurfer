@@ -43,29 +43,29 @@ public class PomParser {
         xPath = XPathFactory.newInstance().newXPath();
     }
 
-    public Project parsePom(PomFile pomFile)
-            throws IOException, SAXException, ParserConfigurationException, XPathExpressionException {
+    public Project parsePom(PomFile pomFile) throws IOException, SAXException,
+            ParserConfigurationException, XPathExpressionException {
 
         prepareDomOfPom(pomFile.getContents());
 
         final Parent parent;
         if (has("//project/parent")) {
             parent = Parent.of(
-                    GroupId.of(get("//project/parent/groupId/text()")),
-                    ArtifactId.of(get("//project/parent/artifactId/text()")),
-                    Version.of(get("//project/parent/version/text()")));
+                    GroupId.of(getText("//project/parent/groupId")),
+                    ArtifactId.of(getText("//project/parent/artifactId")),
+                    Version.of(getText("//project/parent/version")));
         } else {
             parent = null;
         }
 
         project = new Project(pomFile.getName());
         project.setParent(parent);
-        project.setGroupId(GroupId.of(get("//project/groupId/text()")));
-        project.setArtifactId(ArtifactId.of(get("//project/artifactId/text()")));
-        project.setVersion(Version.of(get("//project/version/text()")));
-        project.setPackaging(Packaging.of(get("//project/packaging/text()")));
+        project.setGroupId(GroupId.of(getText("//project/groupId")));
+        project.setArtifactId(ArtifactId.of(getText("//project/artifactId")));
+        project.setVersion(Version.of(getText("//project/version")));
+        project.setPackaging(Packaging.of(getText("//project/packaging")));
 
-        addDependencies();
+        //addDependencies();
 
         return project;
     }
@@ -76,24 +76,26 @@ public class PomParser {
             Node dependencyElement = dependencyElements.item(i);
             Dependency dependency = new Dependency();
             dependency.setGroupId(GroupId.of(
-                    get(dependencyElement, "//groupId/text()")));
+                    getText(dependencyElement, "//groupId")));
             dependency.setArtifactId(ArtifactId.of(
-                    get(dependencyElement, "//artifactId/text()")));
+                    getText(dependencyElement, "//artifactId")));
             dependency.setVersion(VersionRequirement.of(
-                    get(dependencyElement, "//version/text()")));
+                    getText(dependencyElement, "//version")));
             dependency.setClassifier(Classifier.of(
-                    get(dependencyElement, "//classifier/text()")));
+                    getText(dependencyElement, "//classifier")));
             dependency.setType(Type.of(
-                    get(dependencyElement, "//type/text()")));
+                    getText(dependencyElement, "//type")));
             dependency.setScope(Scope.valueOf(
-                    get(dependencyElement, "//scope/text()").toUpperCase()));
+                    getText(dependencyElement, "//scope").toUpperCase()));
             dependency.setOptional(Boolean.valueOf(
-                    get(dependencyElement, "//optional/text()")));
+                    getText(dependencyElement, "//optional")));
             project.addDependency(dependency);
         }
     }
 
-    private void prepareDomOfPom(byte[] pom) throws ParserConfigurationException, IOException, SAXException {
+    private void prepareDomOfPom(byte[] pom)
+            throws ParserConfigurationException, IOException, SAXException {
+
         InputSource inputSource = new InputSource();
         inputSource.setByteStream(new ByteArrayInputStream(pom));
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -102,8 +104,11 @@ public class PomParser {
         pomDocument = builder.parse(inputSource);
     }
 
-    private String get(Node contextNode, String path) throws XPathExpressionException {
-        final XPathExpression compiledPath = xPath.compile(path);
+    private String getText(Node contextNode, String path) throws XPathExpressionException {
+        if (!has(path)) {
+            return null;
+        }
+        final XPathExpression compiledPath = xPath.compile(path + "/text()");
         final NodeList nodes = (NodeList) compiledPath.evaluate(
                 contextNode, NODESET);
         final StringBuilder text = new StringBuilder();
@@ -113,8 +118,8 @@ public class PomParser {
         return text.toString();
     }
 
-    private String get(String path) throws XPathExpressionException {
-        return get(pomDocument, path);
+    private String getText(String path) throws XPathExpressionException {
+        return getText(pomDocument, path);
     }
 
     private boolean has(String path) throws XPathExpressionException {
