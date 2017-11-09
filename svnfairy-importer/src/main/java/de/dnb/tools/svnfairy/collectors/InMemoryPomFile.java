@@ -1,5 +1,7 @@
 package de.dnb.tools.svnfairy.collectors;
 
+import de.dnb.tools.svnfairy.model.PomFile;
+
 public class InMemoryPomFile implements PomFile {
 
     private final String name;

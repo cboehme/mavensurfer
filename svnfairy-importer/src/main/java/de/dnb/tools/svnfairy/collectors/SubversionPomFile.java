@@ -7,6 +7,8 @@ import java.io.UncheckedIOException;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.io.SVNRepository;
 
+import de.dnb.tools.svnfairy.model.PomFile;
+
 class SubversionPomFile implements PomFile {
 
     private final SVNRepository repository;

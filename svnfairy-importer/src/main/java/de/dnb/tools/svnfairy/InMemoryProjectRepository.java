@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import de.dnb.tools.svnfairy.model.Gav;
+import de.dnb.tools.svnfairy.model.Project;
+
 public class InMemoryProjectRepository implements ProjectRepository {
 
     private final Collection<Project> projects = new ArrayList<>();

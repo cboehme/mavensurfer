@@ -5,6 +5,10 @@ import static java.util.stream.Collectors.toList;
 import java.util.Collection;
 import java.util.Optional;
 
+import de.dnb.tools.svnfairy.model.Gav;
+import de.dnb.tools.svnfairy.model.Parent;
+import de.dnb.tools.svnfairy.model.Project;
+
 public class ParentResolvingService {
 
     public void resolveProjects(Collection<Project> projects) {

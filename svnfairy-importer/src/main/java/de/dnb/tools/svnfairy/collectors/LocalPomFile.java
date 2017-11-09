@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 import de.dnb.tools.svnfairy.Util;
+import de.dnb.tools.svnfairy.model.PomFile;
 
 final class LocalPomFile implements PomFile {
 

@@ -13,8 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import de.dnb.tools.svnfairy.collectors.PomCollector;
-import de.dnb.tools.svnfairy.collectors.PomFile;
+import de.dnb.tools.svnfairy.model.PomFile;
 import de.dnb.tools.svnfairy.collectors.SubversionCollector;
+import de.dnb.tools.svnfairy.model.Project;
 
 /**
  * Searches the repository for Maven POMs and outputs group id, artifact id and version for each project found.

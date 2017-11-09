@@ -6,11 +6,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import de.dnb.tools.svnfairy.ArtifactId;
-import de.dnb.tools.svnfairy.GroupId;
-import de.dnb.tools.svnfairy.Packaging;
-import de.dnb.tools.svnfairy.Project;
-import de.dnb.tools.svnfairy.Version;
+import de.dnb.tools.svnfairy.model.ArtifactId;
+import de.dnb.tools.svnfairy.model.GroupId;
+import de.dnb.tools.svnfairy.model.Packaging;
+import de.dnb.tools.svnfairy.model.Project;
+import de.dnb.tools.svnfairy.model.Version;
 
 @ApplicationScoped
 public class MavenProjectRepository {

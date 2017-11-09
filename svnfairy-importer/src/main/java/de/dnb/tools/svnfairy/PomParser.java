@@ -19,7 +19,18 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import de.dnb.tools.svnfairy.collectors.PomFile;
+import de.dnb.tools.svnfairy.model.PomFile;
+import de.dnb.tools.svnfairy.model.ArtifactId;
+import de.dnb.tools.svnfairy.model.Classifier;
+import de.dnb.tools.svnfairy.model.Dependency;
+import de.dnb.tools.svnfairy.model.GroupId;
+import de.dnb.tools.svnfairy.model.Packaging;
+import de.dnb.tools.svnfairy.model.Parent;
+import de.dnb.tools.svnfairy.model.Project;
+import de.dnb.tools.svnfairy.model.Scope;
+import de.dnb.tools.svnfairy.model.Type;
+import de.dnb.tools.svnfairy.model.Version;
+import de.dnb.tools.svnfairy.model.VersionRequirement;
 
 public class PomParser {
 

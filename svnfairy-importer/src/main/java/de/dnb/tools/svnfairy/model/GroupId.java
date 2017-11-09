@@ -13,39 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.model;
 
 import java.util.Objects;
 
-public final class Packaging {
+import de.dnb.tools.svnfairy.Util;
 
-    private final String packaging;
+public final class GroupId {
 
-    private Packaging(String packaging) {
-        this.packaging = packaging;
+    private final String groupId;
+
+    private GroupId(String groupId) {
+        this.groupId = groupId;
     }
 
-    public static Packaging of(String packaging) {
-        if (packaging == null) {
+    public static GroupId of(String groupId) {
+        if (groupId == null) {
             return null;
         }
-        return new Packaging(packaging);
+        return new GroupId(groupId);
     }
 
     @Override
     public boolean equals(Object obj) {
         return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.packaging, b.packaging));
+                Objects.equals(a.groupId, b.groupId));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(packaging);
+        return Objects.hash(groupId);
     }
 
     @Override
     public String toString() {
-        return packaging;
+        return groupId;
     }
 
 }

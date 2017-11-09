@@ -21,6 +21,8 @@ import org.tmatesoft.svn.core.io.SVNRepository;
 import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
+import de.dnb.tools.svnfairy.model.PomFile;
+
 public class SubversionCollector implements PomCollector {
 
     private static final Logger log = LoggerFactory.getLogger(

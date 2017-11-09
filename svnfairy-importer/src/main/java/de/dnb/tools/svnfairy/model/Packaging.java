@@ -13,39 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy;
+package de.dnb.tools.svnfairy.model;
 
 import java.util.Objects;
 
-public final class VersionRequirement {
+import de.dnb.tools.svnfairy.Util;
 
-    private final String versionRequirement;
+public final class Packaging {
 
-    private VersionRequirement(String versionRequirement) {
-        this.versionRequirement = versionRequirement;
+    private final String packaging;
+
+    private Packaging(String packaging) {
+        this.packaging = packaging;
     }
 
-    public static VersionRequirement of(String versionRequirement) {
-        if (versionRequirement == null) {
+    public static Packaging of(String packaging) {
+        if (packaging == null) {
             return null;
         }
-        return new VersionRequirement(versionRequirement);
+        return new Packaging(packaging);
     }
 
     @Override
     public boolean equals(Object obj) {
         return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.versionRequirement, b.versionRequirement));
+                Objects.equals(a.packaging, b.packaging));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(versionRequirement);
+        return Objects.hash(packaging);
     }
 
     @Override
     public String toString() {
-        return versionRequirement;
+        return packaging;
     }
 
 }

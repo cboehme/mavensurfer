@@ -7,6 +7,8 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import de.dnb.tools.svnfairy.model.PomFile;
+
 public class LocalRepositoryCollector implements PomCollector {
 
     private final Path repositoryDir;

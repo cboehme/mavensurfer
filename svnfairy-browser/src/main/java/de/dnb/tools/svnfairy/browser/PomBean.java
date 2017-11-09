@@ -7,10 +7,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import de.dnb.tools.svnfairy.ArtifactId;
-import de.dnb.tools.svnfairy.GroupId;
-import de.dnb.tools.svnfairy.Project;
-import de.dnb.tools.svnfairy.Version;
+import de.dnb.tools.svnfairy.model.ArtifactId;
+import de.dnb.tools.svnfairy.model.GroupId;
+import de.dnb.tools.svnfairy.model.Project;
+import de.dnb.tools.svnfairy.model.Version;
 import de.dnb.tools.svnfairy.browser.db.MavenProjectRepository;
 
 @Named("pom")
