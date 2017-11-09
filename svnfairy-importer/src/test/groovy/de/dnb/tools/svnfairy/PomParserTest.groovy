@@ -1,6 +1,6 @@
 package de.dnb.tools.svnfairy
 
-import de.dnb.tools.svnfairy.collectors.InMemoryPomFile
+import de.dnb.tools.svnfairy.repositories.pomfile.InMemoryPomFile
 import de.dnb.tools.svnfairy.model.ArtifactId
 import de.dnb.tools.svnfairy.model.Classifier
 import de.dnb.tools.svnfairy.model.GroupId

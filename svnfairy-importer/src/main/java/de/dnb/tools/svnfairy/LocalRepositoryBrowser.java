@@ -5,8 +5,8 @@ import java.nio.file.Paths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.dnb.tools.svnfairy.collectors.LocalRepositoryCollector;
-import de.dnb.tools.svnfairy.collectors.PomCollector;
+import de.dnb.tools.svnfairy.repositories.pomfile.LocalMavenRepository;
+import de.dnb.tools.svnfairy.repositories.pomfile.PomFileRepository;
 
 public class LocalRepositoryBrowser {
 
@@ -18,9 +18,9 @@ public class LocalRepositoryBrowser {
     }
 
     private void run() {
-        PomCollector pomCollector = new LocalRepositoryCollector(
+        PomFileRepository pomFileRepository = new LocalMavenRepository(
                 Paths.get("/home/christoph/.m2/repository"));
-        pomCollector.getPoms().forEach(System.out::println);
+        pomFileRepository.getPoms().forEach(System.out::println);
     }
 
 }

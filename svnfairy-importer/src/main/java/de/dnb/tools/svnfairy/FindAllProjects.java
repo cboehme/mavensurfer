@@ -12,9 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import de.dnb.tools.svnfairy.collectors.PomCollector;
+import de.dnb.tools.svnfairy.repositories.pomfile.PomFileRepository;
 import de.dnb.tools.svnfairy.model.PomFile;
-import de.dnb.tools.svnfairy.collectors.SubversionCollector;
+import de.dnb.tools.svnfairy.repositories.pomfile.SubversionRepository;
 import de.dnb.tools.svnfairy.model.Project;
 
 /**
@@ -41,8 +41,8 @@ public class FindAllProjects {
     private void run()
             throws SAXException, ParserConfigurationException, XPathExpressionException, IOException {
         Collection<Project> projects = new ArrayList<>();
-        PomCollector pomCollector = new SubversionCollector(repositoryBaseUrl, "");
-        for (PomFile pomFile : pomCollector.getPoms()) {
+        PomFileRepository pomFileRepository = new SubversionRepository(repositoryBaseUrl, "");
+        for (PomFile pomFile : pomFileRepository.getPoms()) {
             log.info("Processing pom: " + pomFile.getName());
             Project project = pomParser.parsePom(pomFile);
             projects.add(project);
