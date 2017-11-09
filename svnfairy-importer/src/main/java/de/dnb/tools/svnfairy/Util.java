@@ -1,6 +1,5 @@
 package de.dnb.tools.svnfairy;
 
-import java.util.Objects;
 import java.util.function.BiFunction;
 
 public final class Util {

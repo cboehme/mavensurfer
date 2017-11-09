@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 
 import de.dnb.tools.svnfairy.ArtifactId;
 import de.dnb.tools.svnfairy.GroupId;
-import de.dnb.tools.svnfairy.Project;
 import de.dnb.tools.svnfairy.Packaging;
+import de.dnb.tools.svnfairy.Project;
 import de.dnb.tools.svnfairy.Version;
 
 @ApplicationScoped
