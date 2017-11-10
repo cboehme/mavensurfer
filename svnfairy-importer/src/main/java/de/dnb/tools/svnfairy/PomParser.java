@@ -13,6 +13,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,6 +36,8 @@ import de.dnb.tools.svnfairy.model.VersionRequirement;
 
 public class PomParser {
 
+    private static final Logger log = LoggerFactory.getLogger(PomParser.class);
+
     private final XPath xPath;
 
     private Document pomDocument;
@@ -46,6 +50,18 @@ public class PomParser {
     public Project parsePom(PomFile pomFile) throws IOException, SAXException,
             ParserConfigurationException, XPathExpressionException {
 
+        try {
+            doParsePom(pomFile);
+        } catch (Exception e) {
+            log.error("Failed to parse pom {}", pomFile, e);
+            return null;
+        }
+
+        return project;
+    }
+
+    private void doParsePom(
+            PomFile pomFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         prepareDomOfPom(pomFile.getContents());
 
         final Parent parent;
@@ -65,9 +81,7 @@ public class PomParser {
         project.setVersion(Version.of(getText("//project/version")));
         project.setPackaging(Packaging.of(getText("//project/packaging")));
 
-        //addDependencies();
-
-        return project;
+        addDependencies();
     }
 
     private void addDependencies() throws XPathExpressionException {
@@ -76,19 +90,21 @@ public class PomParser {
             Node dependencyElement = dependencyElements.item(i);
             Dependency dependency = new Dependency();
             dependency.setGroupId(GroupId.of(
-                    getText(dependencyElement, "//groupId")));
+                    getText(dependencyElement, "groupId")));
             dependency.setArtifactId(ArtifactId.of(
-                    getText(dependencyElement, "//artifactId")));
+                    getText(dependencyElement, "artifactId")));
             dependency.setVersion(VersionRequirement.of(
-                    getText(dependencyElement, "//version")));
+                    getText(dependencyElement, "version")));
             dependency.setClassifier(Classifier.of(
-                    getText(dependencyElement, "//classifier")));
+                    getText(dependencyElement, "classifier")));
             dependency.setType(Type.of(
-                    getText(dependencyElement, "//type")));
-            dependency.setScope(Scope.valueOf(
-                    getText(dependencyElement, "//scope").toUpperCase()));
+                    getText(dependencyElement, "type")));
+            if (has(dependencyElement, "scope")) {
+                dependency.setScope(Scope.valueOf(
+                        getText(dependencyElement, "scope").toUpperCase()));
+            }
             dependency.setOptional(Boolean.valueOf(
-                    getText(dependencyElement, "//optional")));
+                    getText(dependencyElement, "optional")));
             project.addDependency(dependency);
         }
     }
@@ -104,8 +120,10 @@ public class PomParser {
         pomDocument = builder.parse(inputSource);
     }
 
-    private String getText(Node contextNode, String path) throws XPathExpressionException {
-        if (!has(path)) {
+    private String getText(Node contextNode, String path)
+            throws XPathExpressionException {
+
+        if (!has(contextNode, path)) {
             return null;
         }
         final XPathExpression compiledPath = xPath.compile(path + "/text()");
@@ -122,11 +140,17 @@ public class PomParser {
         return getText(pomDocument, path);
     }
 
-    private boolean has(String path) throws XPathExpressionException {
+    private boolean has(Node contextNode, String path)
+            throws XPathExpressionException {
+
         final XPathExpression compiledPath = xPath.compile(path);
         final NodeList nodes = (NodeList) compiledPath.evaluate(
-            pomDocument, NODESET);
+                contextNode, NODESET);
         return nodes.getLength() > 0;
+    }
+
+    private boolean has(String path) throws XPathExpressionException {
+        return has(pomDocument, path);
     }
 
     private NodeList getNodes(String path) throws XPathExpressionException {

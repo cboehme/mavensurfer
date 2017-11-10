@@ -52,7 +52,6 @@ class PomParserTest extends Specification {
         }
     }
 
-    @Ignore
     def "should add dependency" () {
         given:
         xml = """

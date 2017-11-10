@@ -42,11 +42,9 @@ public class ImporterMain {
 
         for (PomFile pomFile : pomFileRepository.getPoms()) {
             log.debug("Parsing POM: {}", pomFile);
-            try {
-                Project project = pomParser.parsePom(pomFile);
+            Project project = pomParser.parsePom(pomFile);
+            if (project != null) {
                 projects.add(project);
-            } catch (Exception e) {
-                log.error("Parsing of {} failed with exception:", pomFile, e);
             }
         }
 
