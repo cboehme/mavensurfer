@@ -52,6 +52,8 @@ public class ImporterMain {
 
         parentResolvingService.resolveProjects(projects);
 
+        projects.removeIf(Project::hasIncompleteCoordinates);
+
         projects.forEach(System.out::println);
     }
 
