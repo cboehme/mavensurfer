@@ -43,8 +43,8 @@ public class ParentResolvingService {
             if (!project.getParent().isPresent()) {
                 log.warn("Project has incomplete coordinates but defines no parent: {}",
                         project);
-                projects.remove(project);
                 iter.remove();
+                continue;
             }
             Parent parent = project.getParent().get();
             Gav gav = Gav.of(parent.getGroupId(), parent.getArtifactId(),

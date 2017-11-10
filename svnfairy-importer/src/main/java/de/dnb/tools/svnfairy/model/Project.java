@@ -20,7 +20,10 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import de.dnb.tools.svnfairy.Util;
 
 public class Project {
 
@@ -102,6 +105,19 @@ public class Project {
 
     public void addDependency(Dependency dependency) {
         dependencies.add(dependency);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return Util.equals(this, obj, (a, b) ->
+                Objects.equals(a.groupId, b.groupId) &&
+                Objects.equals(a.artifactId, b.artifactId) &&
+                Objects.equals(a.version, b.version));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(groupId, artifactId, version);
     }
 
     @Override

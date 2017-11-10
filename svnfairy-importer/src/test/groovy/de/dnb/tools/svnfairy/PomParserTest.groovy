@@ -1,13 +1,7 @@
 package de.dnb.tools.svnfairy
 
+import de.dnb.tools.svnfairy.model.*
 import de.dnb.tools.svnfairy.repositories.pomfile.InMemoryPomFile
-import de.dnb.tools.svnfairy.model.ArtifactId
-import de.dnb.tools.svnfairy.model.Classifier
-import de.dnb.tools.svnfairy.model.GroupId
-import de.dnb.tools.svnfairy.model.Scope
-import de.dnb.tools.svnfairy.model.Type
-import de.dnb.tools.svnfairy.model.Version
-import de.dnb.tools.svnfairy.model.VersionRequirement
 import spock.lang.Ignore
 import spock.lang.Specification
 
