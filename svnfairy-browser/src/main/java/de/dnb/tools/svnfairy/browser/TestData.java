@@ -6,7 +6,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
-import de.dnb.tools.svnfairy.browser.db.MavenProjectRepository;
+import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.model.ArtifactId;
 import de.dnb.tools.svnfairy.model.GroupId;
 import de.dnb.tools.svnfairy.model.Packaging;
@@ -17,7 +17,7 @@ import de.dnb.tools.svnfairy.model.Version;
 public class TestData {
 
     @Inject
-    private MavenProjectRepository repository;
+    private JpaRepository repository;
 
     public void init(@Observes @Initialized(ApplicationScoped.class) ServletContext init) {
         populate();

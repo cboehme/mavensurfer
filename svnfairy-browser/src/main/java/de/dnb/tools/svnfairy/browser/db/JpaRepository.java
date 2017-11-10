@@ -13,7 +13,7 @@ import de.dnb.tools.svnfairy.model.Project;
 import de.dnb.tools.svnfairy.model.Version;
 
 @ApplicationScoped
-public class MavenProjectRepository {
+public class JpaRepository {
 
     @PersistenceContext
     private EntityManager entityManager;

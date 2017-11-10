@@ -7,7 +7,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import de.dnb.tools.svnfairy.browser.db.MavenProjectRepository;
+import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.model.ArtifactId;
 import de.dnb.tools.svnfairy.model.GroupId;
 import de.dnb.tools.svnfairy.model.Project;
@@ -18,7 +18,7 @@ import de.dnb.tools.svnfairy.model.Version;
 public class PomBean {
 
     @Inject
-    private MavenProjectRepository repository;
+    private JpaRepository repository;
 
     private String groupId;
     private String artifactId;
