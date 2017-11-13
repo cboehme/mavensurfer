@@ -7,11 +7,11 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
-import de.dnb.tools.svnfairy.model.ArtifactId;
-import de.dnb.tools.svnfairy.model.GroupId;
-import de.dnb.tools.svnfairy.model.Packaging;
-import de.dnb.tools.svnfairy.model.Project;
-import de.dnb.tools.svnfairy.model.Version;
+import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Packaging;
+import de.dnb.tools.svnfairy.browser.model.Project;
+import de.dnb.tools.svnfairy.browser.model.Version;
 
 @ApplicationScoped
 public class TestData {

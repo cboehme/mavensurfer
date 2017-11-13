@@ -15,26 +15,25 @@
  */
 package de.dnb.tools.svnfairy.browser;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+import java.util.function.BiFunction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public final class Util {
 
-import de.dnb.tools.svnfairy.browser.api.PomFile;
+    private Util() {
+        throw new AssertionError("No instances allowed");
+    }
 
-@Path("/")
-public class PomResource {
+    public static <T> boolean equals(T object1,
+                                     Object object2,
+                                     BiFunction<T, T, Boolean> equalsMethod) {
 
-    private static final Logger log = LoggerFactory.getLogger(PomResource.class);
-
-    @POST
-    @Consumes("application/json")
-    public Response importPom(PomFile pomFile) {
-        log.info("import pom");
-        return Response.ok().build();
+        if (object1 == object2) {
+            return true;
+        }
+        if (object1 == null || !object1.getClass().isInstance(object2)) {
+            return false;
+        }
+        return equalsMethod.apply(object1, (T) object2);
     }
 
 }

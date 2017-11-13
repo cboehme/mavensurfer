@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy
+package de.dnb.tools.svnfairy.browser
 
-import de.dnb.tools.svnfairy.model.*
+import de.dnb.tools.svnfairy.browser.model.ArtifactId
+import de.dnb.tools.svnfairy.browser.model.GroupId
+import de.dnb.tools.svnfairy.browser.model.Parent
+import de.dnb.tools.svnfairy.browser.model.Project
+import de.dnb.tools.svnfairy.browser.model.Version
 import spock.lang.Specification
 
 class ParentResolvingServiceTest extends Specification {

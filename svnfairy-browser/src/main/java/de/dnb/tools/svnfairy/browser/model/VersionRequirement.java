@@ -13,41 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.model;
+package de.dnb.tools.svnfairy.browser.model;
 
 import java.util.Objects;
 
-import de.dnb.tools.svnfairy.Util;
+import de.dnb.tools.svnfairy.browser.Util;
 
-public final class Classifier {
+public final class VersionRequirement {
 
-    private final String classifier;
+    private final String versionRequirement;
 
-    private Classifier(String classifier) {
-        this.classifier = classifier;
+    private VersionRequirement(String versionRequirement) {
+        this.versionRequirement = versionRequirement;
     }
 
-    public static Classifier of(String classifier) {
-        if (classifier == null) {
+    public static VersionRequirement of(String versionRequirement) {
+        if (versionRequirement == null) {
             return null;
         }
-        return new Classifier(classifier);
+        return new VersionRequirement(versionRequirement);
     }
 
     @Override
     public boolean equals(Object obj) {
         return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.classifier, b.classifier));
+                Objects.equals(a.versionRequirement, b.versionRequirement));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(classifier);
+        return Objects.hash(versionRequirement);
     }
 
     @Override
     public String toString() {
-        return classifier;
+        return versionRequirement;
     }
 
 }

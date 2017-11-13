@@ -1,4 +1,19 @@
-package de.dnb.tools.svnfairy;
+/*
+ * Copyright 2017 Christoph Böhme
+ *
+ * Licensed under the Apache License, Version 2.0 the "License";
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package de.dnb.tools.svnfairy.browser;
 
 import static java.util.stream.Collectors.toList;
 
@@ -9,9 +24,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.dnb.tools.svnfairy.model.Gav;
-import de.dnb.tools.svnfairy.model.Parent;
-import de.dnb.tools.svnfairy.model.Project;
+import de.dnb.tools.svnfairy.browser.model.Gav;
+import de.dnb.tools.svnfairy.browser.model.Parent;
+import de.dnb.tools.svnfairy.browser.model.Project;
 
 public class ParentResolvingService {
 
@@ -37,19 +52,19 @@ public class ParentResolvingService {
     private void tryResolveProjects(Collection<Project> projects,
                                     Collection<Project> unresolvedProjects) {
 
-        Iterator<Project> iter = unresolvedProjects.iterator();
+        final Iterator<Project> iter = unresolvedProjects.iterator();
         while (iter.hasNext()) {
-            Project project = iter.next();
+            final Project project = iter.next();
             if (!project.getParent().isPresent()) {
                 log.warn("Project has incomplete coordinates but defines no parent: {}",
                         project);
                 iter.remove();
                 continue;
             }
-            Parent parent = project.getParent().get();
-            Gav gav = Gav.of(parent.getGroupId(), parent.getArtifactId(),
+            final Parent parent = project.getParent().get();
+            final Gav gav = Gav.of(parent.getGroupId(), parent.getArtifactId(),
                     parent.getVersion());
-            Optional<Project> parentProject = findByGav(projects, gav);
+            final Optional<Project> parentProject = findByGav(projects, gav);
             if (parentProject.isPresent()) {
                 if (!project.getGroupId().isPresent()) {
                     project.setGroupId(parentProject.get().getGroupId().get());

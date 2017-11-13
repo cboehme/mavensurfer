@@ -13,41 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.model;
+package de.dnb.tools.svnfairy.browser.model;
 
 import java.util.Objects;
 
-import de.dnb.tools.svnfairy.Util;
+import de.dnb.tools.svnfairy.browser.Util;
 
-public final class Version {
+public final class GroupId {
 
-    private final String version;
+    private final String groupId;
 
-    private Version(String version) {
-        this.version = version;
+    private GroupId(String groupId) {
+        this.groupId = groupId;
     }
 
-    public static Version of(String version) {
-        if (version == null) {
+    public static GroupId of(String groupId) {
+        if (groupId == null) {
             return null;
         }
-        return new Version(version);
+        return new GroupId(groupId);
     }
 
     @Override
     public boolean equals(Object obj) {
         return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.version, b.version));
+                Objects.equals(a.groupId, b.groupId));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(version);
+        return Objects.hash(groupId);
     }
 
     @Override
     public String toString() {
-        return version;
+        return groupId;
     }
 
 }

@@ -15,8 +15,50 @@
  */
 package de.dnb.tools.svnfairy.browser.model;
 
+import static java.util.Objects.hash;
+import static java.util.Objects.requireNonNull;
+
+import java.util.Arrays;
+import java.util.Objects;
+
+import de.dnb.tools.svnfairy.browser.Util;
+
 public class PomFile {
 
-    private String name;
+    private final String name;
+    private final byte[] contents;
+
+
+    public PomFile(String name, byte[] contents) {
+        requireNonNull(name);
+        requireNonNull(contents);
+
+        this.name = name;
+        this.contents = Arrays.copyOf(contents, contents.length);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public byte[] getContents() {
+        return Arrays.copyOf(contents, contents.length);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return Util.equals(this, obj, (a, b) ->
+                Objects.equals(a.name, b.name));
+    }
+
+    @Override
+    public int hashCode() {
+        return hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

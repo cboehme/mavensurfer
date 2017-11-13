@@ -13,28 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser;
+package de.dnb.tools.svnfairy.browser.model;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.dnb.tools.svnfairy.browser.api.PomFile;
-
-@Path("/")
-public class PomResource {
-
-    private static final Logger log = LoggerFactory.getLogger(PomResource.class);
-
-    @POST
-    @Consumes("application/json")
-    public Response importPom(PomFile pomFile) {
-        log.info("import pom");
-        return Response.ok().build();
-    }
-
+public enum Scope {
+    COMPILE, PROVIDED, RUNTIME, TEST, SYSTEM
 }

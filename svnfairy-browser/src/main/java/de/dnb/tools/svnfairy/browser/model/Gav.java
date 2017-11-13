@@ -13,32 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.model;
+package de.dnb.tools.svnfairy.browser.model;
+
+import static java.util.Objects.requireNonNull;
 
 import java.util.Objects;
 
-import de.dnb.tools.svnfairy.Util;
+import de.dnb.tools.svnfairy.browser.Util;
 
-public final class Parent {
+final public class Gav {
 
     private final GroupId groupId;
     private final ArtifactId artifactId;
     private final Version version;
 
-    private Parent(GroupId groupId,
-                   ArtifactId artifactId,
-                   Version version) {
-
+    private Gav(GroupId groupId, ArtifactId artifactId, Version version) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
     }
 
-    public static Parent of(GroupId groupdId,
-                            ArtifactId artifactId,
-                            Version version) {
+    public static Gav of(GroupId groupId,
+                         ArtifactId artifactId,
+                         Version version) {
+        requireNonNull(groupId);
+        requireNonNull(artifactId);
+        requireNonNull(version);
 
-        return new Parent(groupdId, artifactId, version);
+        return new Gav(groupId, artifactId, version);
     }
 
     public GroupId getGroupId() {
@@ -55,10 +57,11 @@ public final class Parent {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.groupId, b.groupId)
-                && Objects.equals(a.artifactId, b.artifactId)
-                && Objects.equals(a.version, b.version));
+                Objects.equals(a.groupId, b.groupId) &&
+                Objects.equals(a.artifactId, b.artifactId) &&
+                Objects.equals(a.version, b.version));
     }
 
     @Override

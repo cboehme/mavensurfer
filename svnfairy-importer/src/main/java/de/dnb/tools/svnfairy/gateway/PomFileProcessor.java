@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.model;
+package de.dnb.tools.svnfairy.gateway;
 
-public enum Scope {
-    COMPILE, PROVIDED, RUNTIME, TEST, SYSTEM
+import de.dnb.tools.svnfairy.model.PomFile;
+
+public class PomFileProcessor {
+
+    public void sendToProcessingEngine(PomFile file) {
+
+    }
+
 }

@@ -1,4 +1,19 @@
-package de.dnb.tools.svnfairy;
+/*
+ * Copyright 2017 Christoph Böhme
+ *
+ * Licensed under the Apache License, Version 2.0 the "License";
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package de.dnb.tools.svnfairy.browser;
 
 import static javax.xml.xpath.XPathConstants.NODESET;
 
@@ -21,18 +36,18 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import de.dnb.tools.svnfairy.model.ArtifactId;
-import de.dnb.tools.svnfairy.model.Classifier;
-import de.dnb.tools.svnfairy.model.Dependency;
-import de.dnb.tools.svnfairy.model.GroupId;
-import de.dnb.tools.svnfairy.model.Packaging;
-import de.dnb.tools.svnfairy.model.Parent;
-import de.dnb.tools.svnfairy.model.PomFile;
-import de.dnb.tools.svnfairy.model.Project;
-import de.dnb.tools.svnfairy.model.Scope;
-import de.dnb.tools.svnfairy.model.Type;
-import de.dnb.tools.svnfairy.model.Version;
-import de.dnb.tools.svnfairy.model.VersionRequirement;
+import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Classifier;
+import de.dnb.tools.svnfairy.browser.model.Dependency;
+import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Packaging;
+import de.dnb.tools.svnfairy.browser.model.Parent;
+import de.dnb.tools.svnfairy.browser.model.PomFile;
+import de.dnb.tools.svnfairy.browser.model.Project;
+import de.dnb.tools.svnfairy.browser.model.Scope;
+import de.dnb.tools.svnfairy.browser.model.Type;
+import de.dnb.tools.svnfairy.browser.model.Version;
+import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
 public class PomParser {
 

@@ -13,41 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.model;
+package de.dnb.tools.svnfairy.browser.model;
 
 import java.util.Objects;
 
-import de.dnb.tools.svnfairy.Util;
+import de.dnb.tools.svnfairy.browser.Util;
 
-public final class Type {
+public final class ArtifactId {
 
-    private final String type;
+    private final String artifactId;
 
-    private Type(String type) {
-        this.type = type;
+    private ArtifactId(String artifactId) {
+        this.artifactId = artifactId;
     }
 
-    public static Type of(String type) {
-        if (type == null) {
+    public static ArtifactId of(String artifactId) {
+        if (artifactId == null) {
             return null;
         }
-        return new Type(type);
+        return new ArtifactId(artifactId);
     }
 
     @Override
     public boolean equals(Object obj) {
         return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.type, b.type));
+                Objects.equals(a.artifactId, b.artifactId));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type);
+        return Objects.hash(artifactId);
     }
 
     @Override
     public String toString() {
-        return type;
+        return artifactId;
     }
 
 }
