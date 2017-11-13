@@ -13,10 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser.api;
+package de.dnb.tools.svnfairy.api;
 
-public class PomFile {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class Pom {
 
     private String name;
+
+    private String contents;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
 
 }

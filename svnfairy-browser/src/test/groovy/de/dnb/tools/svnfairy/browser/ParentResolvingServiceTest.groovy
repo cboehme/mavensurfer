@@ -15,11 +15,7 @@
  */
 package de.dnb.tools.svnfairy.browser
 
-import de.dnb.tools.svnfairy.browser.model.ArtifactId
-import de.dnb.tools.svnfairy.browser.model.GroupId
-import de.dnb.tools.svnfairy.browser.model.Parent
-import de.dnb.tools.svnfairy.browser.model.Project
-import de.dnb.tools.svnfairy.browser.model.Version
+import de.dnb.tools.svnfairy.browser.model.*
 import spock.lang.Specification
 
 class ParentResolvingServiceTest extends Specification {

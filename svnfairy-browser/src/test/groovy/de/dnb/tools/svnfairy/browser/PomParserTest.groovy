@@ -15,14 +15,7 @@
  */
 package de.dnb.tools.svnfairy.browser
 
-import de.dnb.tools.svnfairy.browser.model.ArtifactId
-import de.dnb.tools.svnfairy.browser.model.Classifier
-import de.dnb.tools.svnfairy.browser.model.GroupId
-import de.dnb.tools.svnfairy.browser.model.PomFile
-import de.dnb.tools.svnfairy.browser.model.Scope
-import de.dnb.tools.svnfairy.browser.model.Type
-import de.dnb.tools.svnfairy.browser.model.Version
-import de.dnb.tools.svnfairy.browser.model.VersionRequirement
+import de.dnb.tools.svnfairy.browser.model.*
 import spock.lang.Specification
 
 import java.nio.charset.StandardCharsets

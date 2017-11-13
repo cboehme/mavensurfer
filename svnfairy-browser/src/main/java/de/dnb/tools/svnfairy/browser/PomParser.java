@@ -65,18 +65,6 @@ public class PomParser {
     public Project parsePom(PomFile pomFile) throws IOException, SAXException,
             ParserConfigurationException, XPathExpressionException {
 
-        try {
-            doParsePom(pomFile);
-        } catch (Exception e) {
-            log.error("Failed to parse pom {}", pomFile, e);
-            return null;
-        }
-
-        return project;
-    }
-
-    private void doParsePom(
-            PomFile pomFile) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         prepareDomOfPom(pomFile.getContents());
 
         final Parent parent;
@@ -97,6 +85,8 @@ public class PomParser {
         project.setPackaging(Packaging.of(getText("//project/packaging")));
 
         addDependencies();
+
+        return project;
     }
 
     private void addDependencies() throws XPathExpressionException {

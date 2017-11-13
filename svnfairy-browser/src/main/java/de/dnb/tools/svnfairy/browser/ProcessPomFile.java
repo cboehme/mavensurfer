@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.enterprise.context.RequestScoped;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -27,6 +28,7 @@ import org.xml.sax.SAXException;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
+@RequestScoped
 public class ProcessPomFile {
 
     private PomParser pomParser = new PomParser();

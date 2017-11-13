@@ -12,6 +12,7 @@
     <modules>
         <module>svnfairy-importer</module>
         <module>svnfairy-browser</module>
+        <module>svnfairy-api</module>
     </modules>
 
     <properties>
