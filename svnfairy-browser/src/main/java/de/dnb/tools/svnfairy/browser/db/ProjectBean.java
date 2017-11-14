@@ -10,9 +10,9 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "pom",
        uniqueConstraints = @UniqueConstraint(columnNames = { "groupId", "artifactId", "version" }))
-@NamedQuery(name = "Pom.findByGav",
-            query = "SELECT pom FROM PomBean pom WHERE pom.groupId = :groupId AND pom.artifactId = :artifactId AND pom.version = :version")
-class PomBean {
+@NamedQuery(name = "Project.findByGav",
+            query = "SELECT pom FROM ProjectBean pom WHERE pom.groupId = :groupId AND pom.artifactId = :artifactId AND pom.version = :version")
+class ProjectBean {
 
     @Id
     @GeneratedValue

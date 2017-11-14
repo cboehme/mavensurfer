@@ -23,49 +23,50 @@ public class JpaRepository {
                             ArtifactId artifactId,
                             Version version) {
 
-        PomBean pomBean = findPomBeanByGav(groupId, artifactId, version);
-        return mapPomBeanToMavenProject(pomBean);
+        ProjectBean projectBean = findProjectBeanByGav(groupId, artifactId,
+                version);
+        return mapBeanToProject(projectBean);
     }
 
-    private PomBean findPomBeanByGav(GroupId groupId,
-                                     ArtifactId artifactId,
-                                     Version version) {
+    private ProjectBean findProjectBeanByGav(GroupId groupId,
+                                             ArtifactId artifactId,
+                                             Version version) {
 
-        TypedQuery<PomBean> findByGav = entityManager.createNamedQuery(
-                "Pom.findByGav", PomBean.class);
+        TypedQuery<ProjectBean> findByGav = entityManager.createNamedQuery(
+                "Project.findByGav", ProjectBean.class);
         findByGav.setParameter("groupId", groupId.toString());
         findByGav.setParameter("artifactId", artifactId.toString());
         findByGav.setParameter("version", version.toString());
         return findByGav.getSingleResult();
     }
 
-    private Project mapPomBeanToMavenProject(PomBean pomBean) {
+    private Project mapBeanToProject(ProjectBean projectBean) {
 
-        Project project = new Project(pomBean.file);
-        project.setGroupId(GroupId.of(pomBean.groupId));
-        project.setArtifactId(ArtifactId.of(pomBean.artifactId));
-        project.setVersion(Version.of(pomBean.version));
-        project.setPackaging(Packaging.of(pomBean.packaging));
+        Project project = new Project(projectBean.file);
+        project.setGroupId(GroupId.of(projectBean.groupId));
+        project.setArtifactId(ArtifactId.of(projectBean.artifactId));
+        project.setVersion(Version.of(projectBean.version));
+        project.setPackaging(Packaging.of(projectBean.packaging));
         return project;
     }
 
     @Transactional
     public void create(Project project) {
-        PomBean pomBean = mapMavenProjectToPomBean(project);
-        entityManager.persist(pomBean);
+        ProjectBean projectBean = mapProjectToBean(project);
+        entityManager.persist(projectBean);
     }
 
-    private PomBean mapMavenProjectToPomBean(Project project) {
+    private ProjectBean mapProjectToBean(Project project) {
 
-        PomBean pomBean = new PomBean();
-        pomBean.file = project.getFile();
-        pomBean.groupId = project.getGroupId().toString();
-        pomBean.artifactId = project.getArtifactId().toString();
-        pomBean.version = project.getVersion().toString();
+        ProjectBean projectBean = new ProjectBean();
+        projectBean.file = project.getFile();
+        projectBean.groupId = project.getGroupId().toString();
+        projectBean.artifactId = project.getArtifactId().toString();
+        projectBean.version = project.getVersion().toString();
         if (project.getPackaging() != null) {
-            pomBean.packaging = project.getPackaging().toString();
+            projectBean.packaging = project.getPackaging().toString();
         }
-        return pomBean;
+        return projectBean;
     }
 
 }

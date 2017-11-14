@@ -15,7 +15,7 @@ public class DependencyBean {
     Long id;
 
     @ManyToOne
-    PomBean owner;
+    ProjectBean owner;
 
     String groupId;
     String artifactId;
