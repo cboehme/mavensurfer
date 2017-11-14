@@ -20,7 +20,7 @@ public class TestData {
     private JpaRepository repository;
 
     public void init(@Observes @Initialized(ApplicationScoped.class) ServletContext init) {
-        populate();
+        // populate();
     }
 
     private void populate() {

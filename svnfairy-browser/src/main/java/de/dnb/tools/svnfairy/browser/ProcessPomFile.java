@@ -20,33 +20,55 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.xml.sax.SAXException;
 
+import de.dnb.tools.svnfairy.browser.db.JpaRepository;
+import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
 @RequestScoped
 public class ProcessPomFile {
 
-    private PomParser pomParser = new PomParser();
-    private ParentResolvingService parentResolvingService =
+    private JpaRepository jpaRepository;
+
+    private final PomParser pomParser = new PomParser();
+    private final ParentResolvingService parentResolvingService =
             new ParentResolvingService();
+
+    @Inject
+    public ProcessPomFile(JpaRepository jpaRepository) {
+        this.jpaRepository = jpaRepository;
+    }
+
+    public ProcessPomFile() {
+        // Required by CDI
+    }
 
     public void processPomFile(PomFile pomFile) throws SAXException,
             ParserConfigurationException, XPathExpressionException, IOException {
 
-        final Collection<Project> projects = new ArrayList<>();
-        Project project = pomParser.parsePom(pomFile);
-        if (project != null) {
-            projects.add(project);
+        final Project project = pomParser.parsePom(pomFile);
+
+        if (!project.isValid()) {
+            return;
         }
 
-        parentResolvingService.resolveProjects(projects);
-        projects.removeIf(Project::hasIncompleteCoordinates);
-        projects.forEach(System.out::println);
+        if (project.hasIncompleteCoordinates()) {
+            final Parent parent = project.getParent().get();
+            if (!project.getGroupId().isPresent()) {
+                project.setGroupId(parent.getGroupId());
+            }
+            if (!project.getVersion().isPresent()) {
+                project.setVersion(parent.getVersion());
+            }
+        }
+
+        jpaRepository.create(project);
     }
 
 }

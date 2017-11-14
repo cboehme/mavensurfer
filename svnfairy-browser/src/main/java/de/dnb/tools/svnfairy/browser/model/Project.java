@@ -38,6 +38,10 @@ public class Project {
 
     private List<Dependency> dependencies = new ArrayList<>();
 
+    public boolean isValid() {
+        return !hasIncompleteCoordinates() || getParent().isPresent();
+    }
+
     public Project(String file) {
         this.file = file;
     }
@@ -124,5 +128,4 @@ public class Project {
     public String toString() {
         return groupId + ":" + artifactId + ":" + version;
     }
-
 }

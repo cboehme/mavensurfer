@@ -1,6 +1,7 @@
 package de.dnb.tools.svnfairy.browser.db;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -14,7 +15,8 @@ import javax.persistence.UniqueConstraint;
 class PomBean {
 
     @Id
-    int id;
+    @GeneratedValue
+    Long id;
 
     String file;
 

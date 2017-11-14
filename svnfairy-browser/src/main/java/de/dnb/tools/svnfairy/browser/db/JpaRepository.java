@@ -62,7 +62,9 @@ public class JpaRepository {
         pomBean.groupId = project.getGroupId().toString();
         pomBean.artifactId = project.getArtifactId().toString();
         pomBean.version = project.getVersion().toString();
-        pomBean.packaging = project.getPackaging().toString();
+        if (project.getPackaging() != null) {
+            pomBean.packaging = project.getPackaging().toString();
+        }
         return pomBean;
     }
 
