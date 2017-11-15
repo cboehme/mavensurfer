@@ -30,6 +30,8 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Intra-project dependencies -->
+
         <dependency>
             <groupId>de.dnb.tools</groupId>
             <artifactId>svnfairy-api</artifactId>

@@ -1,11 +1,17 @@
 package de.dnb.tools.svnfairy.browser;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
@@ -16,6 +22,8 @@ import de.dnb.tools.svnfairy.browser.model.Version;
 @Named("pom")
 @RequestScoped
 public class PomBean {
+
+    private static final Logger log = LoggerFactory.getLogger(PomBean.class);
 
     @Inject
     private JpaRepository repository;
@@ -62,8 +70,13 @@ public class PomBean {
         return project.getFile();
     }
 
-    public List<PomBean> getDependents() {
-        return Collections.emptyList();
+    public List<GavBean> getDependents() {
+        log.info("GAV: {}:{}:{}", groupId, artifactId, version);
+        Project project = repository.getByGav(GroupId.of(groupId),
+                ArtifactId.of(artifactId), Version.of(version));
+        return repository.getDependentProjects(project).stream()
+                .map(GavBean::new)
+                .collect(toList());
     }
 
 }

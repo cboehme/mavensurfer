@@ -24,4 +24,5 @@ public class DependencyBean {
     String type;
     String scope;
     boolean optional;
+
 }

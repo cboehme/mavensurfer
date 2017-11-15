@@ -1,0 +1,6 @@
+swarm:
+  ds:
+    connection:
+      url: jdbc:h2:file:~/svnfairy
+    username: sa
+    password: sa

@@ -26,7 +26,7 @@ public class ImporterMain {
     private ImporterMain() {
 
         pomFileRepository = new LocalMavenRepository(
-                Paths.get("/home/christoph/.m2/repository"));
+                Paths.get("svnfairy-importer/testdata"));
         pomFileProcessor = new PomFileProcessor();
     }
 
