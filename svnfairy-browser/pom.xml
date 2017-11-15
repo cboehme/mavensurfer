@@ -14,7 +14,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <version.wildfly-swarm>2017.10.0</version.wildfly-swarm>
+        <version.wildfly-swarm>2017.11.0</version.wildfly-swarm>
     </properties>
 
     <dependencyManagement>
