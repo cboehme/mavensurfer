@@ -15,24 +15,67 @@
  */
 package de.dnb.tools.svnfairy.browser;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.building.DefaultModelBuilderFactory;
+import org.apache.maven.model.building.DefaultModelBuildingRequest;
+import org.apache.maven.model.building.ModelBuilder;
+import org.apache.maven.model.building.ModelBuildingException;
+import org.apache.maven.model.building.ModelBuildingRequest;
+import org.apache.maven.model.building.ModelSource2;
+import org.apache.maven.model.resolution.ModelResolver;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.project.ProjectModelResolver;
+import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.RequestTrace;
+import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
+import org.eclipse.aether.impl.DefaultServiceLocator;
+import org.eclipse.aether.impl.RemoteRepositoryManager;
+import org.eclipse.aether.internal.impl.DefaultRemoteRepositoryManager;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.LocalRepositoryManager;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
+import org.eclipse.aether.spi.connector.transport.TransporterFactory;
+import org.eclipse.aether.spi.locator.ServiceLocator;
+import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
-import de.dnb.tools.svnfairy.browser.model.Parent;
+import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Classifier;
+import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Packaging;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
+import de.dnb.tools.svnfairy.browser.model.Scope;
+import de.dnb.tools.svnfairy.browser.model.Type;
+import de.dnb.tools.svnfairy.browser.model.Version;
+import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
 @RequestScoped
 public class ProcessPomFile {
+
+    private static final Logger log = LoggerFactory.getLogger(
+            ProcessPomFile.class);
 
     private JpaRepository jpaRepository;
 
@@ -42,16 +85,21 @@ public class ProcessPomFile {
 
     @Inject
     public ProcessPomFile(JpaRepository jpaRepository) {
+
         this.jpaRepository = jpaRepository;
     }
 
     public ProcessPomFile() {
+
         // Required by CDI
     }
 
     public void processPomFile(PomFile pomFile) throws SAXException,
             ParserConfigurationException, XPathExpressionException, IOException {
 
+        final Project project = makeEffectivePom(pomFile);
+
+        /*
         final Project project = pomParser.parsePom(pomFile);
 
         if (!project.isValid()) {
@@ -67,8 +115,88 @@ public class ProcessPomFile {
                 project.setVersion(parent.getVersion());
             }
         }
+        */
 
         jpaRepository.create(project);
+    }
+
+    private Project makeEffectivePom(PomFile pomFile) {
+
+        final ModelSource2 modelSource = new ByteArrayModelSource(
+                pomFile.getName(), pomFile.getContents());
+
+        final ModelBuildingRequest request = new DefaultModelBuildingRequest();
+        request.setModelSource(modelSource);
+        request.setValidationLevel(VALIDATION_LEVEL_MINIMAL);
+        request.setProcessPlugins(false);
+        request.setTwoPhaseBuilding(false);
+        request.setSystemProperties(System.getProperties());
+        request.setModelResolver(createModelResolver());
+
+        final ModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
+
+        final Model effectiveModel;
+        try {
+            effectiveModel = modelBuilder.build(request).getEffectiveModel();
+        } catch (ModelBuildingException e) {
+            log.error("Could not build effective POM", e);
+            throw new RuntimeException(e);
+        }
+
+        return mapModelToProject(pomFile.getName(), effectiveModel);
+    }
+
+    private ModelResolver createModelResolver() {
+        DefaultServiceLocator serviceLocator = MavenRepositorySystemUtils.newServiceLocator();
+        serviceLocator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
+        serviceLocator.addService(TransporterFactory.class, HttpTransporterFactory.class);
+
+        RepositorySystem repositorySystem = serviceLocator.getService(RepositorySystem.class);
+
+        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+
+        LocalRepository localRepository = new LocalRepository("/home/christoph/maven-repo");
+        LocalRepositoryManager localRepositoryManager =
+                repositorySystem.newLocalRepositoryManager(session, localRepository);
+        session.setLocalRepositoryManager(localRepositoryManager);
+        session.setReadOnly();
+
+        serviceLocator.getService(RepositoryConnectorFactory.class);
+        RemoteRepository remoteRepository = new RemoteRepository.Builder(
+                "maven-central", "default", "http://repo1.maven.org/maven2/").build();
+        List<RemoteRepository> remoteRepositories =
+                repositorySystem.newResolutionRepositories(session, singletonList(remoteRepository));
+        RemoteRepositoryManager remoteRepositoryManager =
+                serviceLocator.getService(RemoteRepositoryManager.class);
+
+        return new ProjectModelResolver(session, new RequestTrace(null),
+                repositorySystem, remoteRepositoryManager, remoteRepositories,
+                ProjectBuildingRequest.RepositoryMerging.POM_DOMINANT, null);
+    }
+
+    private Project mapModelToProject(String sourceName, Model model) {
+
+        final Project project = new Project(sourceName);
+
+        project.setGroupId(GroupId.of(model.getGroupId()));
+        project.setArtifactId(ArtifactId.of(model.getArtifactId()));
+        project.setVersion(Version.of(model.getVersion()));
+        project.setPackaging(Packaging.of(model.getPackaging()));
+
+        for (Dependency dependency : model.getDependencies()) {
+            final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =
+                    new de.dnb.tools.svnfairy.browser.model.Dependency();
+            dependencyRef.setGroupId(GroupId.of(dependency.getGroupId()));
+            dependencyRef.setArtifactId(ArtifactId.of(dependency.getArtifactId()));
+            dependencyRef.setVersion(VersionRequirement.of(dependency.getVersion()));
+            dependencyRef.setClassifier(Classifier.of(dependency.getClassifier()));
+            dependencyRef.setType(Type.of(dependency.getType()));
+            dependencyRef.setScope(Scope.valueOf(dependency.getScope().toUpperCase()));
+            dependencyRef.setOptional(dependency.isOptional());
+            project.addDependency(dependencyRef);
+        }
+
+        return project;
     }
 
 }
