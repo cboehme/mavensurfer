@@ -116,8 +116,9 @@ public class ProcessPomFile {
             }
         }
         */
-
-        jpaRepository.create(project);
+        if (project != null) {
+            jpaRepository.create(project);
+        }
     }
 
     private Project makeEffectivePom(PomFile pomFile) {
@@ -140,7 +141,7 @@ public class ProcessPomFile {
             effectiveModel = modelBuilder.build(request).getEffectiveModel();
         } catch (ModelBuildingException e) {
             log.error("Could not build effective POM", e);
-            throw new RuntimeException(e);
+            return null;
         }
 
         return mapModelToProject(pomFile.getName(), effectiveModel);
