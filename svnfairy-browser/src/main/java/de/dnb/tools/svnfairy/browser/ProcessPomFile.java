@@ -75,8 +75,6 @@ public class ProcessPomFile {
 
     private JpaRepository jpaRepository;
 
-    private final PomParser pomParser = new PomParser();
-
     @Inject
     public ProcessPomFile(JpaRepository jpaRepository) {
 
