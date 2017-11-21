@@ -15,12 +15,10 @@
  */
 package de.dnb.tools.svnfairy.browser;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
@@ -42,18 +40,15 @@ import org.apache.maven.project.ProjectModelResolver;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.RequestTrace;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
 import org.eclipse.aether.impl.DefaultServiceLocator;
 import org.eclipse.aether.impl.RemoteRepositoryManager;
-import org.eclipse.aether.internal.impl.DefaultRemoteRepositoryManager;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.LocalRepositoryManager;
 import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
-import org.eclipse.aether.spi.locator.ServiceLocator;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +59,7 @@ import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Classifier;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Packaging;
+import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Scope;
@@ -80,8 +76,6 @@ public class ProcessPomFile {
     private JpaRepository jpaRepository;
 
     private final PomParser pomParser = new PomParser();
-    private final ParentResolvingService parentResolvingService =
-            new ParentResolvingService();
 
     @Inject
     public ProcessPomFile(JpaRepository jpaRepository) {
@@ -98,24 +92,6 @@ public class ProcessPomFile {
             ParserConfigurationException, XPathExpressionException, IOException {
 
         final Project project = makeEffectivePom(pomFile);
-
-        /*
-        final Project project = pomParser.parsePom(pomFile);
-
-        if (!project.isValid()) {
-            return;
-        }
-
-        if (project.hasIncompleteCoordinates()) {
-            final Parent parent = project.getParent().get();
-            if (!project.getGroupId().isPresent()) {
-                project.setGroupId(parent.getGroupId());
-            }
-            if (!project.getVersion().isPresent()) {
-                project.setVersion(parent.getVersion());
-            }
-        }
-        */
         if (project != null) {
             jpaRepository.create(project);
         }
@@ -183,6 +159,18 @@ public class ProcessPomFile {
         project.setArtifactId(ArtifactId.of(model.getArtifactId()));
         project.setVersion(Version.of(model.getVersion()));
         project.setPackaging(Packaging.of(model.getPackaging()));
+
+        if (model.getParent() != null) {
+            final GroupId parentGroupId = GroupId.of(
+                    model.getParent().getGroupId());
+            final ArtifactId parentArtifactId = ArtifactId.of(
+                    model.getParent().getArtifactId());
+            final Version parentVersion = Version.of(
+                    model.getParent().getVersion());
+            final Parent parent = Parent.of(parentGroupId, parentArtifactId,
+                    parentVersion);
+            project.setParent(parent);
+        }
 
         for (Dependency dependency : model.getDependencies()) {
             final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =

@@ -16,5 +16,5 @@
 package de.dnb.tools.svnfairy.browser.model;
 
 public enum Scope {
-    COMPILE, PROVIDED, RUNTIME, TEST, SYSTEM
+    COMPILE, PROVIDED, RUNTIME, TEST, SYSTEM, IMPORT
 }

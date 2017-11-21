@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.maven.model.DependencyManagement;
+
 import de.dnb.tools.svnfairy.browser.Util;
 
 public class Project {
@@ -36,11 +38,9 @@ public class Project {
     private Version version;
     private Packaging packaging;
 
-    private List<Dependency> dependencies = new ArrayList<>();
+    private List<Dependency> dependencyManagement = new ArrayList<>();
 
-    public boolean isValid() {
-        return !hasIncompleteCoordinates() || getParent().isPresent();
-    }
+    private List<Dependency> dependencies = new ArrayList<>();
 
     public Project(String file) {
         this.file = file;
@@ -84,23 +84,20 @@ public class Project {
         this.version = version;
     }
 
-    public boolean hasIncompleteCoordinates() {
-        return groupId == null || version == null;
-    }
-
-    public Optional<Gav> getGav() {
-        if (groupId == null || version == null) {
-            return Optional.empty();
-        }
-        return Optional.of(Gav.of(groupId, artifactId, version));
-    }
-
     public Packaging getPackaging() {
         return packaging;
     }
 
     public void setPackaging(Packaging packaging) {
         this.packaging = packaging;
+    }
+
+    public List<Dependency> getDependencyManagement() {
+        return Collections.unmodifiableList(dependencyManagement);
+    }
+
+    public void addToDependencyManagement(Dependency dependency) {
+        dependencyManagement.add(dependency);
     }
 
     public List<Dependency> getDependencies() {
@@ -128,4 +125,5 @@ public class Project {
     public String toString() {
         return groupId + ":" + artifactId + ":" + version;
     }
+
 }
