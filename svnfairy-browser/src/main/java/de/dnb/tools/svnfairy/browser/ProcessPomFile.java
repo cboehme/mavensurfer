@@ -130,7 +130,7 @@ public class ProcessPomFile {
 
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
-        LocalRepository localRepository = new LocalRepository("/home/christoph/maven-repo");
+        LocalRepository localRepository = new LocalRepository("/home/christoph/.m2/repository");
         LocalRepositoryManager localRepositoryManager =
                 repositorySystem.newLocalRepositoryManager(session, localRepository);
         session.setLocalRepositoryManager(localRepositoryManager);
