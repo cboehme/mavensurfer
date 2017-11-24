@@ -15,6 +15,12 @@
     </f:metadata>
     <h1><h:outputText value="#{pom.name}"/></h1>
     <h2>Abhängige Projekte</h2>
+    <h3>Kind-Projekte</h3>
+    <p><h:outputText value="#{pom.name}"/> ist Parent folgender Maven Projekte:</p>
+    <ui:repeat value="#{pom.children}" var="child">
+        <li><h:outputText value="#{child.gav}"/></li>
+    </ui:repeat>
+
     <p>Diese Maven-Projekte verwenden <h:outputText value="#{pom.name}"/>:
     </p>
     <ui:repeat value="#{pom.dependents}" var="dependent">

@@ -79,4 +79,12 @@ public class PomBean {
                 .collect(toList());
     }
 
+    public List<GavBean> getChildren() {
+        Project project = repository.getByGav(GroupId.of(groupId),
+                ArtifactId.of(artifactId), Version.of(version));
+        return repository.getChildProjectsOf(project).stream()
+                .map(GavBean::new)
+                .collect(toList());
+    }
+
 }

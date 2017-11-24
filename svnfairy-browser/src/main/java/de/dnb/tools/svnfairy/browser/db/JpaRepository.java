@@ -15,6 +15,7 @@ import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Packaging;
+import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
@@ -46,16 +47,6 @@ public class JpaRepository {
         return findByGav.getSingleResult();
     }
 
-    private Project mapBeanToProject(ProjectBean projectBean) {
-
-        Project project = new Project(projectBean.file);
-        project.setGroupId(GroupId.of(projectBean.groupId));
-        project.setArtifactId(ArtifactId.of(projectBean.artifactId));
-        project.setVersion(Version.of(projectBean.version));
-        project.setPackaging(Packaging.of(projectBean.packaging));
-        return project;
-    }
-
     @Transactional
     public Collection<Project> getDependentProjects(Project project) {
 
@@ -77,11 +68,30 @@ public class JpaRepository {
     }
 
     @Transactional
+    public Collection<Project> getChildProjectsOf(Project project) {
+
+        Collection<ProjectBean> projectBeans = findChildProjectBeans(
+                project.getGroupId().get(), project.getArtifactId());
+        return projectBeans.stream()
+                .map(this::mapBeanToProject)
+                .collect(toList());
+    }
+
+    private Collection<ProjectBean> findChildProjectBeans(GroupId groupId,
+                                                          ArtifactId artifactId) {
+
+        Query findByParent = entityManager.createNamedQuery(
+                "Project.findByParent");
+        findByParent.setParameter("parentGroupId", groupId.toString());
+        findByParent.setParameter("parentArtifactId", artifactId.toString());
+        return findByParent.getResultList();
+
+    }
+
+    @Transactional
     public void create(Project project) {
 
         ProjectBean projectBean = mapProjectToBean(project);
-        project.getParent()
-                .ifPresent(projectBean::setParentCoordinates);
         entityManager.persist(projectBean);
 
         for (Dependency dependency : project.getDependencies()) {
@@ -89,6 +99,24 @@ public class JpaRepository {
             dependencyBean.owner = projectBean;
             entityManager.persist(dependencyBean);
         }
+    }
+
+    private Project mapBeanToProject(ProjectBean projectBean) {
+
+        Project project = new Project(projectBean.file);
+        project.setGroupId(GroupId.of(projectBean.groupId));
+        project.setArtifactId(ArtifactId.of(projectBean.artifactId));
+        project.setVersion(Version.of(projectBean.version));
+        project.setPackaging(Packaging.of(projectBean.packaging));
+        if (projectBean.parentGroupId != null
+                && projectBean.parentArtifactId != null) {
+            Parent parent = Parent.of(
+                    GroupId.of(projectBean.parentGroupId),
+                    ArtifactId.of(projectBean.artifactId),
+                    Version.of(projectBean.parentVersionRange));
+            project.setParent(parent);
+        }
+        return project;
     }
 
     private ProjectBean mapProjectToBean(Project project) {
@@ -101,6 +129,8 @@ public class JpaRepository {
         if (project.getPackaging() != null) {
             projectBean.packaging = project.getPackaging().toString();
         }
+        project.getParent()
+                .ifPresent(projectBean::setParentCoordinates);
         return projectBean;
     }
 
@@ -114,5 +144,4 @@ public class JpaRepository {
         }
         return dependencyBean;
     }
-
 }
