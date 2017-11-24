@@ -80,6 +80,8 @@ public class JpaRepository {
     public void create(Project project) {
 
         ProjectBean projectBean = mapProjectToBean(project);
+        project.getParent()
+                .ifPresent(projectBean::setParentCoordinates);
         entityManager.persist(projectBean);
 
         for (Dependency dependency : project.getDependencies()) {

@@ -8,6 +8,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import de.dnb.tools.svnfairy.browser.model.Parent;
+
 @Entity
 @Table(name = "project",
        uniqueConstraints = @UniqueConstraint(columnNames = { "groupId", "artifactId", "version" }))
@@ -30,5 +32,15 @@ class ProjectBean {
     String version;
 
     String packaging;
+
+    String parentGroupId;
+    String parentArtifactId;
+    String parentVersionRange;
+
+    void setParentCoordinates(Parent parent) {
+        parentGroupId = parent.getGroupId().toString();
+        parentArtifactId = parent.getArtifactId().toString();
+        parentVersionRange = parent.getVersion().toString();
+    }
 
 }
