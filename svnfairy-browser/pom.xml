@@ -14,6 +14,7 @@
     <packaging>war</packaging>
 
     <properties>
+        <debug>0</debug>
         <version.wildfly-swarm>2017.11.0</version.wildfly-swarm>
     </properties>
 
@@ -129,7 +130,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <debug>1</debug>
+                    <debug>${debug}</debug>
                     <debugPort>5050</debugPort>
                 </configuration>
             </plugin>
