@@ -70,6 +70,14 @@ public class PomBean {
         return project.getFile();
     }
 
+    public List<String> getAllVersions() {
+        List<Project> projects = repository.findProjectsWith(
+                GroupId.of(groupId), ArtifactId.of(artifactId));
+        return projects.stream()
+                .map(p -> p.getVersion().get().toString())
+                .collect(toList());
+    }
+
     public List<GavBean> getDependents() {
         log.info("GAV: {}:{}:{}", groupId, artifactId, version);
         Project project = repository.getByGav(GroupId.of(groupId),

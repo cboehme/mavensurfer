@@ -13,18 +13,30 @@
         <f:viewParam name="artifactId" value="#{pom.artifactId}"/>
         <f:viewParam name="version" value="#{pom.version}"/>
     </f:metadata>
-    <h1><h:outputText value="#{pom.name}"/></h1>
+    <h1><h:outputText value="#{pom.name} #{pom.version}"/></h1>
+    <h2>Versionen</h2>
+    <ol>
+        <ui:repeat value="#{pom.allVersions}" var="version">
+            <li><h:outputText value="#{version}"/>
+                <h:outputText value=" (Diese Version)" rendered="#{version eq pom.version}"/>
+            </li>
+        </ui:repeat>
+    </ol>
     <h2>Abhängige Projekte</h2>
     <h3>Kind-Projekte</h3>
     <p><h:outputText value="#{pom.name}"/> ist Parent folgender Maven Projekte:</p>
-    <ui:repeat value="#{pom.children}" var="child">
-        <li><h:outputText value="#{child.gav}"/></li>
-    </ui:repeat>
+    <ul>
+        <ui:repeat value="#{pom.children}" var="child">
+            <li><h:outputText value="#{child.gav}"/></li>
+        </ui:repeat>
+    </ul>
 
     <p>Diese Maven-Projekte verwenden <h:outputText value="#{pom.name}"/>:
     </p>
-    <ui:repeat value="#{pom.dependents}" var="dependent">
-        <li><h:outputText value="#{dependent.gav}"/></li>
-    </ui:repeat>
+    <ul>
+        <ui:repeat value="#{pom.dependents}" var="dependent">
+            <li><h:outputText value=" #{dependent.gav}"/></li>
+        </ui:repeat>
+    </ul>
 </h:body>
 </html>

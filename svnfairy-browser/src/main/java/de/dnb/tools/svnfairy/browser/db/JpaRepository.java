@@ -3,6 +3,7 @@ package de.dnb.tools.svnfairy.browser.db;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
@@ -45,6 +46,19 @@ public class JpaRepository {
         findByGav.setParameter("artifactId", artifactId.toString());
         findByGav.setParameter("version", version.toString());
         return findByGav.getSingleResult();
+    }
+
+    @Transactional
+    public List<Project> findProjectsWith(GroupId groupId,
+                                          ArtifactId artifactId) {
+
+        final TypedQuery<ProjectBean> find = entityManager.createNamedQuery(
+                "Project.findByGroupIdAndArtifactId", ProjectBean.class);
+        find.setParameter("groupId", groupId.toString());
+        find.setParameter("artifactId", artifactId.toString());
+        return find.getResultList().stream()
+                .map(this::mapBeanToProject)
+                .collect(toList());
     }
 
     @Transactional
