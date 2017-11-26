@@ -17,6 +17,11 @@ package de.dnb.tools.svnfairy.browser.model;
 
 import java.util.Objects;
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
+import org.apache.maven.artifact.versioning.VersionRange;
+
 import de.dnb.tools.svnfairy.browser.Util;
 
 public final class VersionRequirement {
@@ -32,6 +37,21 @@ public final class VersionRequirement {
             return null;
         }
         return new VersionRequirement(versionRequirement);
+    }
+
+    public boolean containsVersion(Version version) {
+        try {
+            final VersionRange versionRange =
+                    VersionRange.createFromVersionSpec(versionRequirement);
+            final ArtifactVersion artifactVersion
+                    = new DefaultArtifactVersion(version.toString());
+            if (versionRange.getRecommendedVersion() != null) {
+                return artifactVersion.equals(versionRange.getRecommendedVersion());
+            }
+            return versionRange.containsVersion(artifactVersion);
+        } catch (InvalidVersionSpecificationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
