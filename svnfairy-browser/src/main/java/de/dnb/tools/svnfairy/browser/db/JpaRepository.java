@@ -65,7 +65,7 @@ public class JpaRepository {
     public Collection<Project> getDependentProjects(Project project) {
 
         Collection<ProjectBean> projectBeans = findDependentProjectBeans(
-                project.getGroupId().get(), project.getArtifactId());
+                project.getGroupId(), project.getArtifactId());
         return projectBeans.stream()
                 .map(this::mapBeanToProject)
                 .collect(toList());
@@ -85,7 +85,7 @@ public class JpaRepository {
     public Collection<Project> getChildProjectsOf(Project project) {
 
         Collection<ProjectBean> projectBeans = findChildProjectBeans(
-                project.getGroupId().get(), project.getArtifactId());
+                project.getGroupId(), project.getArtifactId());
         return projectBeans.stream()
                 .map(this::mapBeanToProject)
                 .collect(toList());
@@ -137,9 +137,9 @@ public class JpaRepository {
 
         ProjectBean projectBean = new ProjectBean();
         projectBean.file = project.getFile();
-        projectBean.groupId = project.getGroupId().get().toString();
+        projectBean.groupId = project.getGroupId().toString();
         projectBean.artifactId = project.getArtifactId().toString();
-        projectBean.version = project.getVersion().get().toString();
+        projectBean.version = project.getVersion().toString();
         if (project.getPackaging() != null) {
             projectBean.packaging = project.getPackaging().toString();
         }

@@ -25,9 +25,9 @@ public class GavBean {
     private String version;
 
     GavBean(Project project) {
-        this.groupId = project.getGroupId().get().toString();
+        this.groupId = project.getGroupId().toString();
         this.artifactId = project.getArtifactId().toString();
-        this.version = project.getVersion().get().toString();
+        this.version = project.getVersion().toString();
     }
 
     public String getGroupId() {

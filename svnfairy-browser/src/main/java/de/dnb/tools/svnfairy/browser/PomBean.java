@@ -74,7 +74,7 @@ public class PomBean {
         List<Project> projects = repository.findProjectsWith(
                 GroupId.of(groupId), ArtifactId.of(artifactId));
         return projects.stream()
-                .map(p -> p.getVersion().get().toString())
+                .map(p -> p.getVersion().toString())
                 .collect(toList());
     }
 

@@ -58,8 +58,8 @@ public class Project {
         this.parent = parent;
     }
 
-    public Optional<GroupId> getGroupId() {
-        return Optional.ofNullable(groupId);
+    public GroupId getGroupId() {
+        return groupId;
     }
 
     public void setGroupId(GroupId groupId) {
@@ -76,8 +76,8 @@ public class Project {
         this.artifactId = artifactId;
     }
 
-    public Optional<Version> getVersion() {
-        return Optional.ofNullable(version);
+    public Version getVersion() {
+        return version;
     }
 
     public void setVersion(Version version) {

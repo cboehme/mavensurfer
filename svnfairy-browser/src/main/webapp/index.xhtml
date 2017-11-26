@@ -14,14 +14,21 @@
         <f:viewParam name="version" value="#{pom.version}"/>
     </f:metadata>
     <h1><h:outputText value="#{pom.name} #{pom.version}"/></h1>
+
     <h2>Versionen</h2>
     <ol>
         <ui:repeat value="#{pom.allVersions}" var="version">
-            <li><h:outputText value="#{version}"/>
-                <h:outputText value=" (Diese Version)" rendered="#{version eq pom.version}"/>
+            <li>
+                <h:link value="#{version}" outcome="index" rendered="#{version ne pom.version}">
+                    <f:param name="groupId" value="#{pom.groupId}"/>
+                    <f:param name="artifactId" value="#{pom.artifactId}"/>
+                    <f:param name="version" value="#{version}"/>
+                </h:link>
+                <h:outputText value="#{version} (Diese Version)" rendered="#{version eq pom.version}"/>
             </li>
         </ui:repeat>
     </ol>
+
     <h2>Abhängige Projekte</h2>
     <h3>Kind-Projekte</h3>
     <p><h:outputText value="#{pom.name}"/> ist Parent folgender Maven Projekte:</p>
