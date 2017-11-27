@@ -81,19 +81,17 @@ public class PomBean {
                 .collect(toList());
     }
 
+    public List<Project> getChildren() {
+        Project project = repository.getByGav(GroupId.of(groupId),
+                ArtifactId.of(artifactId), Version.of(version));
+        return getChildren.of(project);
+    }
+
     public List<GavBean> getDependents() {
         log.info("GAV: {}:{}:{}", groupId, artifactId, version);
         Project project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version));
         return repository.getDependentProjects(project).stream()
-                .map(GavBean::new)
-                .collect(toList());
-    }
-
-    public List<GavBean> getChildren() {
-        Project project = repository.getByGav(GroupId.of(groupId),
-                ArtifactId.of(artifactId), Version.of(version));
-        return getChildren.of(project).stream()
                 .map(GavBean::new)
                 .collect(toList());
     }
