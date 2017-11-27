@@ -127,7 +127,7 @@ public class JpaRepository {
                 && projectBean.parentArtifactId != null) {
             Parent parent = Parent.of(
                     GroupId.of(projectBean.parentGroupId),
-                    ArtifactId.of(projectBean.artifactId),
+                    ArtifactId.of(projectBean.parentArtifactId),
                     VersionRequirement.of(projectBean.parentVersionRange));
             project.setParent(parent);
         }

@@ -31,6 +31,9 @@ public class PomBean {
     @Inject
     private GetChildren getChildren;
 
+    @Inject
+    private GetPossibleParents getPossibleParents;
+
     private String groupId;
     private String artifactId;
     private String version;
@@ -79,6 +82,12 @@ public class PomBean {
         return projects.stream()
                 .map(p -> p.getVersion().toString())
                 .collect(toList());
+    }
+
+    public List<Project> getPossibleParents() {
+        Project project = repository.getByGav(GroupId.of(groupId),
+                ArtifactId.of(artifactId), Version.of(version));
+        return getPossibleParents.of(project);
     }
 
     public List<Project> getChildren() {
