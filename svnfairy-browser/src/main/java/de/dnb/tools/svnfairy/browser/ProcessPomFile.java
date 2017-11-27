@@ -86,8 +86,7 @@ public class ProcessPomFile {
         // Required by CDI
     }
 
-    public void processPomFile(PomFile pomFile) throws SAXException,
-            ParserConfigurationException, XPathExpressionException, IOException {
+    public void processPomFile(PomFile pomFile) {
 
         final Project project = makeEffectivePom(pomFile);
         if (project != null) {

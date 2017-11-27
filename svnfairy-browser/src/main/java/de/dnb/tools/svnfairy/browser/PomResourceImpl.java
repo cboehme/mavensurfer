@@ -59,15 +59,8 @@ public class PomResourceImpl implements PomResource {
         log.info("Received {}", pomFile.getName());
         log.debug("POM: {}", new String(pomFile.getContents(), StandardCharsets.UTF_8));
 
-        try {
-            processPomFile.processPomFile(pomFile);
-        } catch (SAXException e) {
-            return Response.status(BAD_REQUEST).entity(e).build();
-        } catch (ParserConfigurationException
-                | IOException
-                | XPathExpressionException e) {
-            return Response.serverError().build();
-        }
+        processPomFile.processPomFile(pomFile);
+
         return Response.ok().build();
     }
 

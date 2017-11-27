@@ -36,4 +36,5 @@ public class GetChildren {
                 .filter(child -> child.getParent().get().getVersion().containsVersion(parent.getVersion()))
                 .collect(toList());
     }
+
 }
