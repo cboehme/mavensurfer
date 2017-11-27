@@ -19,6 +19,7 @@ import de.dnb.tools.svnfairy.browser.model.Packaging;
 import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
+import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
 @ApplicationScoped
 public class JpaRepository {
@@ -127,7 +128,7 @@ public class JpaRepository {
             Parent parent = Parent.of(
                     GroupId.of(projectBean.parentGroupId),
                     ArtifactId.of(projectBean.artifactId),
-                    Version.of(projectBean.parentVersionRange));
+                    VersionRequirement.of(projectBean.parentVersionRange));
             project.setParent(parent);
         }
         return project;

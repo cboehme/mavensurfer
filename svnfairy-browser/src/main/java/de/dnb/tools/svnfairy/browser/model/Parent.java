@@ -23,11 +23,11 @@ public final class Parent {
 
     private final GroupId groupId;
     private final ArtifactId artifactId;
-    private final Version version;
+    private final VersionRequirement version;
 
     private Parent(GroupId groupId,
                    ArtifactId artifactId,
-                   Version version) {
+                   VersionRequirement version) {
 
         this.groupId = groupId;
         this.artifactId = artifactId;
@@ -36,7 +36,7 @@ public final class Parent {
 
     public static Parent of(GroupId groupdId,
                             ArtifactId artifactId,
-                            Version version) {
+                            VersionRequirement version) {
 
         return new Parent(groupdId, artifactId, version);
     }
@@ -49,7 +49,7 @@ public final class Parent {
         return artifactId;
     }
 
-    public Version getVersion() {
+    public VersionRequirement getVersion() {
         return version;
     }
 

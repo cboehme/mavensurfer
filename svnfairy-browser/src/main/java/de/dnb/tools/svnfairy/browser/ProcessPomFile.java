@@ -163,7 +163,7 @@ public class ProcessPomFile {
                     model.getParent().getGroupId());
             final ArtifactId parentArtifactId = ArtifactId.of(
                     model.getParent().getArtifactId());
-            final Version parentVersion = Version.of(
+            final VersionRequirement parentVersion = VersionRequirement.of(
                     model.getParent().getVersion());
             final Parent parent = Parent.of(parentGroupId, parentArtifactId,
                     parentVersion);

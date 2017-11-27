@@ -28,6 +28,9 @@ public class PomBean {
     @Inject
     private JpaRepository repository;
 
+    @Inject
+    private GetChildren getChildren;
+
     private String groupId;
     private String artifactId;
     private String version;
@@ -90,7 +93,7 @@ public class PomBean {
     public List<GavBean> getChildren() {
         Project project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version));
-        return repository.getChildProjectsOf(project).stream()
+        return getChildren.of(project).stream()
                 .map(GavBean::new)
                 .collect(toList());
     }
