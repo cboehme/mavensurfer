@@ -17,7 +17,7 @@ import de.dnb.tools.svnfairy.browser.model.Parent;
     @NamedQuery(name = "Project.findByGav",
                 query = "SELECT p FROM ProjectBean p WHERE p.groupId = :groupId AND p.artifactId = :artifactId AND p.version = :version"),
     @NamedQuery(name = "Project.findByDependency",
-                query = "SELECT d.owner FROM DependencyBean d JOIN d.owner WHERE d.groupId = :groupId AND d.artifactId = :artifactId"),
+                query = "SELECT NEW de.dnb.tools.svnfairy.browser.db.ProjectWithDependency(d.owner, d) FROM DependencyBean d JOIN d.owner WHERE d.groupId = :groupId AND d.artifactId = :artifactId"),
     @NamedQuery(name = "Project.findByParent",
                 query = "SELECT p FROM ProjectBean p WHERE p.parentGroupId = :parentGroupId AND p.parentArtifactId = :parentArtifactId"),
     @NamedQuery(name = "Project.findByGroupIdAndArtifactId",

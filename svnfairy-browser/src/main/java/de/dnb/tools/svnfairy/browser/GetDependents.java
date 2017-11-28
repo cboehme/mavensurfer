@@ -33,6 +33,7 @@ public class GetDependents {
 
     public List<Project> of(Project project) {
         return repository.getDependentProjects(project).stream()
+                .filter(p -> p.getDependencies().get(0).getVersion().containsVersion(project.getVersion()))
                 .collect(toList());
     }
 

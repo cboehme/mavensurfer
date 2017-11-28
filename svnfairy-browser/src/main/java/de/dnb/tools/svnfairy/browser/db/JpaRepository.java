@@ -2,6 +2,7 @@ package de.dnb.tools.svnfairy.browser.db;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,11 +14,14 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Classifier;
 import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Packaging;
 import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
+import de.dnb.tools.svnfairy.browser.model.Scope;
+import de.dnb.tools.svnfairy.browser.model.Type;
 import de.dnb.tools.svnfairy.browser.model.Version;
 import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
@@ -65,14 +69,18 @@ public class JpaRepository {
     @Transactional
     public Collection<Project> getDependentProjects(Project project) {
 
-        Collection<ProjectBean> projectBeans = findDependentProjectBeans(
+        Collection<ProjectWithDependency> projectWithDeps = findDependentProjectBeans(
                 project.getGroupId(), project.getArtifactId());
-        return projectBeans.stream()
-                .map(this::mapBeanToProject)
+        return projectWithDeps.stream()
+                .map(projectWithDep -> {
+                    Project p = mapBeanToProject(projectWithDep.project);
+                    p.addDependency(mapBeanToDependency(projectWithDep.dependency));
+                    return p;
+                })
                 .collect(toList());
     }
 
-    private Collection<ProjectBean> findDependentProjectBeans(GroupId groupId,
+    private Collection<ProjectWithDependency> findDependentProjectBeans(GroupId groupId,
                                                               ArtifactId artifactId) {
 
         Query findByDependency = entityManager.createNamedQuery(
@@ -159,4 +167,23 @@ public class JpaRepository {
         }
         return dependencyBean;
     }
+
+    private Dependency mapBeanToDependency(DependencyBean dependencyBean) {
+        Dependency dependency = new Dependency();
+        dependency.setGroupId(GroupId.of(dependencyBean.groupId));
+        dependency.setArtifactId(ArtifactId.of(dependencyBean.artifactId));
+        dependency.setVersion(VersionRequirement.of(dependencyBean.version));
+        if (dependencyBean.classifier != null) {
+            dependency.setClassifier(Classifier.of(dependencyBean.classifier));
+        }
+        if (dependencyBean.type != null) {
+            dependency.setType(Type.of(dependencyBean.type));
+        }
+        if (dependencyBean.scope != null) {
+            dependency.setScope(Scope.valueOf(dependencyBean.scope));
+        }
+        dependency.setOptional(dependencyBean.optional);
+        return dependency;
+    }
+
 }
