@@ -2,6 +2,7 @@ package de.dnb.tools.svnfairy.browser;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -27,12 +28,12 @@ public class PomBean {
 
     @Inject
     private JpaRepository repository;
-
     @Inject
     private GetChildren getChildren;
-
     @Inject
     private GetPossibleParents getPossibleParents;
+    @Inject
+    private GetDependents getDependents;
 
     private String groupId;
     private String artifactId;
@@ -96,13 +97,10 @@ public class PomBean {
         return getChildren.of(project);
     }
 
-    public List<GavBean> getDependents() {
-        log.info("GAV: {}:{}:{}", groupId, artifactId, version);
+    public List<Project> getDependents() {
         Project project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version));
-        return repository.getDependentProjects(project).stream()
-                .map(GavBean::new)
-                .collect(toList());
+        return getDependents.of(project);
     }
 
 }

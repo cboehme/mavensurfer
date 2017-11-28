@@ -61,7 +61,13 @@
     </p>
     <ul>
         <ui:repeat value="#{pom.dependents}" var="dependent">
-            <li><h:outputText value=" #{dependent.gav}"/></li>
+            <li>
+                <h:link value="#{dependent.groupId}:#{dependent.artifactId}:#{dependent.version}" outcome="index">
+                    <f:param name="groupId" value="#{dependent.groupId}"/>
+                    <f:param name="artifactId" value="#{dependent.artifactId}"/>
+                    <f:param name="version" value="#{dependent.version}"/>
+                </h:link>
+            </li>
         </ui:repeat>
     </ul>
 </h:body>
