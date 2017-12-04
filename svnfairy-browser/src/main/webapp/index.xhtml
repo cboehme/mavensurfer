@@ -62,11 +62,13 @@
     <ul>
         <ui:repeat value="#{pom.dependents}" var="dependent">
             <li>
-                <h:link value="#{dependent.groupId}:#{dependent.artifactId}:#{dependent.version}" outcome="index">
+                <h:link value="#{dependent.groupId}:#{dependent.artifactId}:#{dependent.dependencies[0].classifier}:#{dependent.dependencies[0].type}:#{dependent.version}" outcome="index">
                     <f:param name="groupId" value="#{dependent.groupId}"/>
                     <f:param name="artifactId" value="#{dependent.artifactId}"/>
                     <f:param name="version" value="#{dependent.version}"/>
                 </h:link>
+                (<h:outputText value="Scope: ${dependent.dependencies[0].scope}"/>
+                <h:outputText value=", optional" rendered="#{dependent.dependencies[0].optional}"/>)
             </li>
         </ui:repeat>
     </ul>
