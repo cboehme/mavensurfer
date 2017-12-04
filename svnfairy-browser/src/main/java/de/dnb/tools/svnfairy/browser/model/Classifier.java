@@ -21,6 +21,8 @@ import de.dnb.tools.svnfairy.browser.Util;
 
 public final class Classifier {
 
+    private static final String emptyClassifierValue = "";
+
     private final String classifier;
 
     private Classifier(String classifier) {
@@ -28,10 +30,16 @@ public final class Classifier {
     }
 
     public static Classifier of(String classifier) {
+
         if (classifier == null) {
-            return null;
+            return new Classifier(emptyClassifierValue);
         }
         return new Classifier(classifier);
+    }
+
+    public static Classifier none() {
+
+        return new Classifier(emptyClassifierValue);
     }
 
     @Override

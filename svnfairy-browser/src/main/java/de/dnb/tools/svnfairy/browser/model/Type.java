@@ -21,6 +21,8 @@ import de.dnb.tools.svnfairy.browser.Util;
 
 public final class Type {
 
+    private static final String defaultTypeValue = "jar";
+
     private final String type;
 
     private Type(String type) {
@@ -28,10 +30,16 @@ public final class Type {
     }
 
     public static Type of(String type) {
+
         if (type == null) {
-            return null;
+            return new Type(defaultTypeValue);
         }
         return new Type(type);
+    }
+
+    public static Type defaultType() {
+
+        return new Type(defaultTypeValue);
     }
 
     @Override

@@ -15,15 +15,17 @@
  */
 package de.dnb.tools.svnfairy.browser.model;
 
+import static java.util.Objects.requireNonNull;
+
 public class Dependency {
 
     private GroupId groupId;
     private ArtifactId artifactId;
     private VersionRequirement version;
-    private Classifier classifier;
-    private Type type;
-    private Scope scope;
-    private boolean optional;
+    private Classifier classifier = Classifier.none();
+    private Type type = Type.defaultType();
+    private Scope scope = Scope.COMPILE;
+    private boolean optional = false;
 
     public GroupId getGroupId() {
         return groupId;
@@ -54,6 +56,8 @@ public class Dependency {
     }
 
     public void setClassifier(Classifier classifier) {
+
+        requireNonNull(classifier);
         this.classifier = classifier;
     }
 
@@ -62,6 +66,8 @@ public class Dependency {
     }
 
     public void setType(Type type) {
+
+        requireNonNull(type);
         this.type = type;
     }
 
@@ -70,6 +76,8 @@ public class Dependency {
     }
 
     public void setScope(Scope scope) {
+
+        requireNonNull(scope);
         this.scope = scope;
     }
 

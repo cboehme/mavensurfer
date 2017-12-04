@@ -159,29 +159,27 @@ public class JpaRepository {
 
     private DependencyBean mapDependencyToBean(Dependency dependency) {
 
-        DependencyBean dependencyBean = new DependencyBean();
+        final DependencyBean dependencyBean = new DependencyBean();
         dependencyBean.groupId = dependency.getGroupId().toString();
         dependencyBean.artifactId = dependency.getArtifactId().toString();
         if (dependency.getVersion() != null) {
             dependencyBean.version = dependency.getVersion().toString();
         }
+        dependencyBean.classifier = dependency.getClassifier().toString();
+        dependencyBean.type = dependency.getType().toString();
+        dependencyBean.scope = dependency.getScope().name();
+        dependencyBean.optional = dependency.isOptional();
         return dependencyBean;
     }
 
     private Dependency mapBeanToDependency(DependencyBean dependencyBean) {
-        Dependency dependency = new Dependency();
+        final Dependency dependency = new Dependency();
         dependency.setGroupId(GroupId.of(dependencyBean.groupId));
         dependency.setArtifactId(ArtifactId.of(dependencyBean.artifactId));
         dependency.setVersion(VersionRequirement.of(dependencyBean.version));
-        if (dependencyBean.classifier != null) {
-            dependency.setClassifier(Classifier.of(dependencyBean.classifier));
-        }
-        if (dependencyBean.type != null) {
-            dependency.setType(Type.of(dependencyBean.type));
-        }
-        if (dependencyBean.scope != null) {
-            dependency.setScope(Scope.valueOf(dependencyBean.scope));
-        }
+        dependency.setClassifier(Classifier.of(dependencyBean.classifier));
+        dependency.setType(Type.of(dependencyBean.type));
+        dependency.setScope(Scope.valueOf(dependencyBean.scope));
         dependency.setOptional(dependencyBean.optional);
         return dependency;
     }
