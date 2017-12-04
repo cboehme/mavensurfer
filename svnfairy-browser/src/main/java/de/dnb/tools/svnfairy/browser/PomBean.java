@@ -2,9 +2,6 @@ package de.dnb.tools.svnfairy.browser;
 
 import static java.util.stream.Collectors.toList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
