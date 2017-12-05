@@ -33,6 +33,7 @@ import org.apache.maven.model.building.DefaultModelBuildingRequest;
 import org.apache.maven.model.building.ModelBuilder;
 import org.apache.maven.model.building.ModelBuildingException;
 import org.apache.maven.model.building.ModelBuildingRequest;
+import org.apache.maven.model.building.ModelBuildingResult;
 import org.apache.maven.model.building.ModelSource2;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest;
@@ -109,15 +110,18 @@ public class ProcessPomFile {
 
         final ModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
 
-        final Model effectiveModel;
+        final ModelBuildingResult result;
         try {
-            effectiveModel = modelBuilder.build(request).getEffectiveModel();
+            result = modelBuilder.build(request);
         } catch (ModelBuildingException e) {
             log.error("Could not build effective POM", e);
             return null;
         }
 
-        return mapModelToProject(pomFile.getName(), effectiveModel);
+        final Model effectiveModel = result.getEffectiveModel();
+        final Model rawModel = result.getRawModel();
+
+        return mapModelToProject(pomFile.getName(), effectiveModel, rawModel);
     }
 
     private ModelResolver createModelResolver() {
@@ -148,7 +152,9 @@ public class ProcessPomFile {
                 ProjectBuildingRequest.RepositoryMerging.POM_DOMINANT, null);
     }
 
-    private Project mapModelToProject(String sourceName, Model model) {
+    private Project mapModelToProject(String sourceName,
+                                      Model model,
+                                      Model rawModel) {
 
         final Project project = new Project(sourceName);
 
@@ -180,6 +186,26 @@ public class ProcessPomFile {
             dependencyRef.setScope(Scope.valueOf(dependency.getScope().toUpperCase()));
             dependencyRef.setOptional(dependency.isOptional());
             project.addDependency(dependencyRef);
+        }
+
+
+        if (rawModel.getDependencyManagement() != null) {
+            log.info("Process dependency management");
+            for (Dependency dependency : rawModel.getDependencyManagement().getDependencies()) {
+                log.info("processing dependency management: {}", dependency);
+                if ("import".equals(dependency.getScope()) && "pom".equals(dependency.getType())) {
+                    final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =
+                            new de.dnb.tools.svnfairy.browser.model.Dependency();
+                    dependencyRef.setGroupId(GroupId.of(dependency.getGroupId()));
+                    dependencyRef.setArtifactId(ArtifactId.of(dependency.getArtifactId()));
+                    dependencyRef.setVersion(VersionRequirement.of(dependency.getVersion()));
+                    dependencyRef.setClassifier(Classifier.of(dependency.getClassifier()));
+                    dependencyRef.setType(Type.of(dependency.getType()));
+                    dependencyRef.setScope(Scope.valueOf(dependency.getScope().toUpperCase()));
+                    dependencyRef.setOptional(dependency.isOptional());
+                    project.addDependency(dependencyRef);
+                }
+            }
         }
 
         return project;
