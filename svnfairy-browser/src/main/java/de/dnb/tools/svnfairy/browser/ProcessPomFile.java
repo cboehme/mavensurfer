@@ -18,13 +18,13 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
-import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -53,7 +53,6 @@ import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
@@ -175,7 +174,18 @@ public class ProcessPomFile {
             project.setParent(parent);
         }
 
+        final Set<DependencyId> dependencies = new HashSet<>();
+        for (Dependency dependency : rawModel.getDependencies()) {
+            dependencies.add(DependencyId.of(dependency));
+        }
+        log.info("Dependencies: {}", dependencies);
+
         for (Dependency dependency : model.getDependencies()) {
+            final DependencyId dependencyId = DependencyId.of(dependency);
+            if (!dependencies.contains(dependencyId)) {
+                log.info("Skipping dependency: {}", dependency);
+                continue;
+            }
             final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =
                     new de.dnb.tools.svnfairy.browser.model.Dependency();
             dependencyRef.setGroupId(GroupId.of(dependency.getGroupId()));
@@ -187,7 +197,6 @@ public class ProcessPomFile {
             dependencyRef.setOptional(dependency.isOptional());
             project.addDependency(dependencyRef);
         }
-
 
         if (rawModel.getDependencyManagement() != null) {
             log.info("Process dependency management");
@@ -209,6 +218,41 @@ public class ProcessPomFile {
         }
 
         return project;
+    }
+
+    private static final class DependencyId {
+
+        final String groupId;
+        final String artifactId;
+        final String classifier;
+        final String type;
+
+        private DependencyId(Dependency dependency) {
+
+            this.groupId = dependency.getGroupId();
+            this.artifactId = dependency.getArtifactId();
+            this.classifier = dependency.getClassifier();
+            this.type = dependency.getType();
+        }
+
+        static DependencyId of(Dependency dependency) {
+            return new DependencyId(dependency);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return Util.equals(this, obj, (a, b) ->
+                Objects.equals(a.groupId, b.groupId) &&
+                Objects.equals(a.artifactId, b.artifactId) &&
+                Objects.equals(a.classifier, b.classifier) &&
+                Objects.equals(a.type, b.type));
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(groupId, artifactId, classifier, type);
+        }
+
     }
 
 }
