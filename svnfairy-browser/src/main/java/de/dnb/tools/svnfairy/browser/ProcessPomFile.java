@@ -18,10 +18,8 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -177,18 +175,7 @@ public class ProcessPomFile {
             project.setParent(parent);
         }
 
-        final Set<DependencyId> dependencies = new HashSet<>();
-        for (Dependency dependency : rawModel.getDependencies()) {
-            dependencies.add(DependencyId.of(dependency));
-        }
-        log.info("Dependencies: {}", dependencies);
-
         for (Dependency dependency : model.getDependencies()) {
-            final DependencyId dependencyId = DependencyId.of(dependency);
-            if (!dependencies.contains(dependencyId)) {
-                log.info("Skipping dependency: {}", dependency);
-                continue;
-            }
             final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =
                     new de.dnb.tools.svnfairy.browser.model.Dependency();
             dependencyRef.setGroupId(GroupId.of(dependency.getGroupId()));
