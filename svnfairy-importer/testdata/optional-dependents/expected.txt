@@ -1,0 +1,2 @@
+dependency:1.0.0
+  -> dependent-project:1.0.0 (optional: true)

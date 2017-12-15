@@ -1,0 +1,19 @@
+dependency-a:1.0.0
+  -> child:1.0.0
+
+dependency-a:2.0.0
+  -> parent:1.0.0
+
+dependency-b:1.0.0
+  -> parent:1.0.0
+  -> child:1.0.0 (inherited dependency)
+
+dependency-c:1.0.0
+  -> parent:1.0.0
+  -> child:1.0.0 (inherited dependency)
+  -> child:1.0.0 (classifier: sources)
+
+dependency-d:1.0.0
+  -> parent:1.0.0 (type: ejb)
+  -> child:1.0.0 (type: ejb, inherited dependency)
+  -> child:1.0.0 (type: ejb-client)

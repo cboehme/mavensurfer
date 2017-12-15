@@ -1,0 +1,28 @@
+dependency-a:1.0.0
+  -> dependent-project-a-1.0.0
+  -> dependent-project-b-1.0.0
+  -> dependent-project-c-1.0.0
+  -> dependent-project-e-1.0.0
+  -> dependent-project-e-2.0.0
+
+dependency-a:2.0.0
+  -> dependent-project-b-1.0.0
+  -> dependent-project-e-3.0.0
+
+
+dependency-b:1.0.0
+  -> dependent-project-d-1.0.0
+
+
+dependency-b:2.0.0
+
+
+dependency-c:1.0.0
+  -> dependent-project-f-1.0.0 (type: ejb)
+  -> dependent-project-g-1.0.0 (type: ejb)
+  -> dependent-project-g-1.0.0 (type: ejb-client)
+
+
+dependency-d:1.0.0
+  -> dependent-project-h-1.0.0
+  -> dependent-project-h-1.0.0 (classifier: sources)

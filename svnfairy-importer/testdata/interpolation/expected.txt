@@ -1,0 +1,5 @@
+dependency-a:1.0.0
+  -> child:1.0.0
+
+dependency-b:1.0.0
+  -> child:1.0.0

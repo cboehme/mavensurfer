@@ -1,0 +1,4 @@
+dependency:1.0.0
+  -> dependent-project-a:1.0.0 (scope: runtime)
+  -> dependent-project-a:2.0.0 (scope: provided)
+  -> dependent-project-b:1.0.0 (scope: test)
