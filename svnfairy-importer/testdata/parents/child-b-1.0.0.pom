@@ -6,9 +6,9 @@
 
     <parent>
         <groupId>de.dnb.tools.test.parents</groupId>
-	<artifactId>parent</artifactId>
-	<version>(,1.0.0]</version>
-	<relativePath>parent-1.0.0.pom</relativePath>
+        <artifactId>parent</artifactId>
+        <version>(,1.0.0]</version>
+        <relativePath>parent-1.0.0.pom</relativePath>
     </parent>
 
     <artifactId>child-b</artifactId>

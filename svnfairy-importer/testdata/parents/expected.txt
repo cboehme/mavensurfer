@@ -1,0 +1,42 @@
+parent:1.0.0
+  Children:
+    -> child-a:1.0.0
+    -> child-b:1.0.0
+    -> child-c:1.0.0
+    -> child-d:1.0.0
+    -> child-e-parent:1.0.0
+    -> child-f:1.0.0
+
+parent:2.0.0
+  Children:
+    -> child-f:1.0.0
+    -> child-g:1.0.0
+
+child-a:1.0.0
+  Parents:
+    -> parent:1.0.0
+
+child-b:1.0.0
+  Parents:
+    -> parent:1.0.0
+
+child-c:1.0.0
+  Parents:
+    -> parent:1.0.0
+
+child-d:1.0.0
+  Parents:
+    -> parent:1.0.0
+
+child-e-parent:1.0.0
+  Parents:
+    -> parent:1.0.0
+
+child-f:1.0.0
+  Parents:
+    -> parent:1.0.0
+    -> parent:2.0.0
+
+child-g:1.0.0
+  Parents:
+    -> parent:2.0.0
