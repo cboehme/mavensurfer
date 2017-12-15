@@ -103,22 +103,25 @@ public class ProcessPomFile {
         request.setModelSource(modelSource);
         request.setValidationLevel(VALIDATION_LEVEL_MINIMAL);
         request.setProcessPlugins(false);
-        request.setTwoPhaseBuilding(false);
+        request.setTwoPhaseBuilding(true);
         request.setSystemProperties(System.getProperties());
         request.setModelResolver(createModelResolver());
 
         final ModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
 
-        final ModelBuildingResult result;
+        ModelBuildingResult result;
+        final Model rawModel;
+        final Model effectiveModel;
         try {
             result = modelBuilder.build(request);
+            rawModel = result.getEffectiveModel().clone();
+            result = modelBuilder.build(request, result);
+            effectiveModel = result.getEffectiveModel();
+
         } catch (ModelBuildingException e) {
             log.error("Could not build effective POM", e);
             return null;
         }
-
-        final Model effectiveModel = result.getEffectiveModel();
-        final Model rawModel = result.getRawModel();
 
         return mapModelToProject(pomFile.getName(), effectiveModel, rawModel);
     }
