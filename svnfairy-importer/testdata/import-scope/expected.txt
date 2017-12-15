@@ -1,5 +1,6 @@
 bill-of-materials:1.0.0
   -> dependent-project-a:1.0.0 (scope: import)
+  -> dependent-project-c:1.0.0 (scope: import)
   -> parent:1.0.0 (scope: import)
 
 bill-of-materials:2.0.0
@@ -7,6 +8,7 @@ bill-of-materials:2.0.0
 
 dependency:1.0.0
   -> dependent-project-a:1.0.0
+  -> dependent-project-c:1.0.0
 
 dependency:2.0.0
   -> dependent-project-b:1.0.0
