@@ -18,6 +18,7 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +38,14 @@ import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectModelResolver;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.apache.maven.settings.Mirror;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
+import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuilder;
+import org.apache.maven.settings.building.SettingsBuildingException;
+import org.apache.maven.settings.building.SettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuildingResult;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RequestTrace;
@@ -72,11 +81,14 @@ public class ProcessPomFile {
             ProcessPomFile.class);
 
     private JpaRepository jpaRepository;
+    private Configuration configuration;
 
     @Inject
-    public ProcessPomFile(JpaRepository jpaRepository) {
+    public ProcessPomFile(JpaRepository jpaRepository,
+                          Configuration configuration) {
 
         this.jpaRepository = jpaRepository;
+        this.configuration = configuration;
     }
 
     public ProcessPomFile() {
@@ -94,6 +106,8 @@ public class ProcessPomFile {
 
     private Project makeEffectivePom(PomFile pomFile) {
 
+        final Settings settings = readSettings();
+
         final ModelSource2 modelSource = new ByteArrayModelSource(
                 pomFile.getName(), pomFile.getContents());
 
@@ -103,7 +117,7 @@ public class ProcessPomFile {
         request.setProcessPlugins(false);
         request.setTwoPhaseBuilding(true);
         request.setSystemProperties(System.getProperties());
-        request.setModelResolver(createModelResolver());
+        request.setModelResolver(createModelResolver(settings));
 
         final ModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
 
@@ -124,21 +138,24 @@ public class ProcessPomFile {
         return mapModelToProject(pomFile.getName(), effectiveModel, rawModel);
     }
 
-    private ModelResolver createModelResolver() {
-        DefaultServiceLocator serviceLocator = MavenRepositorySystemUtils.newServiceLocator();
+    private ModelResolver createModelResolver(Settings settings) {
+
+        final DefaultServiceLocator serviceLocator = MavenRepositorySystemUtils.newServiceLocator();
         serviceLocator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
         serviceLocator.addService(TransporterFactory.class, HttpTransporterFactory.class);
 
-        RepositorySystem repositorySystem = serviceLocator.getService(RepositorySystem.class);
+        final RepositorySystem repositorySystem = serviceLocator.getService(RepositorySystem.class);
 
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
 
+        // TODO: Read local repo path from settings
         LocalRepository localRepository = new LocalRepository("/home/christoph/.m2/repository");
         LocalRepositoryManager localRepositoryManager =
                 repositorySystem.newLocalRepositoryManager(session, localRepository);
         session.setLocalRepositoryManager(localRepositoryManager);
         session.setReadOnly();
 
+        // TODO: Read remoterepos from settings
         serviceLocator.getService(RepositoryConnectorFactory.class);
         RemoteRepository remoteRepository = new RemoteRepository.Builder(
                 "maven-central", "default", "http://repo1.maven.org/maven2/").build();
@@ -150,6 +167,23 @@ public class ProcessPomFile {
         return new ProjectModelResolver(session, new RequestTrace(null),
                 repositorySystem, remoteRepositoryManager, remoteRepositories,
                 ProjectBuildingRequest.RepositoryMerging.POM_DOMINANT, null);
+    }
+
+    private Settings readSettings() {
+        final SettingsBuilder builder = new DefaultSettingsBuilderFactory().newInstance();
+        final SettingsBuildingRequest request = new DefaultSettingsBuildingRequest();
+        request.setSystemProperties(System.getProperties());
+        request.setGlobalSettingsFile(new File(configuration.getGlobalMavenSettings()));
+        request.setUserSettingsFile(new File(configuration.getUserMavenSettings()));
+
+        final SettingsBuildingResult result;
+        try {
+            result = builder.build(request);
+        } catch (SettingsBuildingException e) {
+            log.error("Could not read Maven settings: {}", e);
+            return null;
+        }
+        return result.getEffectiveSettings();
     }
 
     private Project mapModelToProject(String sourceName,
