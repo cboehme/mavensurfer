@@ -39,6 +39,7 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectModelResolver;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.apache.maven.settings.Mirror;
+import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
 import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
@@ -58,6 +59,8 @@ import org.eclipse.aether.repository.RemoteRepository;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.eclipse.aether.util.repository.DefaultMirrorSelector;
+import org.eclipse.aether.util.repository.DefaultProxySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,25 +151,37 @@ public class ProcessPomFile {
         final DefaultServiceLocator serviceLocator = MavenRepositorySystemUtils.newServiceLocator();
         serviceLocator.addService(RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class);
         serviceLocator.addService(TransporterFactory.class, HttpTransporterFactory.class);
+        serviceLocator.getService(RepositoryConnectorFactory.class);
 
         final RepositorySystem repositorySystem = serviceLocator.getService(RepositorySystem.class);
 
-        DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
-
-        // TODO: Read local repo path from settings
-        LocalRepository localRepository = new LocalRepository("/home/christoph/.m2/repository");
-        LocalRepositoryManager localRepositoryManager =
+        final DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+        final DefaultMirrorSelector mirrorSelector = new DefaultMirrorSelector();
+        for (Mirror mirror : settings.getMirrors()) {
+            mirrorSelector.add(mirror.getId(), mirror.getUrl(), mirror.getLayout(),
+                    false, mirror.getMirrorOf(), mirror.getMirrorOfLayouts());
+        }
+        session.setMirrorSelector(mirrorSelector);
+        final DefaultProxySelector proxySelector = new DefaultProxySelector();
+        for (Proxy proxy : settings.getProxies()) {
+            // TODO: Support proxies with authentication
+            // TODO: Decrypt passwords in settings
+            proxySelector.add(new org.eclipse.aether.repository.Proxy(
+                    proxy.getProtocol(), proxy.getHost(), proxy.getPort()),
+                    proxy.getNonProxyHosts());
+        }
+        final LocalRepository localRepository = new LocalRepository(settings.getLocalRepository());
+        final LocalRepositoryManager localRepositoryManager =
                 repositorySystem.newLocalRepositoryManager(session, localRepository);
         session.setLocalRepositoryManager(localRepositoryManager);
         session.setReadOnly();
 
         // TODO: Read remoterepos from settings
-        serviceLocator.getService(RepositoryConnectorFactory.class);
-        RemoteRepository remoteRepository = new RemoteRepository.Builder(
+        final RemoteRepository remoteRepository = new RemoteRepository.Builder(
                 "maven-central", "default", "http://repo1.maven.org/maven2/").build();
-        List<RemoteRepository> remoteRepositories =
+        final List<RemoteRepository> remoteRepositories =
                 repositorySystem.newResolutionRepositories(session, singletonList(remoteRepository));
-        RemoteRepositoryManager remoteRepositoryManager =
+        final RemoteRepositoryManager remoteRepositoryManager =
                 serviceLocator.getService(RemoteRepositoryManager.class);
 
         return new ProjectModelResolver(session, new RequestTrace(null),
