@@ -15,17 +15,26 @@
  */
 package de.dnb.tools.svnfairy.browser;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class Configuration {
 
-    public String getUserMavenSettings() {
-        return "/home/christoph.m2/settings.xml";
+    private final Path userHome = Paths.get(System.getProperty("user.home"));
+
+    public Path getUserMavenSettings() {
+        return userHome.resolve(".m2/settings.xml").toAbsolutePath();
     }
 
-    public String getGlobalMavenSettings() {
-        return "/etc/maven/settings.xml";
+    public Path getGlobalMavenSettings() {
+        return Paths.get("/etc/maven/settings.xml");
+    }
+
+    public Path getDefaultLocalRepository() {
+        return userHome.resolve(".m2/repository").toAbsolutePath();
     }
 
 }

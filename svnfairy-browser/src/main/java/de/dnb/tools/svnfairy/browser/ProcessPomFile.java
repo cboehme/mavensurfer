@@ -18,9 +18,7 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
-import java.io.File;
 import java.util.List;
-import java.util.Objects;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -170,7 +168,11 @@ public class ProcessPomFile {
                     proxy.getProtocol(), proxy.getHost(), proxy.getPort()),
                     proxy.getNonProxyHosts());
         }
-        final LocalRepository localRepository = new LocalRepository(settings.getLocalRepository());
+        String localRepositoryDirectory = settings.getLocalRepository();
+        if (localRepositoryDirectory == null) {
+            localRepositoryDirectory = configuration.getDefaultLocalRepository().toString();
+        }
+        final LocalRepository localRepository = new LocalRepository(localRepositoryDirectory);
         final LocalRepositoryManager localRepositoryManager =
                 repositorySystem.newLocalRepositoryManager(session, localRepository);
         session.setLocalRepositoryManager(localRepositoryManager);
@@ -208,8 +210,8 @@ public class ProcessPomFile {
     private SettingsBuildingRequest createSettingsBuildingRequest() {
 
         return new DefaultSettingsBuildingRequest()
-                .setGlobalSettingsFile(new File(configuration.getGlobalMavenSettings()))
-                .setUserSettingsFile(new File(configuration.getUserMavenSettings()))
+                .setGlobalSettingsFile(configuration.getGlobalMavenSettings().toFile())
+                .setUserSettingsFile(configuration.getUserMavenSettings().toFile())
                 .setSystemProperties(System.getProperties());
     }
 
