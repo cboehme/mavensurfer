@@ -15,7 +15,7 @@
  */
 package de.dnb.tools.svnfairy.browser;
 
-import static java.util.Collections.singletonList;
+import static java.util.Collections.emptyList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
 import java.util.List;
@@ -178,11 +178,8 @@ public class ProcessPomFile {
         session.setLocalRepositoryManager(localRepositoryManager);
         session.setReadOnly();
 
-        // TODO: Read remoterepos from settings
-        final RemoteRepository remoteRepository = new RemoteRepository.Builder(
-                "maven-central", "default", "http://repo1.maven.org/maven2/").build();
-        final List<RemoteRepository> remoteRepositories =
-                repositorySystem.newResolutionRepositories(session, singletonList(remoteRepository));
+        // TODO: Add repositories from settings
+        final List<RemoteRepository> remoteRepositories = emptyList();
         final RemoteRepositoryManager remoteRepositoryManager =
                 serviceLocator.getService(RemoteRepositoryManager.class);
 
