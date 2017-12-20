@@ -107,35 +107,40 @@ public class ProcessPomFile {
     private Project makeEffectivePom(PomFile pomFile) {
 
         final Settings settings = readSettings();
-
         final ModelSource2 modelSource = new ByteArrayModelSource(
                 pomFile.getName(), pomFile.getContents());
-
-        final ModelBuildingRequest request = new DefaultModelBuildingRequest();
-        request.setModelSource(modelSource);
-        request.setValidationLevel(VALIDATION_LEVEL_MINIMAL);
-        request.setProcessPlugins(false);
-        request.setTwoPhaseBuilding(true);
-        request.setSystemProperties(System.getProperties());
-        request.setModelResolver(createModelResolver(settings));
-
+        final ModelResolver modelResolver = createModelResolver(settings);
+        final ModelBuildingRequest request = createModelBuildingRequest(
+                modelSource, modelResolver);
         final ModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
 
-        ModelBuildingResult result;
-        final Model rawModel;
-        final Model effectiveModel;
+        final Model partlyProcessedModel;
+        final Model fullyProcessedModel;
         try {
-            result = modelBuilder.build(request);
-            rawModel = result.getEffectiveModel().clone();
+            ModelBuildingResult result = modelBuilder.build(request);
+            partlyProcessedModel = result.getEffectiveModel().clone();
             result = modelBuilder.build(request, result);
-            effectiveModel = result.getEffectiveModel();
+            fullyProcessedModel = result.getEffectiveModel();
 
         } catch (ModelBuildingException e) {
             log.error("Could not build effective POM", e);
             return null;
         }
 
-        return mapModelToProject(pomFile.getName(), effectiveModel, rawModel);
+        return mapModelToProject(pomFile.getName(), partlyProcessedModel,
+                fullyProcessedModel);
+    }
+
+    private ModelBuildingRequest createModelBuildingRequest(ModelSource2 modelSource,
+                                                            ModelResolver modelResolver) {
+
+        return new DefaultModelBuildingRequest()
+                .setModelSource(modelSource)
+                .setValidationLevel(VALIDATION_LEVEL_MINIMAL)
+                .setProcessPlugins(false)
+                .setTwoPhaseBuilding(true)
+                .setSystemProperties(System.getProperties())
+                .setModelResolver(modelResolver);
     }
 
     private ModelResolver createModelResolver(Settings settings) {
@@ -170,46 +175,53 @@ public class ProcessPomFile {
     }
 
     private Settings readSettings() {
-        final SettingsBuilder builder = new DefaultSettingsBuilderFactory().newInstance();
-        final SettingsBuildingRequest request = new DefaultSettingsBuildingRequest();
-        request.setSystemProperties(System.getProperties());
-        request.setGlobalSettingsFile(new File(configuration.getGlobalMavenSettings()));
-        request.setUserSettingsFile(new File(configuration.getUserMavenSettings()));
 
-        final SettingsBuildingResult result;
+        final SettingsBuildingRequest request = createSettingsBuildingRequest();
+        final SettingsBuilder builder = new DefaultSettingsBuilderFactory().newInstance();
+
+        final Settings settings;
         try {
-            result = builder.build(request);
+            final SettingsBuildingResult result = builder.build(request);
+            settings = result.getEffectiveSettings();
         } catch (SettingsBuildingException e) {
             log.error("Could not read Maven settings: {}", e);
-            return null;
+            return new Settings();
         }
-        return result.getEffectiveSettings();
+        return settings;
+    }
+
+    private SettingsBuildingRequest createSettingsBuildingRequest() {
+
+        return new DefaultSettingsBuildingRequest()
+                .setGlobalSettingsFile(new File(configuration.getGlobalMavenSettings()))
+                .setUserSettingsFile(new File(configuration.getUserMavenSettings()))
+                .setSystemProperties(System.getProperties());
     }
 
     private Project mapModelToProject(String sourceName,
-                                      Model model,
-                                      Model rawModel) {
+                                      Model partlyProcessedModel,
+                                      Model fullyProcessedModel) {
 
         final Project project = new Project(sourceName);
 
-        project.setGroupId(GroupId.of(model.getGroupId()));
-        project.setArtifactId(ArtifactId.of(model.getArtifactId()));
-        project.setVersion(Version.of(model.getVersion()));
-        project.setPackaging(Packaging.of(model.getPackaging()));
+        project.setGroupId(GroupId.of(fullyProcessedModel.getGroupId()));
+        project.setArtifactId(ArtifactId.of(fullyProcessedModel.getArtifactId()));
+        project.setVersion(Version.of(fullyProcessedModel.getVersion()));
+        project.setPackaging(Packaging.of(fullyProcessedModel.getPackaging()));
 
-        if (model.getParent() != null) {
+        if (fullyProcessedModel.getParent() != null) {
             final GroupId parentGroupId = GroupId.of(
-                    model.getParent().getGroupId());
+                    fullyProcessedModel.getParent().getGroupId());
             final ArtifactId parentArtifactId = ArtifactId.of(
-                    model.getParent().getArtifactId());
+                    fullyProcessedModel.getParent().getArtifactId());
             final VersionRequirement parentVersion = VersionRequirement.of(
-                    model.getParent().getVersion());
+                    fullyProcessedModel.getParent().getVersion());
             final Parent parent = Parent.of(parentGroupId, parentArtifactId,
                     parentVersion);
             project.setParent(parent);
         }
 
-        for (Dependency dependency : model.getDependencies()) {
+        for (Dependency dependency : fullyProcessedModel.getDependencies()) {
             final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =
                     new de.dnb.tools.svnfairy.browser.model.Dependency();
             dependencyRef.setGroupId(GroupId.of(dependency.getGroupId()));
@@ -222,9 +234,9 @@ public class ProcessPomFile {
             project.addDependency(dependencyRef);
         }
 
-        if (rawModel.getDependencyManagement() != null) {
+        if (partlyProcessedModel.getDependencyManagement() != null) {
             log.info("Process dependency management");
-            for (Dependency dependency : rawModel.getDependencyManagement().getDependencies()) {
+            for (Dependency dependency : partlyProcessedModel.getDependencyManagement().getDependencies()) {
                 log.info("processing dependency management: {}", dependency);
                 if ("import".equals(dependency.getScope()) && "pom".equals(dependency.getType())) {
                     final de.dnb.tools.svnfairy.browser.model.Dependency dependencyRef =
@@ -242,41 +254,6 @@ public class ProcessPomFile {
         }
 
         return project;
-    }
-
-    private static final class DependencyId {
-
-        final String groupId;
-        final String artifactId;
-        final String classifier;
-        final String type;
-
-        private DependencyId(Dependency dependency) {
-
-            this.groupId = dependency.getGroupId();
-            this.artifactId = dependency.getArtifactId();
-            this.classifier = dependency.getClassifier();
-            this.type = dependency.getType();
-        }
-
-        static DependencyId of(Dependency dependency) {
-            return new DependencyId(dependency);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.groupId, b.groupId) &&
-                Objects.equals(a.artifactId, b.artifactId) &&
-                Objects.equals(a.classifier, b.classifier) &&
-                Objects.equals(a.type, b.type));
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(groupId, artifactId, classifier, type);
-        }
-
     }
 
 }
