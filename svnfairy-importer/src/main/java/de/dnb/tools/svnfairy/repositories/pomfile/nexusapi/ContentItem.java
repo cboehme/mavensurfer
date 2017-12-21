@@ -17,9 +17,6 @@ package de.dnb.tools.svnfairy.repositories.pomfile.nexusapi;
 
 import java.net.URI;
 
-import com.sun.xml.internal.txw2.annotation.XmlElement;
-
-@XmlElement("content-item")
 public class ContentItem {
 
     private URI resourceURI;
