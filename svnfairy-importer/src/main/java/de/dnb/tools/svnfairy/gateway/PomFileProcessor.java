@@ -29,17 +29,21 @@ import de.dnb.tools.svnfairy.model.PomFile;
 
 public class PomFileProcessor {
 
+    private final PomResource pomResource;
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
 
-    public void sendToProcessingEngine(PomFile file) {
-        final Pom pom = new Pom();
-        pom.setName(file.getName());
-        pom.setContents(encodeAsBase64(file.getContents()));
+    public PomFileProcessor() {
 
         final Client client = ClientBuilder.newClient();
         final WebTarget target = client.target("http://localhost:8080/api");
-        final PomResource pomResource =
-                ((ResteasyWebTarget) target).proxy(PomResource.class);
+        pomResource = ((ResteasyWebTarget) target).proxy(PomResource.class);
+    }
+
+    public void sendToProcessingEngine(PomFile file) {
+
+        final Pom pom = new Pom();
+        pom.setName(file.getName());
+        pom.setContents(encodeAsBase64(file.getContents()));
 
         pomResource.importPom(pom);
     }
