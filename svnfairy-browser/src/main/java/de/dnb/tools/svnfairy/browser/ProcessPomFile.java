@@ -183,6 +183,7 @@ public class ProcessPomFile {
         final DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
         final DefaultMirrorSelector mirrorSelector = new DefaultMirrorSelector();
         for (Mirror mirror : settings.getMirrors()) {
+            log.info("Adding mirror: {}, {}", mirror.getId(), mirror.getUrl());
             mirrorSelector.add(mirror.getId(), mirror.getUrl(), mirror.getLayout(),
                     false, mirror.getMirrorOf(), mirror.getMirrorOfLayouts());
         }
