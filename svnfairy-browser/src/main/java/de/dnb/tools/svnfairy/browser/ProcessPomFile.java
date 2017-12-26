@@ -20,6 +20,7 @@ import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LE
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -31,8 +32,10 @@ import org.apache.maven.model.building.ModelBuilder;
 import org.apache.maven.model.building.ModelBuildingException;
 import org.apache.maven.model.building.ModelBuildingRequest;
 import org.apache.maven.model.building.ModelBuildingResult;
+import org.apache.maven.model.building.ModelSource;
 import org.apache.maven.model.building.ModelSource2;
 import org.apache.maven.model.resolution.ModelResolver;
+import org.apache.maven.model.resolution.UnresolvableModelException;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectModelResolver;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -84,12 +87,21 @@ public class ProcessPomFile {
     private JpaRepository jpaRepository;
     private Configuration configuration;
 
+    private Settings settings;
+    private ModelResolver modelResolver;
+
     @Inject
     public ProcessPomFile(JpaRepository jpaRepository,
                           Configuration configuration) {
 
         this.jpaRepository = jpaRepository;
         this.configuration = configuration;
+    }
+
+    @PostConstruct
+    public void init() {
+        settings = readSettings();
+        modelResolver = createModelResolver(settings);
     }
 
     public ProcessPomFile() {
@@ -99,21 +111,36 @@ public class ProcessPomFile {
 
     public void processPomFile(PomFile pomFile) {
 
-        final Project project = makeEffectivePom(pomFile);
+        final ModelSource modelSource = new ByteArrayModelSource(
+                pomFile.getName(), pomFile.getContents());
+        final Project project = makeEffectivePom(modelSource);
         if (project != null) {
             jpaRepository.create(project);
         }
     }
 
-    private Project makeEffectivePom(PomFile pomFile) {
+    public void process(GroupId groupId,
+                        ArtifactId artifactId,
+                        Version version) {
 
-        final Settings settings = readSettings();
-        final ModelSource2 modelSource = new ByteArrayModelSource(
-                pomFile.getName(), pomFile.getContents());
-        final ModelResolver modelResolver = createModelResolver(settings);
+        try {
+            final ModelSource modelSource = modelResolver.resolveModel(
+                    groupId.toString(), artifactId.toString(), version.toString());
+            final Project project = makeEffectivePom(modelSource);
+            if (project != null) {
+                jpaRepository.create(project);
+            }
+        } catch (UnresolvableModelException e) {
+            log.error("Failed to retrieve resource");
+        }
+    }
+
+    private Project makeEffectivePom(ModelSource modelSource) {
+
         final ModelBuildingRequest request = createModelBuildingRequest(
                 modelSource, modelResolver);
-        final ModelBuilder modelBuilder = new DefaultModelBuilderFactory().newInstance();
+        final ModelBuilder modelBuilder =
+                new DefaultModelBuilderFactory().newInstance();
 
         final Model partlyProcessedModel;
         final Model fullyProcessedModel;
@@ -128,11 +155,11 @@ public class ProcessPomFile {
             return null;
         }
 
-        return mapModelToProject(pomFile.getName(), partlyProcessedModel,
+        return mapModelToProject(modelSource.getLocation(), partlyProcessedModel,
                 fullyProcessedModel);
     }
 
-    private ModelBuildingRequest createModelBuildingRequest(ModelSource2 modelSource,
+    private ModelBuildingRequest createModelBuildingRequest(ModelSource modelSource,
                                                             ModelResolver modelResolver) {
 
         return new DefaultModelBuildingRequest()

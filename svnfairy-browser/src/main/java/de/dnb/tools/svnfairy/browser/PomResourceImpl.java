@@ -16,23 +16,16 @@
 package de.dnb.tools.svnfairy.browser;
 
 import static java.util.Objects.requireNonNull;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Objects;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 import de.dnb.tools.svnfairy.api.Pom;
 import de.dnb.tools.svnfairy.api.PomResource;
@@ -51,6 +44,7 @@ public class PomResourceImpl implements PomResource {
 
     @Override
     public Response importPom(Pom pom) {
+
         requireNonNull(pom);
 
         final byte[] contents = base64Decoder.decode(pom.getContents());
