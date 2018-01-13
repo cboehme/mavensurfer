@@ -14,7 +14,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <version.wildfly-swarm>2017.11.0</version.wildfly-swarm>
+        <version.wildfly-swarm>2017.12.1</version.wildfly-swarm>
     </properties>
 
     <dependencyManagement>
@@ -45,6 +45,38 @@
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- We make use of RESTEasy's client poxy feature which is not part
+             of standard jax-rs. Thus, the RESTEasy client needs to be
+             available on the compile classpath: -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.24.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Wildfly Swarm fractions -->
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jaxrs-jaxb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>batch-jberet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jsf</artifactId>
         </dependency>
 
         <!-- Datasource for Wildfly-Swarm -->
