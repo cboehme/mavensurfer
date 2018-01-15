@@ -16,10 +16,12 @@
 package de.dnb.tools.svnfairy.browser;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -87,9 +89,35 @@ public class ProjectsResourceImpl implements ProjectsResource {
     @Override
     public Response listGroupIds() {
 
-        final List<String> groupIds = queryProjects.getGroupIds();
+        final List<String> groupIdStrings =
+                queryProjects.getGroupIds().stream()
+                        .map(GroupId::toString)
+                        .collect(toList());
+        return Response.ok(groupIdStrings).build();
+    }
 
-        return Response.ok(groupIds).build();
+    @Override
+    public Response listArtifactIdsFor(String groupIdString) {
+
+        final GroupId groupId = GroupId.of(groupIdString);
+        final List<String> artifactIdStrings =
+                queryProjects.getArtifactIdsIn(groupId).stream()
+                        .map(ArtifactId::toString)
+                        .collect(toList());
+        return Response.ok(artifactIdStrings).build();
+    }
+
+    @Override
+    public Response listVersionsFor(String groupIdString,
+                                    String artifactIdString) {
+
+        final GroupId groupId = GroupId.of(groupIdString);
+        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
+        final List<String> versionStrings =
+                queryProjects.getVersionsOf(groupId, artifactId).stream()
+                        .map(Version::toString)
+                        .collect(toList());
+        return Response.ok(versionStrings).build();
     }
 
 }

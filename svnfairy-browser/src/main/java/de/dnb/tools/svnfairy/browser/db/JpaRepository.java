@@ -67,11 +67,24 @@ public class JpaRepository {
     }
 
     @Transactional
-    public List<String> findGroupIds() {
+    public List<GroupId> findGroupIds() {
 
         final TypedQuery<String> find = entityManager.createNamedQuery(
                 "Project.findGroupIds", String.class);
-        return find.getResultList();
+        return find.getResultList().stream()
+                .map(GroupId::of)
+                .collect(toList());
+    }
+
+    @Transactional
+    public List<ArtifactId> findArtifactIdsIn(GroupId groupId) {
+
+        final TypedQuery<String> find = entityManager.createNamedQuery(
+                "Project.findArtifactIds", String.class);
+        find.setParameter("groupId", groupId.toString());
+        return find.getResultList().stream()
+                .map(ArtifactId::of)
+                .collect(toList());
     }
 
     @Transactional

@@ -15,12 +15,18 @@
  */
 package de.dnb.tools.svnfairy.browser;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
+import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Project;
+import de.dnb.tools.svnfairy.browser.model.Version;
 
 @ApplicationScoped
 public class QueryProjects {
@@ -28,9 +34,21 @@ public class QueryProjects {
     @Inject
     private JpaRepository repository;
 
-    public List<String> getGroupIds() {
+    public List<GroupId> getGroupIds() {
 
         return repository.findGroupIds();
+    }
+
+    public List<ArtifactId> getArtifactIdsIn(GroupId groupId) {
+
+        return repository.findArtifactIdsIn(groupId);
+    }
+
+    public List<Version> getVersionsOf(GroupId groupId, ArtifactId artifactId) {
+
+        return repository.findProjectsWith(groupId, artifactId).stream()
+                .map(Project::getVersion)
+                .collect(toList());
     }
 
 }

@@ -42,4 +42,15 @@ public interface ProjectsResource {
     @Produces(MediaType.APPLICATION_JSON)
     Response listGroupIds();
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{groupId}")
+    Response listArtifactIdsFor(@PathParam("groupId") String groupId);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{groupId}/{artifactId}")
+    Response listVersionsFor(@PathParam("groupId") String groupId,
+                             @PathParam("artifactId") String artifactId);
+
 }

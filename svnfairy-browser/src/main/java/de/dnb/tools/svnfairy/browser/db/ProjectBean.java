@@ -23,7 +23,9 @@ import de.dnb.tools.svnfairy.browser.model.Parent;
     @NamedQuery(name = "Project.findByGroupIdAndArtifactId",
                 query = "SELECT p FROM ProjectBean p WHERE p.groupId = :groupId AND p.artifactId = :artifactId"),
     @NamedQuery(name = "Project.findGroupIds",
-                query = "SELECT DISTINCT(p.groupId) FROM ProjectBean p")
+                query = "SELECT DISTINCT(p.groupId) FROM ProjectBean p"),
+    @NamedQuery(name = "Project.findArtifactIds",
+                query = "SELECT DISTINCT(p.artifactId) FROM ProjectBean p WHERE p.groupId = :groupId")
 })
 class ProjectBean {
 
