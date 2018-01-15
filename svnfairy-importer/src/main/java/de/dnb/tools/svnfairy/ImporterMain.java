@@ -1,8 +1,8 @@
 package de.dnb.tools.svnfairy;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -12,7 +12,7 @@ import org.xml.sax.SAXException;
 
 import de.dnb.tools.svnfairy.gateway.PomFileProcessor;
 import de.dnb.tools.svnfairy.model.PomFile;
-import de.dnb.tools.svnfairy.repositories.pomfile.NexusRepository;
+import de.dnb.tools.svnfairy.repositories.pomfile.LocalMavenRepository;
 import de.dnb.tools.svnfairy.repositories.pomfile.PomFileRepository;
 
 public class ImporterMain {
@@ -25,16 +25,13 @@ public class ImporterMain {
 
     private ImporterMain() {
 
-//        pomFileRepository = new LocalMavenRepository(
-//                Paths.get("/home/christoph/Code/svnfairy/svnfairy-importer/testdata"));
+        pomFileRepository = new LocalMavenRepository(
+                Paths.get("/home/christoph/Code/svnfairy/svnfairy-importer/testdata"));
 /*
         pomFileRepository = new NexusRepository(
                 UriBuilder.fromUri("http://nexus.dnb.de/").build(),
                 "releases", "/");
 */
-        pomFileRepository = new NexusRepository(
-                UriBuilder.fromUri("https://oss.sonatype.org/").build(),
-                "releases", "/org/culturegraph/");
         pomFileProcessor = new PomFileProcessor();
     }
 
