@@ -19,6 +19,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -43,6 +44,8 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
     @Inject
     private ProcessPomFile  processPomFile;
+    @Inject
+    private QueryProjects queryProjects;
 
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
 
@@ -79,6 +82,14 @@ public class ProjectsResourceImpl implements ProjectsResource {
         processPomFile.process(groupId, artifactId, version);
 
         return Response.ok().build();
+    }
+
+    @Override
+    public Response listGroupIds() {
+
+        final List<String> groupIds = queryProjects.getGroupIds();
+
+        return Response.ok(groupIds).build();
     }
 
 }

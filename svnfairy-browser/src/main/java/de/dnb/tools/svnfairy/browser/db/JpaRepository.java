@@ -67,6 +67,14 @@ public class JpaRepository {
     }
 
     @Transactional
+    public List<String> findGroupIds() {
+
+        final TypedQuery<String> find = entityManager.createNamedQuery(
+                "Project.findGroupIds", String.class);
+        return find.getResultList();
+    }
+
+    @Transactional
     public Collection<Project> getDependentProjects(Project project) {
 
         Collection<ProjectWithDependency> projectWithDeps = findDependentProjectBeans(
