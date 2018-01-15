@@ -16,17 +16,24 @@
 package de.dnb.tools.svnfairy.api;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/")
-public interface PomResource {
+@Path("/projects")
+public interface ProjectsResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response importPom(Pom pom);
+    Response indexPom(Pom pom);
+
+    @POST
+    @Path("/{groupId}/{artifactId}/{version}")
+    Response indexGav(@PathParam("groupId") String groupId,
+                      @PathParam("artifactId") String artifactId,
+                      @PathParam("version") String version);
 
 }

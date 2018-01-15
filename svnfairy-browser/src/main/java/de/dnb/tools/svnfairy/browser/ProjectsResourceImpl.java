@@ -24,26 +24,30 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.dnb.tools.svnfairy.api.Pom;
-import de.dnb.tools.svnfairy.api.PomResource;
+import de.dnb.tools.svnfairy.api.ProjectsResource;
+import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
+import de.dnb.tools.svnfairy.browser.model.Version;
 
 @RequestScoped
-public class PomResourceImpl implements PomResource {
+public class ProjectsResourceImpl implements ProjectsResource {
 
     private static final Logger log = LoggerFactory.getLogger(
-            PomResourceImpl.class);
+            ProjectsResourceImpl.class);
 
     @Inject
-    private ProcessPomFile processPomFile;
+    private ProcessPomFile  processPomFile;
 
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
 
     @Override
-    public Response importPom(Pom pom) {
+    public Response indexPom(Pom pom) {
 
         requireNonNull(pom);
 
@@ -51,9 +55,28 @@ public class PomResourceImpl implements PomResource {
         final PomFile pomFile = new PomFile(pom.getName(), contents);
 
         log.info("Received {}", pomFile.getName());
-        log.debug("POM: {}", new String(pomFile.getContents(), StandardCharsets.UTF_8));
+        log.debug("POM: {}", new String(pomFile.getContents(),
+                StandardCharsets.UTF_8));
 
         processPomFile.processPomFile(pomFile);
+
+        return Response.ok().build();
+    }
+
+    @Override
+    public Response indexGav(String groupIdString,
+                             String artifactIdString,
+                             String versionString) {
+
+        requireNonNull(groupIdString);
+        requireNonNull(artifactIdString);
+        requireNonNull(versionString);
+
+        final GroupId groupId = GroupId.of(groupIdString);
+        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
+        final Version version = Version.of(versionString);
+
+        processPomFile.process(groupId, artifactId, version);
 
         return Response.ok().build();
     }
