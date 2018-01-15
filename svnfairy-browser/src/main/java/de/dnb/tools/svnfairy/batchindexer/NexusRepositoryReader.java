@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayDeque;
+import java.util.PriorityQueue;
 import java.util.Properties;
 import java.util.Queue;
 
@@ -81,7 +82,7 @@ public class NexusRepositoryReader implements ItemReader {
 
         nexusUrl = checkpoint.getNexusUrl();
         repositoryId = checkpoint.getRepositoryId();
-        foldersToProcess = new ArrayDeque<>(checkpoint.getFoldersToProcess());
+        foldersToProcess = new PriorityQueue<>(checkpoint.getFoldersToProcess());
         filesToProcess = new ArrayDeque<>(checkpoint.getFilesToProcess());
 
         log.info("({}, {}) Resuming batch from checkpoint. Next folder is {}",
@@ -93,7 +94,7 @@ public class NexusRepositoryReader implements ItemReader {
 
         nexusUrl = new URI(jobProperties.getProperty("nexus-url"));
         repositoryId = jobProperties.getProperty("repository-id");
-        foldersToProcess = new ArrayDeque<>();
+        foldersToProcess = new PriorityQueue<>();
         foldersToProcess.add(jobProperties.getProperty("base-path"));
         filesToProcess = new ArrayDeque<>();
 
