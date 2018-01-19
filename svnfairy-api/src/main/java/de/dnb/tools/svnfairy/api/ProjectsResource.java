@@ -43,13 +43,13 @@ public interface ProjectsResource {
     Response listGroupIds();
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{groupId}")
+    @Produces(MediaType.APPLICATION_JSON)
     Response listArtifactIdsFor(@PathParam("groupId") String groupId);
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/{groupId}/{artifactId}")
+    @Produces(MediaType.APPLICATION_JSON)
     Response listVersionsFor(@PathParam("groupId") String groupId,
                              @PathParam("artifactId") String artifactId);
 

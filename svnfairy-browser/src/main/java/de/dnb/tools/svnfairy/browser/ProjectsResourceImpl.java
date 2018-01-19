@@ -18,21 +18,25 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
-import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.api.JsonCollection;
+import de.dnb.tools.svnfairy.api.JsonGroupId;
 import de.dnb.tools.svnfairy.api.Pom;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
+import de.dnb.tools.svnfairy.api.impl.JsonMapper;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
@@ -44,12 +48,23 @@ public class ProjectsResourceImpl implements ProjectsResource {
     private static final Logger log = LoggerFactory.getLogger(
             ProjectsResourceImpl.class);
 
+    @Context
+    private UriInfo uriInfo;
+
     @Inject
     private ProcessPomFile  processPomFile;
     @Inject
     private QueryProjects queryProjects;
 
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
+    private final JsonMapper map;
+
+    public ProjectsResourceImpl() {
+
+        map = new JsonMapper();
+        map.withListGroupIdsUri(this::getListGroupIdsUri);
+        map.withListArtifactIdsUri(this::getListArtifactIdsUri);
+    }
 
     @Override
     public Response indexPom(Pom pom) {
@@ -89,11 +104,9 @@ public class ProjectsResourceImpl implements ProjectsResource {
     @Override
     public Response listGroupIds() {
 
-        final List<String> groupIdStrings =
-                queryProjects.getGroupIds().stream()
-                        .map(GroupId::toString)
-                        .collect(toList());
-        return Response.ok(groupIdStrings).build();
+        final List<GroupId> groupIds = queryProjects.getGroupIds();
+        final JsonCollection<JsonGroupId> groupIdsJson = map.toJson(groupIds);
+        return Response.ok(groupIdsJson).build();
     }
 
     @Override
@@ -118,6 +131,21 @@ public class ProjectsResourceImpl implements ProjectsResource {
                         .map(Version::toString)
                         .collect(toList());
         return Response.ok(versionStrings).build();
+    }
+
+    private URI getListGroupIdsUri() {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectsResource.class)
+                .build();
+    }
+
+    private URI getListArtifactIdsUri(GroupId groupId) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectsResource.class)
+                .path(ProjectsResource.class, "listArtifactIdsFor")
+                .build(groupId);
     }
 
 }
