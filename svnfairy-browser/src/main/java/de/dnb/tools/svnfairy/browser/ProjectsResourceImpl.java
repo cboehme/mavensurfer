@@ -32,8 +32,10 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.api.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.JsonCollection;
 import de.dnb.tools.svnfairy.api.JsonGroupId;
+import de.dnb.tools.svnfairy.api.JsonVersion;
 import de.dnb.tools.svnfairy.api.Pom;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.api.impl.JsonMapper;
@@ -62,8 +64,10 @@ public class ProjectsResourceImpl implements ProjectsResource {
     public ProjectsResourceImpl() {
 
         map = new JsonMapper();
-        map.withListGroupIdsUri(this::getListGroupIdsUri);
-        map.withListArtifactIdsUri(this::getListArtifactIdsUri);
+        map.setListGroupIdsUri(this::getListGroupIdsUri);
+        map.setListArtifactIdsUri(this::getListArtifactIdsUri);
+        map.setListVersionsUri(this::getListVersionsUri);
+        map.setProjectUri(this::getProjectUri);
     }
 
     @Override
@@ -105,32 +109,44 @@ public class ProjectsResourceImpl implements ProjectsResource {
     public Response listGroupIds() {
 
         final List<GroupId> groupIds = queryProjects.getGroupIds();
-        final JsonCollection<JsonGroupId> groupIdsJson = map.toJson(groupIds);
-        return Response.ok(groupIdsJson).build();
+        if (groupIds.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        final JsonCollection<JsonGroupId> jsonGroupIds = map.groupIdsToJson(groupIds);
+        return Response.ok(jsonGroupIds).build();
     }
 
     @Override
     public Response listArtifactIdsFor(String groupIdString) {
 
+        requireNonNull(groupIdString);
+
         final GroupId groupId = GroupId.of(groupIdString);
-        final List<String> artifactIdStrings =
-                queryProjects.getArtifactIdsIn(groupId).stream()
-                        .map(ArtifactId::toString)
-                        .collect(toList());
-        return Response.ok(artifactIdStrings).build();
+        final List<ArtifactId> artifactIds = queryProjects.getArtifactIdsIn(groupId);
+        if (artifactIds.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        final JsonCollection<JsonArtifactId> jsonArtifactIds =
+                map.artifactIdsToJson(groupId, artifactIds);
+        return Response.ok(jsonArtifactIds).build();
     }
 
     @Override
     public Response listVersionsFor(String groupIdString,
                                     String artifactIdString) {
 
+        requireNonNull(groupIdString);
+        requireNonNull(artifactIdString);
+
         final GroupId groupId = GroupId.of(groupIdString);
         final ArtifactId artifactId = ArtifactId.of(artifactIdString);
-        final List<String> versionStrings =
-                queryProjects.getVersionsOf(groupId, artifactId).stream()
-                        .map(Version::toString)
-                        .collect(toList());
-        return Response.ok(versionStrings).build();
+        final List<Version> versions = queryProjects.getVersionsOf(groupId, artifactId);
+        if (versions.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        final JsonCollection<JsonVersion> jsonVersions =
+                map.versionsToJson(groupId, artifactId, versions);
+        return Response.ok(jsonVersions).build();
     }
 
     private URI getListGroupIdsUri() {
@@ -146,6 +162,25 @@ public class ProjectsResourceImpl implements ProjectsResource {
                 .path(ProjectsResource.class)
                 .path(ProjectsResource.class, "listArtifactIdsFor")
                 .build(groupId);
+    }
+
+    private URI getListVersionsUri(GroupId groupId,
+                                   ArtifactId artifactId) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectsResource.class)
+                .path(ProjectsResource.class, "listVersionsFor")
+                .build(groupId, artifactId);
+    }
+
+    private URI getProjectUri(GroupId groupId,
+                              ArtifactId artifactId,
+                              Version version) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectsResource.class)
+                .path(ProjectsResource.class, "indexGav")
+                .build(groupId, artifactId, version);
     }
 
 }

@@ -19,44 +19,54 @@ import static java.util.stream.Collectors.toList;
 
 import java.net.URI;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import de.dnb.tools.svnfairy.api.JsonCollection;
+import de.dnb.tools.svnfairy.api.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.JsonGroupId;
+import de.dnb.tools.svnfairy.api.JsonVersion;
+import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Version;
 
 public class JsonMapper {
 
     private Supplier<URI> listGroupIdsUri;
     private Function<GroupId, URI> listArtifactIdsUri;
+    private BiFunction<GroupId, ArtifactId, URI> listVersionsUri;
+    private TriFunction<GroupId, ArtifactId, Version, URI> projectUri;
 
-    public JsonMapper withListGroupIdsUri(Supplier<URI> uriMaker) {
+    public void setListGroupIdsUri(Supplier<URI> uriMaker) {
 
         listGroupIdsUri = uriMaker;
-        return this;
     }
 
-    public JsonMapper withListArtifactIdsUri(Function<GroupId, URI> uriMaker) {
+    public void setListArtifactIdsUri(Function<GroupId, URI> uriMaker) {
 
         listArtifactIdsUri = uriMaker;
-        return this;
     }
 
-    public JsonCollection<JsonGroupId> toJson(List<GroupId> groupIds) {
+    public void setListVersionsUri(BiFunction<GroupId, ArtifactId, URI> listVersionsUri) {
+
+        this.listVersionsUri = listVersionsUri;
+    }
+
+    public void setProjectUri(TriFunction<GroupId, ArtifactId, Version, URI> projectUri) {
+
+        this.projectUri = projectUri;
+    }
+
+    public JsonCollection<JsonGroupId> groupIdsToJson(List<GroupId> groupIds) {
 
         final List<JsonGroupId> jsonGroupIds = groupIds.stream()
-                .map(this::toJson)
+                .map(this::groupIdToJson)
                 .collect(toList());
-
-        final JsonCollection<JsonGroupId> jsonCollection = new JsonCollection<>();
-        jsonCollection.setId(listGroupIdsUri.get());
-        jsonCollection.setTotalItems(jsonGroupIds.size());
-        jsonCollection.setMember(jsonGroupIds);
-        return jsonCollection;
+        return collectionToJson(jsonGroupIds, listGroupIdsUri.get());
     }
 
-    private JsonGroupId toJson(GroupId groupId) {
+    private JsonGroupId groupIdToJson(GroupId groupId) {
 
         final JsonGroupId jsonGroupId = new JsonGroupId();
         jsonGroupId.setId(listArtifactIdsUri.apply(groupId));
@@ -64,4 +74,51 @@ public class JsonMapper {
         return jsonGroupId;
     }
 
+    public JsonCollection<JsonArtifactId> artifactIdsToJson(GroupId groupId,
+                                                            List<ArtifactId> artifactIds) {
+
+        final List<JsonArtifactId> jsonArtifactIds = artifactIds.stream()
+                .map(artifactId -> artifactIdToJson(groupId, artifactId))
+                .collect(toList());
+        return collectionToJson(jsonArtifactIds, listArtifactIdsUri.apply(groupId));
+    }
+
+    private JsonArtifactId artifactIdToJson(GroupId groupId,
+                                            ArtifactId artifactId) {
+
+        final JsonArtifactId jsonArtifactId = new JsonArtifactId();
+        jsonArtifactId.setId(listVersionsUri.apply(groupId, artifactId));
+        jsonArtifactId.setArtifactId(artifactId.toString());
+        return jsonArtifactId;
+    }
+
+    public JsonCollection<JsonVersion> versionsToJson(GroupId groupId,
+                                                      ArtifactId artifactId,
+                                                      List<Version> versions) {
+
+        final List<JsonVersion> jsonVersions = versions.stream()
+                .map(version -> versionToJson(groupId, artifactId, version))
+                .collect(toList());
+        return collectionToJson(jsonVersions, listVersionsUri.apply(groupId, artifactId));
+    }
+
+    private JsonVersion versionToJson(GroupId groupId,
+                                      ArtifactId artifactId,
+                                      Version version) {
+
+        final JsonVersion jsonVersion = new JsonVersion();
+        jsonVersion.setId(projectUri.apply(groupId, artifactId, version));
+        jsonVersion.setVersion(version.toString());
+        return jsonVersion;
+    }
+
+    private <E> JsonCollection<E> collectionToJson(List<E> collection,
+                                                   URI id) {
+
+        final JsonCollection<E> jsonCollection = new JsonCollection<>();
+        jsonCollection.setId(id);
+        jsonCollection.setTotalItems(collection.size());
+        jsonCollection.setMember(collection);
+        return jsonCollection;
+    }
 }
