@@ -16,7 +16,6 @@
 package de.dnb.tools.svnfairy.browser;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -109,9 +108,6 @@ public class ProjectsResourceImpl implements ProjectsResource {
     public Response listGroupIds() {
 
         final List<GroupId> groupIds = queryProjects.getGroupIds();
-        if (groupIds.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
         final JsonCollection<JsonGroupId> jsonGroupIds = map.groupIdsToJson(groupIds);
         return Response.ok(jsonGroupIds).build();
     }
