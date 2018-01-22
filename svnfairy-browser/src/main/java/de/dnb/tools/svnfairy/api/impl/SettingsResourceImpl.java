@@ -16,6 +16,8 @@
 package de.dnb.tools.svnfairy.api.impl;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
@@ -23,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.dnb.tools.svnfairy.api.SettingsResource;
+import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 
 @Path("/")
 @RequestScoped
@@ -31,22 +34,30 @@ public class SettingsResourceImpl implements SettingsResource {
     private static final Logger log =
             LoggerFactory.getLogger(SettingsResourceImpl.class);
 
+    @Inject
+    private ManageSettings manageSettings;
+
     @Override
     public Response getSettings() {
 
-        return Response.ok().build();
+        return manageSettings.get()
+                .map(settings -> Response.ok(settings).build())
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override
     public Response putSettings(byte[] data) {
 
+        manageSettings.set(data);
         return Response.ok().build();
     }
 
     @Override
-    public Response deleteSettings() {
+    public void deleteSettings() {
 
-        return Response.ok().build();
+        if (!manageSettings.delete()) {
+            throw new NotFoundException();
+        }
     }
 
 }

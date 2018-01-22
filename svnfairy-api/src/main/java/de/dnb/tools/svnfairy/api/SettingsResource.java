@@ -38,6 +38,6 @@ public interface SettingsResource {
 
     @DELETE
     @Path("/configuration/settings")
-    Response deleteSettings();
+    void deleteSettings();
 
 }
