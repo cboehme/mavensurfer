@@ -38,18 +38,16 @@ public class SettingsResourceImpl implements SettingsResource {
     private ManageSettings manageSettings;
 
     @Override
-    public Response getSettings() {
+    public byte[] getSettings() {
 
         return manageSettings.get()
-                .map(settings -> Response.ok(settings).build())
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public Response putSettings(byte[] data) {
+    public void putSettings(byte[] data) {
 
         manageSettings.set(data);
-        return Response.ok().build();
     }
 
     @Override

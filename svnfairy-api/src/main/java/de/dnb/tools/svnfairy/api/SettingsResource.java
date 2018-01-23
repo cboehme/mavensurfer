@@ -29,12 +29,12 @@ public interface SettingsResource {
     @GET
     @Path("/configuration/settings")
     @Produces(MediaType.APPLICATION_XML)
-    Response getSettings();
+    byte[] getSettings();
 
     @PUT
     @Path("/configuration/settings")
     @Consumes(MediaType.APPLICATION_XML)
-    Response putSettings(byte[] data);
+    void putSettings(byte[] data);
 
     @DELETE
     @Path("/configuration/settings")
