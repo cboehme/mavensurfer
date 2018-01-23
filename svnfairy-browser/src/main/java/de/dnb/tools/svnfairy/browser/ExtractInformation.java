@@ -63,6 +63,7 @@ import org.eclipse.aether.util.repository.DefaultProxySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Classifier;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
@@ -81,13 +82,16 @@ public class ExtractInformation {
     private static final Logger log = LoggerFactory.getLogger(
             ProcessPomFile.class);
 
+    private ManageSettings manageSettings;
     private Configuration configuration;
 
     private ModelResolver modelResolver;
 
     @Inject
-    public ExtractInformation(Configuration configuration) {
+    public ExtractInformation(ManageSettings manageSettings,
+                              Configuration configuration) {
 
+        this.manageSettings = manageSettings;
         this.configuration = configuration;
     }
 
@@ -211,10 +215,13 @@ public class ExtractInformation {
 
     private SettingsBuildingRequest createSettingsBuildingRequest() {
 
-        return new DefaultSettingsBuildingRequest()
-                .setGlobalSettingsFile(configuration.getGlobalMavenSettings().toFile())
-                .setUserSettingsFile(configuration.getUserMavenSettings().toFile())
-                .setSystemProperties(System.getProperties());
+        final DefaultSettingsBuildingRequest request =
+                new DefaultSettingsBuildingRequest();
+        manageSettings.get()
+                .map(InMemorySettings::new)
+                .ifPresent(request::setGlobalSettingsSource);
+        request.setSystemProperties(System.getProperties());
+        return request;
     }
 
     private Project mapModelToProject(String sourceName,

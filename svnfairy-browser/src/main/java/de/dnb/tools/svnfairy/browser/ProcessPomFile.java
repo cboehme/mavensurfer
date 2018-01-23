@@ -19,6 +19,7 @@ import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -64,6 +65,8 @@ import org.eclipse.aether.util.repository.DefaultProxySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.browser.configuration.ConfigData;
+import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Classifier;
@@ -84,6 +87,7 @@ public class ProcessPomFile {
             ProcessPomFile.class);
 
     private JpaRepository jpaRepository;
+    private ManageSettings manageSettings;
     private Configuration configuration;
 
     private Settings settings;
@@ -91,9 +95,11 @@ public class ProcessPomFile {
 
     @Inject
     public ProcessPomFile(JpaRepository jpaRepository,
+                          ManageSettings manageSettings,
                           Configuration configuration) {
 
         this.jpaRepository = jpaRepository;
+        this.manageSettings = manageSettings;
         this.configuration = configuration;
     }
 
@@ -236,10 +242,13 @@ public class ProcessPomFile {
 
     private SettingsBuildingRequest createSettingsBuildingRequest() {
 
-        return new DefaultSettingsBuildingRequest()
-                .setGlobalSettingsFile(configuration.getGlobalMavenSettings().toFile())
-                .setUserSettingsFile(configuration.getUserMavenSettings().toFile())
-                .setSystemProperties(System.getProperties());
+        final DefaultSettingsBuildingRequest request =
+                new DefaultSettingsBuildingRequest();
+        manageSettings.get()
+                .map(InMemorySettings::new)
+                .ifPresent(request::setGlobalSettingsSource);
+        request.setSystemProperties(System.getProperties());
+        return request;
     }
 
     private Project mapModelToProject(String sourceName,
