@@ -22,22 +22,19 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
+@Path("/configuration/settings")
 public interface SettingsResource {
 
     @GET
-    @Path("/configuration/settings")
     @Produces(MediaType.APPLICATION_XML)
     byte[] getSettings();
 
     @PUT
-    @Path("/configuration/settings")
     @Consumes(MediaType.APPLICATION_XML)
     void putSettings(byte[] data);
 
     @DELETE
-    @Path("/configuration/settings")
     void deleteSettings();
 
 }

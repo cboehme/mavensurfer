@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import de.dnb.tools.svnfairy.api.SettingsResource;
 import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 
-@Path("/")
 @RequestScoped
 public class SettingsResourceImpl implements SettingsResource {
 
