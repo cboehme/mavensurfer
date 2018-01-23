@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Christoph Böhme
+ * Copyright 2018 Christoph Böhme
  *
  * Licensed under the Apache License, Version 2.0 the "License";
  * you may not use this file except in compliance with the License.
@@ -13,31 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.api;
+package de.dnb.tools.svnfairy.api.datatypes;
+
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class Pom {
+public class JobSubmission {
 
-    private String name;
+    private String type;
 
-    private String contents;
+    private Map<String, String> settings;
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getContents() {
-        return contents;
+    public Map<String, String> getSettings() {
+        return settings;
     }
 
-    public void setContents(String contents) {
-        this.contents = contents;
+    public void setSettings(Map<String, String> settings) {
+        this.settings = settings;
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format("Job Submission [ %s, %s ]", type, settings);
     }
 
 }

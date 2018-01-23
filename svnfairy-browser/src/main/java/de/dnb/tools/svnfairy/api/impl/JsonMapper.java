@@ -23,10 +23,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import de.dnb.tools.svnfairy.api.JsonCollection;
-import de.dnb.tools.svnfairy.api.JsonArtifactId;
-import de.dnb.tools.svnfairy.api.JsonGroupId;
-import de.dnb.tools.svnfairy.api.JsonVersion;
+import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
+import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Version;

@@ -13,39 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.api;
-
-import java.util.Map;
+package de.dnb.tools.svnfairy.api.datatypes;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class JobSubmission {
+public class Pom {
 
-    private String type;
+    private String name;
 
-    private Map<String, String> settings;
+    private String contents;
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Map<String, String> getSettings() {
-        return settings;
+    public String getContents() {
+        return contents;
     }
 
-    public void setSettings(Map<String, String> settings) {
-        this.settings = settings;
-    }
-
-    @Override
-    public String toString() {
-
-        return String.format("Job Submission [ %s, %s ]", type, settings);
+    public void setContents(String contents) {
+        this.contents = contents;
     }
 
 }

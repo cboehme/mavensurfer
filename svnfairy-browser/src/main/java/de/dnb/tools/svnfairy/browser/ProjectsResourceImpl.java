@@ -31,11 +31,11 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.dnb.tools.svnfairy.api.JsonArtifactId;
-import de.dnb.tools.svnfairy.api.JsonCollection;
-import de.dnb.tools.svnfairy.api.JsonGroupId;
-import de.dnb.tools.svnfairy.api.JsonVersion;
-import de.dnb.tools.svnfairy.api.Pom;
+import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
+import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
+import de.dnb.tools.svnfairy.api.datatypes.Pom;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.api.impl.JsonMapper;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;

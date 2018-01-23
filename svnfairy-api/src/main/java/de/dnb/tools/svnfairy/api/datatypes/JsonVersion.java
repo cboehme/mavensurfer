@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.api;
+package de.dnb.tools.svnfairy.api.datatypes;
 
-public class JsonGroupId extends Referable {
+public class JsonVersion extends Referable {
 
-    private String groupId;
+    private String version;
 
-    public String getGroupId() {
-        return groupId;
+    public String getVersion() {
+        return version;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
 }

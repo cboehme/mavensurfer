@@ -23,7 +23,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.core.Response;
 
 import de.dnb.tools.svnfairy.api.IndexingJobsResource;
-import de.dnb.tools.svnfairy.api.JobSubmission;
+import de.dnb.tools.svnfairy.api.datatypes.JobSubmission;
 
 @RequestScoped
 public class IndexingJobResourceImpl implements IndexingJobsResource {

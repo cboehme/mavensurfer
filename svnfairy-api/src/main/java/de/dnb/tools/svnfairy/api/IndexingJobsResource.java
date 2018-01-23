@@ -21,6 +21,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.dnb.tools.svnfairy.api.datatypes.JobSubmission;
+
 @Path("/indexing-jobs")
 public interface IndexingJobsResource {
 

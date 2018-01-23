@@ -13,36 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.api;
+package de.dnb.tools.svnfairy.api.datatypes;
 
-import java.util.List;
+public class JsonGroupId extends Referable {
 
-import javax.xml.bind.annotation.XmlElement;
+    private String groupId;
 
-public class JsonCollection<T> extends Referable {
-
-    private long totalItems;
-    private List<T> member;
-
-    @XmlElement(name = "@type")
-    public String getType() {
-        return "JsonCollection";
+    public String getGroupId() {
+        return groupId;
     }
 
-    public long getTotalItems() {
-        return totalItems;
-    }
-
-    public void setTotalItems(long totalItems) {
-        this.totalItems = totalItems;
-    }
-
-    public List<T> getMember() {
-        return member;
-    }
-
-    public void setMember(List<T> member) {
-        this.member = member;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
     }
 
 }

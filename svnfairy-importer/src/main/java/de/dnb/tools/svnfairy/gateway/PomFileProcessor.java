@@ -23,7 +23,7 @@ import javax.ws.rs.client.WebTarget;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
-import de.dnb.tools.svnfairy.api.Pom;
+import de.dnb.tools.svnfairy.api.datatypes.Pom;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.model.PomFile;
 
