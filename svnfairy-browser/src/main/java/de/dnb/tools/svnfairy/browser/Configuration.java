@@ -23,10 +23,19 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class Configuration {
 
-    private final Path userHome = Paths.get(System.getProperty("user.home"));
+    private static final String mavenRepositoryProperty = "maven.repository";
+    private static final String userHomeProperty = "user.home";
+
+    private static final String defaultRepositoryLocation = ".m2/repository";
 
     public Path getDefaultLocalRepository() {
-        return userHome.resolve(".m2/repository").toAbsolutePath();
+
+        final String localRepository = System.getProperty(mavenRepositoryProperty);
+        if (localRepository != null) {
+            return Paths.get(localRepository);
+        }
+        final Path userHome = Paths.get(System.getProperty(userHomeProperty));
+        return userHome.resolve(defaultRepositoryLocation).toAbsolutePath();
     }
 
 }
