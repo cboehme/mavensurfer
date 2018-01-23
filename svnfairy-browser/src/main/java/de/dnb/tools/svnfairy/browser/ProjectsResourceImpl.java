@@ -21,7 +21,6 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -44,7 +43,6 @@ import de.dnb.tools.svnfairy.api.impl.JsonMapper;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
-import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
 @RequestScoped
@@ -112,7 +110,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
     public Response listGroupIds() {
 
         final List<GroupId> groupIds = queryProjects.getGroupIds();
-        final JsonCollection<JsonGroupId> jsonGroupIds = map.groupIdsToJson(groupIds);
+        final JsonCollection<JsonGroupId> jsonGroupIds = map.toJson(groupIds);
         return Response.ok(jsonGroupIds).build();
     }
 
@@ -127,7 +125,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         final JsonCollection<JsonArtifactId> jsonArtifactIds =
-                map.artifactIdsToJson(groupId, artifactIds);
+                map.toJson(groupId, artifactIds);
         return Response.ok(jsonArtifactIds).build();
     }
 
@@ -145,7 +143,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         final JsonCollection<JsonVersion> jsonVersions =
-                map.versionsToJson(groupId, artifactId, versions);
+                map.toJson(groupId, artifactId, versions);
         return Response.ok(jsonVersions).build();
     }
 
@@ -163,7 +161,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
         final Version version = Version.of(versionString);
 
         return queryProjects.getProject(groupId, artifactId, version)
-                .map(map::projectToJson)
+                .map(map::toJson)
                 .orElseThrow(NotFoundException::new);
     }
 

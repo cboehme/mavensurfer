@@ -60,15 +60,15 @@ public class JsonMapper {
         this.projectUri = projectUri;
     }
 
-    public JsonCollection<JsonGroupId> groupIdsToJson(List<GroupId> groupIds) {
+    public JsonCollection<JsonGroupId> toJson(List<GroupId> groupIds) {
 
         final List<JsonGroupId> jsonGroupIds = groupIds.stream()
-                .map(this::groupIdToJson)
+                .map(this::toJson)
                 .collect(toList());
-        return collectionToJson(jsonGroupIds, listGroupIdsUri.get());
+        return toJson(jsonGroupIds, listGroupIdsUri.get());
     }
 
-    private JsonGroupId groupIdToJson(GroupId groupId) {
+    private JsonGroupId toJson(GroupId groupId) {
 
         final JsonGroupId jsonGroupId = new JsonGroupId();
         jsonGroupId.setId(listArtifactIdsUri.apply(groupId));
@@ -76,17 +76,17 @@ public class JsonMapper {
         return jsonGroupId;
     }
 
-    public JsonCollection<JsonArtifactId> artifactIdsToJson(GroupId groupId,
-                                                            List<ArtifactId> artifactIds) {
+    public JsonCollection<JsonArtifactId> toJson(GroupId groupId,
+                                                 List<ArtifactId> artifactIds) {
 
         final List<JsonArtifactId> jsonArtifactIds = artifactIds.stream()
-                .map(artifactId -> artifactIdToJson(groupId, artifactId))
+                .map(artifactId -> toJson(groupId, artifactId))
                 .collect(toList());
-        return collectionToJson(jsonArtifactIds, listArtifactIdsUri.apply(groupId));
+        return toJson(jsonArtifactIds, listArtifactIdsUri.apply(groupId));
     }
 
-    private JsonArtifactId artifactIdToJson(GroupId groupId,
-                                            ArtifactId artifactId) {
+    private JsonArtifactId toJson(GroupId groupId,
+                                  ArtifactId artifactId) {
 
         final JsonArtifactId jsonArtifactId = new JsonArtifactId();
         jsonArtifactId.setId(listVersionsUri.apply(groupId, artifactId));
@@ -94,19 +94,19 @@ public class JsonMapper {
         return jsonArtifactId;
     }
 
-    public JsonCollection<JsonVersion> versionsToJson(GroupId groupId,
-                                                      ArtifactId artifactId,
-                                                      List<Version> versions) {
+    public JsonCollection<JsonVersion> toJson(GroupId groupId,
+                                              ArtifactId artifactId,
+                                              List<Version> versions) {
 
         final List<JsonVersion> jsonVersions = versions.stream()
-                .map(version -> versionToJson(groupId, artifactId, version))
+                .map(version -> toJson(groupId, artifactId, version))
                 .collect(toList());
-        return collectionToJson(jsonVersions, listVersionsUri.apply(groupId, artifactId));
+        return toJson(jsonVersions, listVersionsUri.apply(groupId, artifactId));
     }
 
-    private JsonVersion versionToJson(GroupId groupId,
-                                      ArtifactId artifactId,
-                                      Version version) {
+    private JsonVersion toJson(GroupId groupId,
+                               ArtifactId artifactId,
+                               Version version) {
 
         final JsonVersion jsonVersion = new JsonVersion();
         jsonVersion.setId(projectUri.apply(groupId, artifactId, version));
@@ -114,7 +114,7 @@ public class JsonMapper {
         return jsonVersion;
     }
 
-    public JsonProject projectToJson(Project project) {
+    public JsonProject toJson(Project project) {
 
         final JsonProject jsonProject = new JsonProject();
         jsonProject.setId(projectUri.apply(project.getGroupId(),
@@ -125,8 +125,8 @@ public class JsonMapper {
         return jsonProject;
     }
 
-    private <E> JsonCollection<E> collectionToJson(List<E> collection,
-                                                   URI id) {
+    private <E> JsonCollection<E> toJson(List<E> collection,
+                                         URI id) {
 
         final JsonCollection<E> jsonCollection = new JsonCollection<>();
         jsonCollection.setId(id);
