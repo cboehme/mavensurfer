@@ -18,6 +18,7 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -44,11 +45,19 @@ public class QueryProjects {
         return repository.findArtifactIdsIn(groupId);
     }
 
-    public List<Version> getVersionsOf(GroupId groupId, ArtifactId artifactId) {
+    public List<Version> getVersionsOf(GroupId groupId,
+                                       ArtifactId artifactId) {
 
         return repository.findProjectsWith(groupId, artifactId).stream()
                 .map(Project::getVersion)
                 .collect(toList());
+    }
+
+    public Optional<Project> getProject(GroupId groupId,
+                                        ArtifactId artifactId,
+                                        Version version) {
+
+        return repository.getByGav(groupId, artifactId, version);
     }
 
 }

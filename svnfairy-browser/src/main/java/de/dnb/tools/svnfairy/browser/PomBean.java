@@ -70,7 +70,7 @@ public class PomBean {
 
     public String getFile() {
         Project project = repository.getByGav(GroupId.of(groupId),
-                ArtifactId.of(artifactId), Version.of(version));
+                ArtifactId.of(artifactId), Version.of(version)).get();
         return project.getFile();
     }
 
@@ -84,19 +84,19 @@ public class PomBean {
 
     public List<Project> getPossibleParents() {
         Project project = repository.getByGav(GroupId.of(groupId),
-                ArtifactId.of(artifactId), Version.of(version));
+                ArtifactId.of(artifactId), Version.of(version)).get();
         return getPossibleParents.of(project);
     }
 
     public List<Project> getChildren() {
         Project project = repository.getByGav(GroupId.of(groupId),
-                ArtifactId.of(artifactId), Version.of(version));
+                ArtifactId.of(artifactId), Version.of(version)).get();
         return getChildren.of(project);
     }
 
     public List<Project> getDependents() {
         Project project = repository.getByGav(GroupId.of(groupId),
-                ArtifactId.of(artifactId), Version.of(version));
+                ArtifactId.of(artifactId), Version.of(version)).get();
         return getDependents.of(project);
     }
 

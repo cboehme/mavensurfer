@@ -2,12 +2,13 @@ package de.dnb.tools.svnfairy.browser.db;
 
 import static java.util.stream.Collectors.toList;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -32,25 +33,28 @@ public class JpaRepository {
     private EntityManager entityManager;
 
     @Transactional
-    public Project getByGav(GroupId groupId,
-                            ArtifactId artifactId,
-                            Version version) {
+    public Optional<Project> getByGav(GroupId groupId,
+                                      ArtifactId artifactId,
+                                      Version version) {
 
-        ProjectBean projectBean = findProjectBeanByGav(groupId, artifactId,
-                version);
-        return mapBeanToProject(projectBean);
+        return findProjectBeanByGav(groupId, artifactId, version)
+                .map(this::mapBeanToProject);
     }
 
-    private ProjectBean findProjectBeanByGav(GroupId groupId,
-                                             ArtifactId artifactId,
-                                             Version version) {
+    private Optional<ProjectBean> findProjectBeanByGav(GroupId groupId,
+                                                       ArtifactId artifactId,
+                                                       Version version) {
 
         TypedQuery<ProjectBean> findByGav = entityManager.createNamedQuery(
                 "Project.findByGav", ProjectBean.class);
         findByGav.setParameter("groupId", groupId.toString());
         findByGav.setParameter("artifactId", artifactId.toString());
         findByGav.setParameter("version", version.toString());
-        return findByGav.getSingleResult();
+        try {
+            return Optional.of(findByGav.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Transactional

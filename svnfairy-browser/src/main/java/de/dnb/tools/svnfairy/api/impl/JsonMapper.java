@@ -26,9 +26,11 @@ import java.util.function.Supplier;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
 public class JsonMapper {
@@ -112,6 +114,17 @@ public class JsonMapper {
         return jsonVersion;
     }
 
+    public JsonProject projectToJson(Project project) {
+
+        final JsonProject jsonProject = new JsonProject();
+        jsonProject.setId(projectUri.apply(project.getGroupId(),
+                project.getArtifactId(), project.getVersion()));
+        jsonProject.setArtifactId(project.getArtifactId().toString());
+        jsonProject.setGroupId(project.getGroupId().toString());
+        jsonProject.setVersion(project.getVersion().toString());
+        return jsonProject;
+    }
+
     private <E> JsonCollection<E> collectionToJson(List<E> collection,
                                                    URI id) {
 
@@ -121,4 +134,5 @@ public class JsonMapper {
         jsonCollection.setMember(collection);
         return jsonCollection;
     }
+
 }

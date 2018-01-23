@@ -21,9 +21,11 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
@@ -41,6 +44,7 @@ import de.dnb.tools.svnfairy.api.impl.JsonMapper;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
+import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
 @RequestScoped
@@ -145,6 +149,24 @@ public class ProjectsResourceImpl implements ProjectsResource {
         return Response.ok(jsonVersions).build();
     }
 
+    @Override
+    public JsonProject getProject(String groupIdString,
+                                  String artifactIdString,
+                                  String versionString) {
+
+        requireNonNull(groupIdString);
+        requireNonNull(artifactIdString);
+        requireNonNull(versionString);
+
+        final GroupId groupId = GroupId.of(groupIdString);
+        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
+        final Version version = Version.of(versionString);
+
+        return queryProjects.getProject(groupId, artifactId, version)
+                .map(map::projectToJson)
+                .orElseThrow(NotFoundException::new);
+    }
+
     private URI getListGroupIdsUri() {
 
         return uriInfo.getBaseUriBuilder()
@@ -175,7 +197,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectsResource.class)
-                .path(ProjectsResource.class, "indexGav")
+                .path(ProjectsResource.class, "getProject")
                 .build(groupId, artifactId, version);
     }
 
