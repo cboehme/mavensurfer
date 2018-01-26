@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Christoph Böhme
+ * Copyright 2018 Christoph Böhme
  *
  * Licensed under the Apache License, Version 2.0 the "License";
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package de.dnb.tools.svnfairy.api;
 
-import javax.ws.rs.Consumes;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,28 +24,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.dnb.tools.svnfairy.api.datatypes.Pom;
+import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 
-@Path("/projects")
-public interface ProjectsResource {
+@Path("/projects/{groupId}/{artifactId}/{version}")
+public interface ProjectResource {
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    JsonProject getProject(@PathParam("groupId") @NotNull String groupId,
+                           @PathParam("artifactId") @NotNull String artifactId,
+                           @PathParam("version") @NotNull String version);
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    Response indexPom(Pom pom);
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    Response listGroupIds();
-
-    @GET
-    @Path("/{groupId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response listArtifactIdsFor(@PathParam("groupId") String groupId);
-
-    @GET
-    @Path("/{groupId}/{artifactId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    Response listVersionsFor(@PathParam("groupId") String groupId,
-                             @PathParam("artifactId") String artifactId);
+    Response indexGav(@PathParam("groupId") @NotNull String groupId,
+                      @PathParam("artifactId") @NotNull String artifactId,
+                      @PathParam("version") @NotNull String version);
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Christoph Böhme
+ * Copyright 2018 Christoph Böhme
  *
  * Licensed under the Apache License, Version 2.0 the "License";
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser;
+package de.dnb.tools.svnfairy.api.impl;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Christoph Böhme
+ * Copyright 2018 Christoph Böhme
  *
  * Licensed under the Apache License, Version 2.0 the "License";
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser;
+package de.dnb.tools.svnfairy.api.impl;
 
 import static java.util.Objects.requireNonNull;
 
@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -32,14 +31,15 @@ import javax.ws.rs.core.UriInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.api.ProjectResource;
+import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
-import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
-import de.dnb.tools.svnfairy.api.ProjectsResource;
-import de.dnb.tools.svnfairy.api.impl.JsonMapper;
+import de.dnb.tools.svnfairy.browser.ProcessPomFile;
+import de.dnb.tools.svnfairy.browser.QueryProjects;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
@@ -55,7 +55,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
     private UriInfo uriInfo;
 
     @Inject
-    private ProcessPomFile  processPomFile;
+    private ProcessPomFile processPomFile;
     @Inject
     private QueryProjects queryProjects;
 
@@ -84,24 +84,6 @@ public class ProjectsResourceImpl implements ProjectsResource {
                 StandardCharsets.UTF_8));
 
         processPomFile.processPomFile(pomFile);
-
-        return Response.ok().build();
-    }
-
-    @Override
-    public Response indexGav(String groupIdString,
-                             String artifactIdString,
-                             String versionString) {
-
-        requireNonNull(groupIdString);
-        requireNonNull(artifactIdString);
-        requireNonNull(versionString);
-
-        final GroupId groupId = GroupId.of(groupIdString);
-        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
-        final Version version = Version.of(versionString);
-
-        processPomFile.process(groupId, artifactId, version);
 
         return Response.ok().build();
     }
@@ -147,24 +129,6 @@ public class ProjectsResourceImpl implements ProjectsResource {
         return Response.ok(jsonVersions).build();
     }
 
-    @Override
-    public JsonProject getProject(String groupIdString,
-                                  String artifactIdString,
-                                  String versionString) {
-
-        requireNonNull(groupIdString);
-        requireNonNull(artifactIdString);
-        requireNonNull(versionString);
-
-        final GroupId groupId = GroupId.of(groupIdString);
-        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
-        final Version version = Version.of(versionString);
-
-        return queryProjects.getProject(groupId, artifactId, version)
-                .map(map::toJson)
-                .orElseThrow(NotFoundException::new);
-    }
-
     private URI getListGroupIdsUri() {
 
         return uriInfo.getBaseUriBuilder()
@@ -194,8 +158,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
                               Version version) {
 
         return uriInfo.getBaseUriBuilder()
-                .path(ProjectsResource.class)
-                .path(ProjectsResource.class, "getProject")
+                .path(ProjectResource.class)
                 .build(groupId, artifactId, version);
     }
 
