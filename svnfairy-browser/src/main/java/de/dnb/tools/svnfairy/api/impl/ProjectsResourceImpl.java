@@ -17,21 +17,17 @@ package de.dnb.tools.svnfairy.api.impl;
 
 import static java.util.Objects.requireNonNull;
 
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
@@ -51,25 +47,15 @@ public class ProjectsResourceImpl implements ProjectsResource {
     private static final Logger log = LoggerFactory.getLogger(
             ProjectsResourceImpl.class);
 
-    @Context
-    private UriInfo uriInfo;
-
     @Inject
     private ProcessPomFile processPomFile;
     @Inject
     private QueryProjects queryProjects;
 
+    @Inject
+    private JsonMapper map;
+
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
-    private final JsonMapper map;
-
-    public ProjectsResourceImpl() {
-
-        map = new JsonMapper();
-        map.setListGroupIdsUri(this::getListGroupIdsUri);
-        map.setListArtifactIdsUri(this::getListArtifactIdsUri);
-        map.setListVersionsUri(this::getListVersionsUri);
-        map.setProjectUri(this::getProjectUri);
-    }
 
     @Override
     public Response indexPom(Pom pom) {
@@ -127,39 +113,6 @@ public class ProjectsResourceImpl implements ProjectsResource {
         final JsonCollection<JsonVersion> jsonVersions =
                 map.toJson(groupId, artifactId, versions);
         return Response.ok(jsonVersions).build();
-    }
-
-    private URI getListGroupIdsUri() {
-
-        return uriInfo.getBaseUriBuilder()
-                .path(ProjectsResource.class)
-                .build();
-    }
-
-    private URI getListArtifactIdsUri(GroupId groupId) {
-
-        return uriInfo.getBaseUriBuilder()
-                .path(ProjectsResource.class)
-                .path(ProjectsResource.class, "listArtifactIdsFor")
-                .build(groupId);
-    }
-
-    private URI getListVersionsUri(GroupId groupId,
-                                   ArtifactId artifactId) {
-
-        return uriInfo.getBaseUriBuilder()
-                .path(ProjectsResource.class)
-                .path(ProjectsResource.class, "listVersionsFor")
-                .build(groupId, artifactId);
-    }
-
-    private URI getProjectUri(GroupId groupId,
-                              ArtifactId artifactId,
-                              Version version) {
-
-        return uriInfo.getBaseUriBuilder()
-                .path(ProjectResource.class)
-                .build(groupId, artifactId, version);
     }
 
 }

@@ -15,13 +15,10 @@
  */
 package de.dnb.tools.svnfairy.api.impl;
 
-import java.net.URI;
-
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
@@ -31,23 +28,16 @@ import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
+@RequestScoped
 public class ProjectResourceImpl implements ProjectResource {
-
-    @Context
-    private UriInfo uriInfo;
 
     @Inject
     private ProcessPomFile processPomFile;
     @Inject
     private QueryProjects queryProjects;
 
-    private final JsonMapper map;
-
-    public ProjectResourceImpl() {
-
-        map = new JsonMapper();
-        map.setProjectUri(this::getProjectUri);
-    }
+    @Inject
+    private JsonMapper map;
 
     @Override
     public JsonProject getProject(String groupIdString,
@@ -75,15 +65,6 @@ public class ProjectResourceImpl implements ProjectResource {
         processPomFile.process(groupId, artifactId, version);
 
         return Response.ok().build();
-    }
-
-    private URI getProjectUri(GroupId groupId,
-                              ArtifactId artifactId,
-                              Version version) {
-
-        return uriInfo.getBaseUriBuilder()
-                .path(ProjectResource.class)
-                .build(groupId, artifactId, version);
     }
 
 }

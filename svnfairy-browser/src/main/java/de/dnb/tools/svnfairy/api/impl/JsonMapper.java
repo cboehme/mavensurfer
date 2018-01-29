@@ -19,12 +19,12 @@ import static java.util.stream.Collectors.toList;
 
 import java.net.URI;
 import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
-import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
@@ -33,45 +33,24 @@ import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
+@ApplicationScoped
 public class JsonMapper {
 
-    private Supplier<URI> listGroupIdsUri;
-    private Function<GroupId, URI> listArtifactIdsUri;
-    private BiFunction<GroupId, ArtifactId, URI> listVersionsUri;
-    private TriFunction<GroupId, ArtifactId, Version, URI> projectUri;
-
-    public void setListGroupIdsUri(Supplier<URI> uriMaker) {
-
-        listGroupIdsUri = uriMaker;
-    }
-
-    public void setListArtifactIdsUri(Function<GroupId, URI> uriMaker) {
-
-        listArtifactIdsUri = uriMaker;
-    }
-
-    public void setListVersionsUri(BiFunction<GroupId, ArtifactId, URI> listVersionsUri) {
-
-        this.listVersionsUri = listVersionsUri;
-    }
-
-    public void setProjectUri(TriFunction<GroupId, ArtifactId, Version, URI> projectUri) {
-
-        this.projectUri = projectUri;
-    }
+    @Inject
+    private ResourceUris uris;
 
     public JsonCollection<JsonGroupId> toJson(List<GroupId> groupIds) {
 
         final List<JsonGroupId> jsonGroupIds = groupIds.stream()
                 .map(this::toJson)
                 .collect(toList());
-        return toJson(jsonGroupIds, listGroupIdsUri.get());
+        return toJson(jsonGroupIds, uris.getListGroupIdsUri());
     }
 
     private JsonGroupId toJson(GroupId groupId) {
 
         final JsonGroupId jsonGroupId = new JsonGroupId();
-        jsonGroupId.setId(listArtifactIdsUri.apply(groupId));
+        jsonGroupId.setId(uris.getListArtifactIdsUri(groupId));
         jsonGroupId.setGroupId(groupId.toString());
         return jsonGroupId;
     }
@@ -82,14 +61,14 @@ public class JsonMapper {
         final List<JsonArtifactId> jsonArtifactIds = artifactIds.stream()
                 .map(artifactId -> toJson(groupId, artifactId))
                 .collect(toList());
-        return toJson(jsonArtifactIds, listArtifactIdsUri.apply(groupId));
+        return toJson(jsonArtifactIds, uris.getListArtifactIdsUri(groupId));
     }
 
     private JsonArtifactId toJson(GroupId groupId,
                                   ArtifactId artifactId) {
 
         final JsonArtifactId jsonArtifactId = new JsonArtifactId();
-        jsonArtifactId.setId(listVersionsUri.apply(groupId, artifactId));
+        jsonArtifactId.setId(uris.getListVersionsUri(groupId, artifactId));
         jsonArtifactId.setArtifactId(artifactId.toString());
         return jsonArtifactId;
     }
@@ -101,7 +80,7 @@ public class JsonMapper {
         final List<JsonVersion> jsonVersions = versions.stream()
                 .map(version -> toJson(groupId, artifactId, version))
                 .collect(toList());
-        return toJson(jsonVersions, listVersionsUri.apply(groupId, artifactId));
+        return toJson(jsonVersions, uris.getListVersionsUri(groupId, artifactId));
     }
 
     private JsonVersion toJson(GroupId groupId,
@@ -109,7 +88,7 @@ public class JsonMapper {
                                Version version) {
 
         final JsonVersion jsonVersion = new JsonVersion();
-        jsonVersion.setId(projectUri.apply(groupId, artifactId, version));
+        jsonVersion.setId(uris.getProjectUri(groupId, artifactId, version));
         jsonVersion.setVersion(version.toString());
         return jsonVersion;
     }
@@ -117,7 +96,7 @@ public class JsonMapper {
     public JsonProject toJson(Project project) {
 
         final JsonProject jsonProject = new JsonProject();
-        jsonProject.setId(projectUri.apply(project.getGroupId(),
+        jsonProject.setId(uris.getProjectUri(project.getGroupId(),
                 project.getArtifactId(), project.getVersion()));
         jsonProject.setArtifactId(project.getArtifactId().toString());
         jsonProject.setGroupId(project.getGroupId().toString());
