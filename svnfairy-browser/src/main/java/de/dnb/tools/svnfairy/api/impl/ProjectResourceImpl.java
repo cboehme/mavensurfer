@@ -24,6 +24,7 @@ import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.browser.FindChildren;
+import de.dnb.tools.svnfairy.browser.FindDependents;
 import de.dnb.tools.svnfairy.browser.FindParents;
 import de.dnb.tools.svnfairy.browser.ProcessPomFile;
 import de.dnb.tools.svnfairy.browser.QueryProjects;
@@ -43,6 +44,8 @@ public class ProjectResourceImpl implements ProjectResource {
     private FindParents findParents;
     @Inject
     private FindChildren findChildren;
+    @Inject
+    private FindDependents findDependents;
 
     @Inject
     private JsonMapper map;
@@ -60,9 +63,9 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public Response indexGav(String groupIdString,
-                             String artifactIdString,
-                             String versionString) {
+    public Response indexProject(String groupIdString,
+                                 String artifactIdString,
+                                 String versionString) {
 
         final GroupId groupId = GroupId.of(groupIdString);
         final ArtifactId artifactId = ArtifactId.of(artifactIdString);
@@ -95,6 +98,19 @@ public class ProjectResourceImpl implements ProjectResource {
 
         return queryProjects.getProject(gav)
                 .map(findChildren::of)
+                .map(projects -> map.toJson(gav, projects))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public JsonCollection getDependents(String groupId,
+                                        String artifactId,
+                                        String version) {
+
+        final Gav gav = Gav.of(groupId, artifactId, version);
+
+        return queryProjects.getProject(gav)
+                .map(findDependents::of)
                 .map(projects -> map.toJson(gav, projects))
                 .orElseThrow(NotFoundException::new);
     }

@@ -37,9 +37,9 @@ public interface ProjectResource {
                            @PathParam("version") @NotNull String version);
 
     @POST
-    Response indexGav(@PathParam("groupId") @NotNull String groupId,
-                      @PathParam("artifactId") @NotNull String artifactId,
-                      @PathParam("version") @NotNull String version);
+    Response indexProject(@PathParam("groupId") @NotNull String groupId,
+                          @PathParam("artifactId") @NotNull String artifactId,
+                          @PathParam("version") @NotNull String version);
 
     @GET
     @Path("/parents")
@@ -54,5 +54,12 @@ public interface ProjectResource {
     JsonCollection getChildren(@PathParam("groupId") @NotNull String groupId,
                                @PathParam("artifactId") @NotNull String artifactId,
                                @PathParam("version") @NotNull String version);
+
+    @GET
+    @Path("/dependents")
+    @Produces(MediaType.APPLICATION_JSON)
+    JsonCollection getDependents(@PathParam("groupId") @NotNull String groupId,
+                                 @PathParam("artifactId") @NotNull String artifactId,
+                                 @PathParam("version") @NotNull String version);
 
 }

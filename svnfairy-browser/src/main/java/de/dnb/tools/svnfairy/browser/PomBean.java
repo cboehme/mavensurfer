@@ -30,7 +30,7 @@ public class PomBean {
     @Inject
     private FindParents findParents;
     @Inject
-    private GetDependents getDependents;
+    private FindDependents findDependents;
 
     private String groupId;
     private String artifactId;
@@ -97,7 +97,7 @@ public class PomBean {
     public List<Project> getDependents() {
         Project project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version)).get();
-        return getDependents.of(project);
+        return findDependents.of(project);
     }
 
 }

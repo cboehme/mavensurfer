@@ -26,7 +26,7 @@ import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
 @ApplicationScoped
-public class GetDependents {
+public class FindDependents {
 
     @Inject
     private JpaRepository repository;

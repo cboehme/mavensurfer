@@ -67,6 +67,26 @@ public class ResourceUris {
                 .build(groupId, artifactId, version);
     }
 
+    public URI getChildrenUri(GroupId groupId,
+                              ArtifactId artifactId,
+                              Version version) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectResource.class)
+                .path(ProjectResource.class, "getChildren")
+                .build(groupId, artifactId, version);
+    }
+
+    public URI getDependentsUri(GroupId groupId,
+                              ArtifactId artifactId,
+                              Version version) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectResource.class)
+                .path(ProjectResource.class, "getDependents")
+                .build(groupId, artifactId, version);
+    }
+
     URI getProjectUri(GroupId groupId,
                       ArtifactId artifactId,
                       Version version) {
