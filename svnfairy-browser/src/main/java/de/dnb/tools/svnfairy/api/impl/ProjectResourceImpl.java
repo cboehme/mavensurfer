@@ -15,6 +15,10 @@
  */
 package de.dnb.tools.svnfairy.api.impl;
 
+import static de.dnb.tools.svnfairy.api.impl.Relation.child;
+import static de.dnb.tools.svnfairy.api.impl.Relation.dependent;
+import static de.dnb.tools.svnfairy.api.impl.Relation.parent;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
@@ -85,7 +89,7 @@ public class ProjectResourceImpl implements ProjectResource {
 
         return queryProjects.getProject(gav)
                 .map(findParents::of)
-                .map(projects -> map.toJson(gav, projects))
+                .map(projects -> map.toJson(gav, parent, projects))
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -98,7 +102,7 @@ public class ProjectResourceImpl implements ProjectResource {
 
         return queryProjects.getProject(gav)
                 .map(findChildren::of)
-                .map(projects -> map.toJson(gav, projects))
+                .map(projects -> map.toJson(gav, child, projects))
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -111,7 +115,7 @@ public class ProjectResourceImpl implements ProjectResource {
 
         return queryProjects.getProject(gav)
                 .map(findDependents::of)
-                .map(projects -> map.toJson(gav, projects))
+                .map(projects -> map.toJson(gav, dependent, projects))
                 .orElseThrow(NotFoundException::new);
     }
 

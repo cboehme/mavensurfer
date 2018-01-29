@@ -95,13 +95,31 @@ public class JsonMapper {
     }
 
     public JsonCollection<JsonProject> toJson(Gav gav,
+                                              Relation relation,
                                               List<Project> projects) {
 
         final List<JsonProject> jsonProjects = projects.stream()
                 .map(this::toJson)
                 .collect(toList());
-        return toJson(jsonProjects, uris.getParentsUri(
-                gav.getGroupId(), gav.getArtifactId(), gav.getVersion()));
+        return toJson(jsonProjects, makeUri(gav, relation));
+    }
+
+    private URI makeUri(Gav gav,
+                        Relation relation) {
+
+        switch (relation) {
+            case parent:
+                return uris.getParentsUri(gav.getGroupId(), gav.getArtifactId(),
+                        gav.getVersion());
+            case child:
+                return uris.getChildrenUri(gav.getGroupId(), gav.getArtifactId(),
+                        gav.getVersion());
+            case dependent:
+                return uris.getDependentsUri(gav.getGroupId(),
+                        gav.getArtifactId(), gav.getVersion());
+            default:
+                throw new AssertionError("Unexpected relation");
+        }
     }
 
     public JsonProject toJson(Project project) {
