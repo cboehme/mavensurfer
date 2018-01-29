@@ -38,9 +38,8 @@ public class Project {
     private Version version;
     private Packaging packaging;
 
-    private List<Dependency> dependencyManagement = new ArrayList<>();
-
-    private List<Dependency> dependencies = new ArrayList<>();
+    private final List<Dependency> dependencyManagement = new ArrayList<>();
+    private final List<Dependency> dependencies = new ArrayList<>();
 
     public Project(String file) {
         this.file = file;

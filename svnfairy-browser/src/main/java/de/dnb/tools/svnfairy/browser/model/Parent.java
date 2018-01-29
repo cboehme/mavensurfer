@@ -55,6 +55,7 @@ public final class Parent {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.groupId, b.groupId)
                 && Objects.equals(a.artifactId, b.artifactId)

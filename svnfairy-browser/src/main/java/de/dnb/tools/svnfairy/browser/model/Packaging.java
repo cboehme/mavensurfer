@@ -28,6 +28,7 @@ public final class Packaging {
     }
 
     public static Packaging of(String packaging) {
+
         if (packaging == null) {
             return null;
         }
@@ -36,6 +37,7 @@ public final class Packaging {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.packaging, b.packaging));
     }

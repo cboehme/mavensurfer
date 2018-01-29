@@ -29,10 +29,12 @@ public final class VersionRequirement {
     private final String versionRequirement;
 
     private VersionRequirement(String versionRequirement) {
+
         this.versionRequirement = versionRequirement;
     }
 
     public static VersionRequirement of(String versionRequirement) {
+
         if (versionRequirement == null) {
             return null;
         }
@@ -40,6 +42,7 @@ public final class VersionRequirement {
     }
 
     public boolean containsVersion(Version version) {
+
         try {
             final VersionRange versionRange =
                     VersionRange.createFromVersionSpec(versionRequirement);
@@ -56,6 +59,7 @@ public final class VersionRequirement {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.versionRequirement, b.versionRequirement));
     }

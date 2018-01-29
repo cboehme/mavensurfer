@@ -28,6 +28,7 @@ public final class Version {
     }
 
     public static Version of(String version) {
+
         if (version == null) {
             return null;
         }
@@ -36,6 +37,7 @@ public final class Version {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.version, b.version));
     }

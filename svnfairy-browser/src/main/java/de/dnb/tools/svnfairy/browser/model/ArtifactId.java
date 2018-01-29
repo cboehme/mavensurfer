@@ -28,6 +28,7 @@ public final class ArtifactId {
     }
 
     public static ArtifactId of(String artifactId) {
+
         if (artifactId == null) {
             return null;
         }
@@ -36,6 +37,7 @@ public final class ArtifactId {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.artifactId, b.artifactId));
     }

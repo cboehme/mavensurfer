@@ -32,7 +32,7 @@ public final class Type {
     public static Type of(String type) {
 
         if (type == null) {
-            return new Type(defaultTypeValue);
+            return defaultType();
         }
         return new Type(type);
     }
@@ -44,6 +44,7 @@ public final class Type {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.type, b.type));
     }

@@ -32,7 +32,7 @@ public final class Classifier {
     public static Classifier of(String classifier) {
 
         if (classifier == null) {
-            return new Classifier(emptyClassifierValue);
+            return none();
         }
         return new Classifier(classifier);
     }
@@ -44,6 +44,7 @@ public final class Classifier {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.classifier, b.classifier));
     }

@@ -28,6 +28,7 @@ public final class GroupId {
     }
 
     public static GroupId of(String groupId) {
+
         if (groupId == null) {
             return null;
         }
@@ -36,6 +37,7 @@ public final class GroupId {
 
     @Override
     public boolean equals(Object obj) {
+
         return Util.equals(this, obj, (a, b) ->
                 Objects.equals(a.groupId, b.groupId));
     }
