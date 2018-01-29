@@ -57,13 +57,13 @@ public class ResourceUris {
                 .build(groupId, artifactId);
     }
 
-    public URI getPossibleParentsUri(GroupId groupId,
-                                     ArtifactId artifactId,
-                                     Version version) {
+    public URI getParentsUri(GroupId groupId,
+                             ArtifactId artifactId,
+                             Version version) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
-                .path(ProjectResource.class, "getPossibleParents")
+                .path(ProjectResource.class, "getParents")
                 .build(groupId, artifactId, version);
     }
 

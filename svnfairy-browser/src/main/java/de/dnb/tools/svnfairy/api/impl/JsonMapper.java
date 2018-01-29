@@ -100,7 +100,7 @@ public class JsonMapper {
         final List<JsonProject> jsonProjects = projects.stream()
                 .map(this::toJson)
                 .collect(toList());
-        return toJson(jsonProjects, uris.getPossibleParentsUri(
+        return toJson(jsonProjects, uris.getParentsUri(
                 gav.getGroupId(), gav.getArtifactId(), gav.getVersion()));
     }
 

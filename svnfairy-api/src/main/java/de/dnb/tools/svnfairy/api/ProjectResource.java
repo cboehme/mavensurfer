@@ -42,11 +42,11 @@ public interface ProjectResource {
                       @PathParam("version") @NotNull String version);
 
     @GET
-    @Path("/possible-parents")
+    @Path("/parents")
     @Produces(MediaType.APPLICATION_JSON)
-    JsonCollection getPossibleParents(@PathParam("groupId") @NotNull String groupId,
-                                      @PathParam("artifactId") @NotNull String artifactId,
-                                      @PathParam("version") @NotNull String version);
+    JsonCollection getParents(@PathParam("groupId") @NotNull String groupId,
+                              @PathParam("artifactId") @NotNull String artifactId,
+                              @PathParam("version") @NotNull String version);
 
     @GET
     @Path("/children")

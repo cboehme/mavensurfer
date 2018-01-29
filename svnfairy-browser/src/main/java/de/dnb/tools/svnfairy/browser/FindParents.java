@@ -28,7 +28,7 @@ import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
 @ApplicationScoped
-public class FindPossibleParents {
+public class FindParents {
 
     @Inject
     private JpaRepository repository;

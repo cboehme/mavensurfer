@@ -24,7 +24,7 @@ import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.browser.FindChildren;
-import de.dnb.tools.svnfairy.browser.FindPossibleParents;
+import de.dnb.tools.svnfairy.browser.FindParents;
 import de.dnb.tools.svnfairy.browser.ProcessPomFile;
 import de.dnb.tools.svnfairy.browser.QueryProjects;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
@@ -40,7 +40,7 @@ public class ProjectResourceImpl implements ProjectResource {
     @Inject
     private QueryProjects queryProjects;
     @Inject
-    private FindPossibleParents findPossibleParents;
+    private FindParents findParents;
     @Inject
     private FindChildren findChildren;
 
@@ -74,14 +74,14 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public JsonCollection getPossibleParents(String groupId,
-                                             String artifactId,
-                                             String version) {
+    public JsonCollection getParents(String groupId,
+                                     String artifactId,
+                                     String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
         return queryProjects.getProject(gav)
-                .map(findPossibleParents::of)
+                .map(findParents::of)
                 .map(projects -> map.toJson(gav, projects))
                 .orElseThrow(NotFoundException::new);
     }
