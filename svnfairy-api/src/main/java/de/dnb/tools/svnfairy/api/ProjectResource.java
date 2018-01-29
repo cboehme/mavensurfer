@@ -48,4 +48,11 @@ public interface ProjectResource {
                                       @PathParam("artifactId") @NotNull String artifactId,
                                       @PathParam("version") @NotNull String version);
 
+    @GET
+    @Path("/children")
+    @Produces(MediaType.APPLICATION_JSON)
+    JsonCollection getChildren(@PathParam("groupId") @NotNull String groupId,
+                               @PathParam("artifactId") @NotNull String artifactId,
+                               @PathParam("version") @NotNull String version);
+
 }
