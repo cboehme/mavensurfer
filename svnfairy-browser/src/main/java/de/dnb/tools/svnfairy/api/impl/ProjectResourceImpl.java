@@ -113,6 +113,10 @@ public class ProjectResourceImpl implements ProjectResource {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
+        // TODO: Add scope, optional, type and classifier attributes
+        // These are available as dependent.dependencies[0].{ type,classifier
+        // scope, optional}.
+
         return queryProjects.getProject(gav)
                 .map(findDependents::of)
                 .map(projects -> map.toJson(gav, dependent, projects))

@@ -74,11 +74,6 @@
             <artifactId>jpa</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>jsf</artifactId>
-        </dependency>
-
         <!-- Datasource for Wildfly-Swarm -->
 
         <dependency>
@@ -166,12 +161,6 @@
                         </goals>
                     </execution>
                 </executions>
-<!--
-                <configuration>
-                    <debug>1</debug>
-                    <debugPort>5050</debugPort>
-                </configuration>
--->
             </plugin>
 
             <plugin>
