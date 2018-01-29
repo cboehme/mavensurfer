@@ -28,12 +28,13 @@ import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
 @ApplicationScoped
-public class GetPossibleParents {
+public class FindPossibleParents {
 
     @Inject
     private JpaRepository repository;
 
     public List<Project> of(Project project) {
+
         if (!project.getParent().isPresent()) {
             return emptyList();
         }

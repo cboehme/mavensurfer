@@ -24,6 +24,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 
 @Path("/projects/{groupId}/{artifactId}/{version}")
@@ -39,5 +40,12 @@ public interface ProjectResource {
     Response indexGav(@PathParam("groupId") @NotNull String groupId,
                       @PathParam("artifactId") @NotNull String artifactId,
                       @PathParam("version") @NotNull String version);
+
+    @GET
+    @Path("/possible-parents")
+    @Produces(MediaType.APPLICATION_JSON)
+    JsonCollection getPossibleParents(@PathParam("groupId") @NotNull String groupId,
+                                      @PathParam("artifactId") @NotNull String artifactId,
+                                      @PathParam("version") @NotNull String version);
 
 }

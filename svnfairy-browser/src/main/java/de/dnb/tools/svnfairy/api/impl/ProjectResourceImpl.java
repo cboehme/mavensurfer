@@ -21,10 +21,13 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 
 import de.dnb.tools.svnfairy.api.ProjectResource;
+import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
+import de.dnb.tools.svnfairy.browser.FindPossibleParents;
 import de.dnb.tools.svnfairy.browser.ProcessPomFile;
 import de.dnb.tools.svnfairy.browser.QueryProjects;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
@@ -35,20 +38,20 @@ public class ProjectResourceImpl implements ProjectResource {
     private ProcessPomFile processPomFile;
     @Inject
     private QueryProjects queryProjects;
+    @Inject
+    private FindPossibleParents findPossibleParents;
 
     @Inject
     private JsonMapper map;
 
     @Override
-    public JsonProject getProject(String groupIdString,
-                                  String artifactIdString,
-                                  String versionString) {
+    public JsonProject getProject(String groupId,
+                                  String artifactId,
+                                  String version) {
 
-        final GroupId groupId = GroupId.of(groupIdString);
-        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
-        final Version version = Version.of(versionString);
+        final Gav gav = Gav.of(groupId, artifactId, version);
 
-        return queryProjects.getProject(groupId, artifactId, version)
+        return queryProjects.getProject(gav)
                 .map(map::toJson)
                 .orElseThrow(NotFoundException::new);
     }
@@ -65,6 +68,19 @@ public class ProjectResourceImpl implements ProjectResource {
         processPomFile.process(groupId, artifactId, version);
 
         return Response.ok().build();
+    }
+
+    @Override
+    public JsonCollection getPossibleParents(String groupId,
+                                             String artifactId,
+                                             String version) {
+
+        final Gav gav = Gav.of(groupId, artifactId, version);
+
+        return queryProjects.getProject(gav)
+                .map(findPossibleParents::of)
+                .map(projects -> map.toJson(gav, projects))
+                .orElseThrow(NotFoundException::new);
     }
 
 }

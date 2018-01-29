@@ -57,6 +57,16 @@ public class ResourceUris {
                 .build(groupId, artifactId);
     }
 
+    public URI getPossibleParentsUri(GroupId groupId,
+                                     ArtifactId artifactId,
+                                     Version version) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectResource.class)
+                .path(ProjectResource.class, "getPossibleParents")
+                .build(groupId, artifactId, version);
+    }
+
     URI getProjectUri(GroupId groupId,
                       ArtifactId artifactId,
                       Version version) {
@@ -65,5 +75,4 @@ public class ResourceUris {
                 .path(ProjectResource.class)
                 .build(groupId, artifactId, version);
     }
-
 }

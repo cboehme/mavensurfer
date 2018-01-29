@@ -29,6 +29,7 @@ import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
@@ -93,6 +94,16 @@ public class JsonMapper {
         return jsonVersion;
     }
 
+    public JsonCollection<JsonProject> toJson(Gav gav,
+                                              List<Project> projects) {
+
+        final List<JsonProject> jsonProjects = projects.stream()
+                .map(this::toJson)
+                .collect(toList());
+        return toJson(jsonProjects, uris.getPossibleParentsUri(
+                gav.getGroupId(), gav.getArtifactId(), gav.getVersion()));
+    }
+
     public JsonProject toJson(Project project) {
 
         final JsonProject jsonProject = new JsonProject();
@@ -113,5 +124,4 @@ public class JsonMapper {
         jsonCollection.setMember(collection);
         return jsonCollection;
     }
-
 }

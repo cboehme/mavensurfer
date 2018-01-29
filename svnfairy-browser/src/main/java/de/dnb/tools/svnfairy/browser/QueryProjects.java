@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
@@ -53,11 +54,10 @@ public class QueryProjects {
                 .collect(toList());
     }
 
-    public Optional<Project> getProject(GroupId groupId,
-                                        ArtifactId artifactId,
-                                        Version version) {
+    public Optional<Project> getProject(Gav gav) {
 
-        return repository.getByGav(groupId, artifactId, version);
+        return repository.getByGav(gav.getGroupId(), gav.getArtifactId(),
+                gav.getVersion());
     }
 
 }

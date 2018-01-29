@@ -28,7 +28,7 @@ public class PomBean {
     @Inject
     private GetChildren getChildren;
     @Inject
-    private GetPossibleParents getPossibleParents;
+    private FindPossibleParents findPossibleParents;
     @Inject
     private GetDependents getDependents;
 
@@ -85,7 +85,7 @@ public class PomBean {
     public List<Project> getPossibleParents() {
         Project project = repository.getByGav(GroupId.of(groupId),
                 ArtifactId.of(artifactId), Version.of(version)).get();
-        return getPossibleParents.of(project);
+        return findPossibleParents.of(project);
     }
 
     public List<Project> getChildren() {
