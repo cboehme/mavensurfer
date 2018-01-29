@@ -15,14 +15,13 @@
  */
 package de.dnb.tools.svnfairy.api.impl;
 
-import static java.util.Objects.requireNonNull;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
@@ -34,8 +33,8 @@ import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
+import de.dnb.tools.svnfairy.browser.Find;
 import de.dnb.tools.svnfairy.browser.ProcessPomFile;
-import de.dnb.tools.svnfairy.browser.QueryProjects;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
@@ -48,9 +47,9 @@ public class ProjectsResourceImpl implements ProjectsResource {
             ProjectsResourceImpl.class);
 
     @Inject
-    private ProcessPomFile processPomFile;
+    private Find find;
     @Inject
-    private QueryProjects queryProjects;
+    private ProcessPomFile processPomFile;
 
     @Inject
     private JsonMapper map;
@@ -59,8 +58,6 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
     @Override
     public Response indexPom(Pom pom) {
-
-        requireNonNull(pom);
 
         final byte[] contents = base64Decoder.decode(pom.getContents());
         final PomFile pomFile = new PomFile(pom.getName(), contents);
@@ -75,44 +72,35 @@ public class ProjectsResourceImpl implements ProjectsResource {
     }
 
     @Override
-    public Response listGroupIds() {
+    public JsonCollection<JsonGroupId> listGroupIds() {
 
-        final List<GroupId> groupIds = queryProjects.getGroupIds();
-        final JsonCollection<JsonGroupId> jsonGroupIds = map.toJson(groupIds);
-        return Response.ok(jsonGroupIds).build();
+        return map.toJson(find.allGroupIds());
     }
 
     @Override
-    public Response listArtifactIdsFor(String groupIdString) {
-
-        requireNonNull(groupIdString);
+    public JsonCollection<JsonArtifactId> listArtifactIdsFor(String groupIdString) {
 
         final GroupId groupId = GroupId.of(groupIdString);
-        final List<ArtifactId> artifactIds = queryProjects.getArtifactIdsIn(groupId);
+
+        final List<ArtifactId> artifactIds = find.artifactIdsIn(groupId);
         if (artifactIds.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new NotFoundException();
         }
-        final JsonCollection<JsonArtifactId> jsonArtifactIds =
-                map.toJson(groupId, artifactIds);
-        return Response.ok(jsonArtifactIds).build();
+        return map.toJson(groupId, artifactIds);
     }
 
     @Override
-    public Response listVersionsFor(String groupIdString,
-                                    String artifactIdString) {
-
-        requireNonNull(groupIdString);
-        requireNonNull(artifactIdString);
+    public JsonCollection<JsonVersion> listVersionsFor(String groupIdString,
+                                                       String artifactIdString) {
 
         final GroupId groupId = GroupId.of(groupIdString);
         final ArtifactId artifactId = ArtifactId.of(artifactIdString);
-        final List<Version> versions = queryProjects.getVersionsOf(groupId, artifactId);
+
+        final List<Version> versions = find.versionsOf(groupId, artifactId);
         if (versions.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new NotFoundException();
         }
-        final JsonCollection<JsonVersion> jsonVersions =
-                map.toJson(groupId, artifactId, versions);
-        return Response.ok(jsonVersions).build();
+        return map.toJson(groupId, artifactId, versions);
     }
 
 }

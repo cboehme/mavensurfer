@@ -15,6 +15,7 @@
  */
 package de.dnb.tools.svnfairy.api;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +25,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
+import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
 
 @Path("/projects")
@@ -31,21 +36,21 @@ public interface ProjectsResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response indexPom(Pom pom);
+    Response indexPom(@NotNull Pom pom);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    Response listGroupIds();
+    JsonCollection<JsonGroupId> listGroupIds();
 
     @GET
     @Path("/{groupId}")
     @Produces(MediaType.APPLICATION_JSON)
-    Response listArtifactIdsFor(@PathParam("groupId") String groupId);
+    JsonCollection<JsonArtifactId> listArtifactIdsFor(@PathParam("groupId") @NotNull String groupId);
 
     @GET
     @Path("/{groupId}/{artifactId}")
     @Produces(MediaType.APPLICATION_JSON)
-    Response listVersionsFor(@PathParam("groupId") String groupId,
-                             @PathParam("artifactId") String artifactId);
+    JsonCollection<JsonVersion> listVersionsFor(@PathParam("groupId") @NotNull String groupId,
+                                                @PathParam("artifactId") @NotNull String artifactId);
 
 }

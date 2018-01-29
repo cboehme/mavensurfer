@@ -48,7 +48,7 @@ class ProjectBean {
     void setParentCoordinates(Parent parent) {
         parentGroupId = parent.getGroupId().toString();
         parentArtifactId = parent.getArtifactId().toString();
-        parentVersionRange = parent.getVersion().toString();
+        parentVersionRange = parent.getVersionRange().toString();
     }
 
 }

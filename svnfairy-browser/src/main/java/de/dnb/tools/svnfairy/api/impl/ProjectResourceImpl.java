@@ -27,11 +27,8 @@ import javax.ws.rs.core.Response;
 import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
-import de.dnb.tools.svnfairy.browser.FindChildren;
-import de.dnb.tools.svnfairy.browser.FindDependents;
-import de.dnb.tools.svnfairy.browser.FindParents;
+import de.dnb.tools.svnfairy.browser.Find;
 import de.dnb.tools.svnfairy.browser.ProcessPomFile;
-import de.dnb.tools.svnfairy.browser.QueryProjects;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
@@ -41,15 +38,9 @@ import de.dnb.tools.svnfairy.browser.model.Version;
 public class ProjectResourceImpl implements ProjectResource {
 
     @Inject
+    private Find find;
+    @Inject
     private ProcessPomFile processPomFile;
-    @Inject
-    private QueryProjects queryProjects;
-    @Inject
-    private FindParents findParents;
-    @Inject
-    private FindChildren findChildren;
-    @Inject
-    private FindDependents findDependents;
 
     @Inject
     private JsonMapper map;
@@ -61,7 +52,7 @@ public class ProjectResourceImpl implements ProjectResource {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
-        return queryProjects.getProject(gav)
+        return find.projectWith(gav)
                 .map(map::toJson)
                 .orElseThrow(NotFoundException::new);
     }
@@ -81,35 +72,35 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public JsonCollection getParents(String groupId,
-                                     String artifactId,
-                                     String version) {
+    public JsonCollection<JsonProject> getParents(String groupId,
+                                                  String artifactId,
+                                                  String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
-        return queryProjects.getProject(gav)
-                .map(findParents::of)
+        return find.projectWith(gav)
+                .map(find::parentsOf)
                 .map(projects -> map.toJson(gav, parent, projects))
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public JsonCollection getChildren(String groupId,
-                                      String artifactId,
-                                      String version) {
+    public JsonCollection<JsonProject> getChildren(String groupId,
+                                                   String artifactId,
+                                                   String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
-        return queryProjects.getProject(gav)
-                .map(findChildren::of)
+        return find.projectWith(gav)
+                .map(find::childrenOf)
                 .map(projects -> map.toJson(gav, child, projects))
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
-    public JsonCollection getDependents(String groupId,
-                                        String artifactId,
-                                        String version) {
+    public JsonCollection<JsonProject> getDependents(String groupId,
+                                                     String artifactId,
+                                                     String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
@@ -117,8 +108,8 @@ public class ProjectResourceImpl implements ProjectResource {
         // These are available as dependent.dependencies[0].{ type,classifier
         // scope, optional}.
 
-        return queryProjects.getProject(gav)
-                .map(findDependents::of)
+        return find.projectWith(gav)
+                .map(find::dependentsOf)
                 .map(projects -> map.toJson(gav, dependent, projects))
                 .orElseThrow(NotFoundException::new);
     }

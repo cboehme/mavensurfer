@@ -44,22 +44,22 @@ public interface ProjectResource {
     @GET
     @Path("/parents")
     @Produces(MediaType.APPLICATION_JSON)
-    JsonCollection getParents(@PathParam("groupId") @NotNull String groupId,
-                              @PathParam("artifactId") @NotNull String artifactId,
-                              @PathParam("version") @NotNull String version);
+    JsonCollection<JsonProject> getParents(@PathParam("groupId") @NotNull String groupId,
+                                           @PathParam("artifactId") @NotNull String artifactId,
+                                           @PathParam("version") @NotNull String version);
 
     @GET
     @Path("/children")
     @Produces(MediaType.APPLICATION_JSON)
-    JsonCollection getChildren(@PathParam("groupId") @NotNull String groupId,
-                               @PathParam("artifactId") @NotNull String artifactId,
-                               @PathParam("version") @NotNull String version);
+    JsonCollection<JsonProject> getChildren(@PathParam("groupId") @NotNull String groupId,
+                                            @PathParam("artifactId") @NotNull String artifactId,
+                                            @PathParam("version") @NotNull String version);
 
     @GET
     @Path("/dependents")
     @Produces(MediaType.APPLICATION_JSON)
-    JsonCollection getDependents(@PathParam("groupId") @NotNull String groupId,
-                                 @PathParam("artifactId") @NotNull String artifactId,
-                                 @PathParam("version") @NotNull String version);
+    JsonCollection<JsonProject> getDependents(@PathParam("groupId") @NotNull String groupId,
+                                              @PathParam("artifactId") @NotNull String artifactId,
+                                              @PathParam("version") @NotNull String version);
 
 }

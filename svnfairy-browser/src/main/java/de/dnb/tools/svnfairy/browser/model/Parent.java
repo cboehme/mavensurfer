@@ -49,7 +49,7 @@ public final class Parent {
         return artifactId;
     }
 
-    public VersionRequirement getVersion() {
+    public VersionRequirement getVersionRange() {
         return version;
     }
 
