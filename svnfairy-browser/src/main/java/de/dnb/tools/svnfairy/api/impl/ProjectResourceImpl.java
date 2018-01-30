@@ -16,7 +16,6 @@
 package de.dnb.tools.svnfairy.api.impl;
 
 import static de.dnb.tools.svnfairy.api.impl.Relation.child;
-import static de.dnb.tools.svnfairy.api.impl.Relation.dependent;
 import static de.dnb.tools.svnfairy.api.impl.Relation.parent;
 
 import javax.enterprise.context.RequestScoped;
@@ -26,6 +25,7 @@ import javax.ws.rs.core.Response;
 
 import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
+import de.dnb.tools.svnfairy.api.datatypes.JsonDependant;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.browser.Find;
 import de.dnb.tools.svnfairy.browser.ImportProject;
@@ -92,19 +92,15 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public JsonCollection<JsonProject> getDependents(String groupId,
-                                                     String artifactId,
-                                                     String version) {
+    public JsonCollection<JsonDependant> getDependents(String groupId,
+                                                       String artifactId,
+                                                       String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
-        // TODO: Add scope, optional, type and classifier attributes
-        // These are available as dependent.dependencies[0].{ type,classifier
-        // scope, optional}.
-
         return find.projectWith(gav)
                 .map(find::dependentsOf)
-                .map(projects -> map.toJson(gav, dependent, projects))
+                .map(projects -> map.toJson(gav, projects))
                 .orElseThrow(NotFoundException::new);
     }
 

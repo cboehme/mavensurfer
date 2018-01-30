@@ -25,10 +25,12 @@ import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
+import de.dnb.tools.svnfairy.api.datatypes.JsonDependant;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Project;
@@ -89,7 +91,7 @@ public class JsonMapper {
                                Version version) {
 
         final JsonVersion jsonVersion = new JsonVersion();
-        jsonVersion.setId(uris.getProjectUri(groupId, artifactId, version));
+        jsonVersion.setId(uris.getProjectUri(Gav.of(groupId, artifactId, version)));
         jsonVersion.setVersion(version.toString());
         return jsonVersion;
     }
@@ -109,14 +111,11 @@ public class JsonMapper {
 
         switch (relation) {
             case parent:
-                return uris.getParentsUri(gav.getGroupId(), gav.getArtifactId(),
-                        gav.getVersion());
+                return uris.getParentsUri(gav);
             case child:
-                return uris.getChildrenUri(gav.getGroupId(), gav.getArtifactId(),
-                        gav.getVersion());
+                return uris.getChildrenUri(gav);
             case dependent:
-                return uris.getDependentsUri(gav.getGroupId(),
-                        gav.getArtifactId(), gav.getVersion());
+                return uris.getDependentsUri(gav);
             default:
                 throw new AssertionError("Unexpected relation");
         }
@@ -125,12 +124,32 @@ public class JsonMapper {
     public JsonProject toJson(Project project) {
 
         final JsonProject jsonProject = new JsonProject();
-        jsonProject.setId(uris.getProjectUri(project.getGroupId(),
-                project.getArtifactId(), project.getVersion()));
+        jsonProject.setId(uris.getProjectUri(project.getGav()));
         jsonProject.setArtifactId(project.getArtifactId().toString());
         jsonProject.setGroupId(project.getGroupId().toString());
         jsonProject.setVersion(project.getVersion().toString());
         return jsonProject;
+    }
+
+    public JsonCollection<JsonDependant> toJson(Gav gav,
+                                                List<Project> projects) {
+
+        final List<JsonDependant> jsonDependants = projects.stream()
+                .map(this::toJsonDependant)
+                .collect(toList());
+        return toJson(jsonDependants, uris.getDependentsUri(gav));
+    }
+
+    private JsonDependant toJsonDependant(Project project) {
+
+        final JsonDependant jsonDependant = new JsonDependant();
+        jsonDependant.setProject(toJson(project));
+        final Dependency dependency = project.getDependencies().get(0);
+        jsonDependant.setClassifier(dependency.getClassifier().toString());
+        jsonDependant.setType(dependency.getType().toString());
+        jsonDependant.setScope(dependency.getScope().toString());
+        jsonDependant.setOptional(dependency.isOptional());
+        return jsonDependant;
     }
 
     private <E> JsonCollection<E> toJson(List<E> collection,
@@ -142,4 +161,5 @@ public class JsonMapper {
         jsonCollection.setMember(collection);
         return jsonCollection;
     }
+
 }

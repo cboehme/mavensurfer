@@ -55,6 +55,11 @@ public class Project {
         this.parent = parent;
     }
 
+    public Gav getGav() {
+
+        return Gav.of(groupId, artifactId, version);
+    }
+
     public GroupId getGroupId() {
         return groupId;
     }
@@ -122,5 +127,4 @@ public class Project {
     public String toString() {
         return groupId + ":" + artifactId + ":" + version;
     }
-
 }

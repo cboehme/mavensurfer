@@ -24,6 +24,7 @@ import javax.ws.rs.core.UriInfo;
 import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
@@ -57,42 +58,34 @@ public class ResourceUris {
                 .build(groupId, artifactId);
     }
 
-    public URI getParentsUri(GroupId groupId,
-                             ArtifactId artifactId,
-                             Version version) {
+    public URI getParentsUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
                 .path(ProjectResource.class, "getParents")
-                .build(groupId, artifactId, version);
+                .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 
-    public URI getChildrenUri(GroupId groupId,
-                              ArtifactId artifactId,
-                              Version version) {
+    public URI getChildrenUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
                 .path(ProjectResource.class, "getChildren")
-                .build(groupId, artifactId, version);
+                .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 
-    public URI getDependentsUri(GroupId groupId,
-                              ArtifactId artifactId,
-                              Version version) {
+    public URI getDependentsUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
                 .path(ProjectResource.class, "getDependents")
-                .build(groupId, artifactId, version);
+                .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 
-    URI getProjectUri(GroupId groupId,
-                      ArtifactId artifactId,
-                      Version version) {
+    URI getProjectUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
-                .build(groupId, artifactId, version);
+                .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 }
