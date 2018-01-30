@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Christoph Böhme
+ * Copyright 2018 Christoph Böhme
  *
  * Licensed under the Apache License, Version 2.0 the "License";
  * you may not use this file except in compliance with the License.
@@ -13,36 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser;
+package de.dnb.tools.svnfairy.browser.maven;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 
-import org.apache.maven.model.building.ModelSource2;
+import org.apache.maven.building.Source;
 
-public class ByteArrayModelSource implements ModelSource2 {
+public class InMemorySource implements Source {
 
     private final String name;
     private final byte[] contents;
 
-    public ByteArrayModelSource(String name, byte[] contents) {
+    InMemorySource(String name, byte[] contents) {
 
         this.name = name;
         this.contents = contents;
-    }
-
-    @Override
-    public ModelSource2 getRelatedSource(String relPath) {
-
-        return null;
-    }
-
-    @Override
-    public URI getLocationURI() {
-
-        return null;
     }
 
     @Override

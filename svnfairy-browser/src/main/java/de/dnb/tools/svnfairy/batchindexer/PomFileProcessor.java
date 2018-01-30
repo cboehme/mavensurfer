@@ -22,7 +22,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.dnb.tools.svnfairy.browser.ExtractInformation;
+import de.dnb.tools.svnfairy.browser.maven.ExtractInformation;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
 

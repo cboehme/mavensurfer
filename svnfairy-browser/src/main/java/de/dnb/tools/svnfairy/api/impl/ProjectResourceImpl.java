@@ -29,10 +29,7 @@ import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.browser.Find;
 import de.dnb.tools.svnfairy.browser.ImportProject;
-import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Gav;
-import de.dnb.tools.svnfairy.browser.model.GroupId;
-import de.dnb.tools.svnfairy.browser.model.Version;
 
 @RequestScoped
 public class ProjectResourceImpl implements ProjectResource {

@@ -15,7 +15,7 @@
  */
 package de.dnb.tools.svnfairy.browser.configuration;
 
-import static java.util.Objects.*;
+import static java.util.Objects.requireNonNull;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;

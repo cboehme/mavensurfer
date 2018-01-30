@@ -18,8 +18,6 @@ package de.dnb.tools.svnfairy.browser.db;
 import java.time.ZonedDateTime;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;

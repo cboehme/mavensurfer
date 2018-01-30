@@ -18,8 +18,8 @@ package de.dnb.tools.svnfairy.browser;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
-import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
+import de.dnb.tools.svnfairy.browser.maven.ExtractInformation;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;

@@ -13,33 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+package de.dnb.tools.svnfairy.browser.maven;
 
 import org.apache.maven.settings.building.SettingsSource;
 
-public class InMemorySettings implements SettingsSource {
+class InMemorySettingsSource extends InMemorySource implements SettingsSource {
 
-    private final byte[] data;
+    InMemorySettingsSource(byte[] contents) {
 
-    public InMemorySettings(byte[] data) {
-
-        this.data = data;
-    }
-
-    @Override
-    public InputStream getInputStream() throws IOException {
-
-        return new ByteArrayInputStream(data);
-    }
-
-    @Override
-    public String getLocation() {
-
-        return "settings.xml";
+        super("settings.xml", contents);
     }
 
 }

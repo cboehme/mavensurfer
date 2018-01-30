@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.dnb.tools.svnfairy.browser;
+package de.dnb.tools.svnfairy.browser.maven;
 
 import static java.util.Collections.singletonList;
 import static org.apache.maven.model.building.ModelBuildingRequest.VALIDATION_LEVEL_MINIMAL;
@@ -65,6 +65,7 @@ import org.eclipse.aether.util.repository.DefaultProxySelector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.dnb.tools.svnfairy.browser.Configuration;
 import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Classifier;
@@ -112,7 +113,7 @@ public class ExtractInformation {
 
     public Project fromPom(PomFile pomFile) {
 
-        final ModelSource2 modelSource = new ByteArrayModelSource(
+        final ModelSource2 modelSource = new InMemoryModelSource(
                 pomFile.getName(), pomFile.getContents());
         return makeEffectivePom(modelSource);
     }
@@ -235,7 +236,7 @@ public class ExtractInformation {
         final DefaultSettingsBuildingRequest request =
                 new DefaultSettingsBuildingRequest();
         manageSettings.get()
-                .map(InMemorySettings::new)
+                .map(InMemorySettingsSource::new)
                 .ifPresent(request::setGlobalSettingsSource);
         request.setSystemProperties(System.getProperties());
         return request;
