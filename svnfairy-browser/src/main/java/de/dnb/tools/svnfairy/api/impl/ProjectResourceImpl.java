@@ -92,14 +92,14 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public JsonCollection<JsonDependant> getDependents(String groupId,
+    public JsonCollection<JsonDependant> getDependants(String groupId,
                                                        String artifactId,
                                                        String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
         return find.projectWith(gav)
-                .map(find::dependentsOf)
+                .map(find::dependantsOf)
                 .map(projects -> map.toJson(gav, projects))
                 .orElseThrow(NotFoundException::new);
     }

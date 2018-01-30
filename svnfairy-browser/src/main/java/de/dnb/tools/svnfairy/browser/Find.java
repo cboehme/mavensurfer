@@ -72,7 +72,7 @@ public class Find {
                 .collect(toList());
     }
 
-    public List<Project> dependentsOf(Project project) {
+    public List<Project> dependantsOf(Project project) {
 
         return repository.getDependentProjects(project).stream()
                 .filter(p -> p.getDependencies().get(0).getVersion().containsVersion(project.getVersion()))

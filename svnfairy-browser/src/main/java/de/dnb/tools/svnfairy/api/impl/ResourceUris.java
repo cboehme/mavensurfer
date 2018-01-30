@@ -74,11 +74,11 @@ public class ResourceUris {
                 .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 
-    public URI getDependentsUri(Gav gav) {
+    public URI getDependantsUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
-                .path(ProjectResource.class, "getDependents")
+                .path(ProjectResource.class, "getDependants")
                 .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 

@@ -57,9 +57,9 @@ public interface ProjectResource {
                                             @PathParam("version") @NotNull String version);
 
     @GET
-    @Path("/dependents")
+    @Path("/dependants")
     @Produces(MediaType.APPLICATION_JSON)
-    JsonCollection<JsonDependant> getDependents(@PathParam("groupId") @NotNull String groupId,
+    JsonCollection<JsonDependant> getDependants(@PathParam("groupId") @NotNull String groupId,
                                               @PathParam("artifactId") @NotNull String artifactId,
                                               @PathParam("version") @NotNull String version);
 

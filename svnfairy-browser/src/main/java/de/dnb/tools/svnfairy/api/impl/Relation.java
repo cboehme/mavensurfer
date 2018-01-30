@@ -17,6 +17,6 @@ package de.dnb.tools.svnfairy.api.impl;
 
 public enum Relation {
 
-    parent, child, dependent
+    parent, child, dependant
 
 }

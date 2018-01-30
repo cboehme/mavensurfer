@@ -19,22 +19,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.dnb.tools.test.dependents</groupId>
-    <artifactId>dependent-project-g</artifactId>
+    <groupId>de.dnb.tools.test.optional-dependants</groupId>
+    <artifactId>dependent-project</artifactId>
     <version>1.0.0</version>
 
     <dependencies>
         <dependency>
-            <groupId>de.dnb.tools.test.dependents</groupId>
-            <artifactId>dependency-c</artifactId>
+            <groupId>de.dnb.tools.test.optional-dependants</groupId>
+            <artifactId>dependency</artifactId>
             <version>1.0.0</version>
-            <type>ejb</type>
-        </dependency>
-        <dependency>
-            <groupId>de.dnb.tools.test.dependents</groupId>
-            <artifactId>dependency-c</artifactId>
-            <version>1.0.0</version>
-            <type>ejb-client</type>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

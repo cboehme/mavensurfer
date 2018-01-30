@@ -114,8 +114,8 @@ public class JsonMapper {
                 return uris.getParentsUri(gav);
             case child:
                 return uris.getChildrenUri(gav);
-            case dependent:
-                return uris.getDependentsUri(gav);
+            case dependant:
+                return uris.getDependantsUri(gav);
             default:
                 throw new AssertionError("Unexpected relation");
         }
@@ -137,7 +137,7 @@ public class JsonMapper {
         final List<JsonDependant> jsonDependants = projects.stream()
                 .map(this::toJsonDependant)
                 .collect(toList());
-        return toJson(jsonDependants, uris.getDependentsUri(gav));
+        return toJson(jsonDependants, uris.getDependantsUri(gav));
     }
 
     private JsonDependant toJsonDependant(Project project) {
