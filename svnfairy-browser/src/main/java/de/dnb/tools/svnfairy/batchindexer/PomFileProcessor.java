@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import de.dnb.tools.svnfairy.browser.ExtractInformation;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
+import de.dnb.tools.svnfairy.browser.model.Project;
 
 @Named
 public class PomFileProcessor implements ItemProcessor {
@@ -34,7 +35,7 @@ public class PomFileProcessor implements ItemProcessor {
 
     public PomFileProcessor() {
 
-        // Default constructor required by CDI
+        // Required by CDI
     }
 
     @Inject
@@ -44,7 +45,7 @@ public class PomFileProcessor implements ItemProcessor {
     }
 
     @Override
-    public Object processItem(Object item) throws Exception {
+    public Project processItem(Object item) throws Exception {
 
         if (!(item instanceof PomFile)) {
             log.warn("Item is not an instance of {}", PomFile.class.getName());

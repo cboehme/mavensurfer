@@ -49,11 +49,13 @@ public class JpaProjectWriter implements ItemWriter {
     @Override
     public void open(Serializable checkpoint) throws Exception {
 
+        // Nothing to do
     }
 
     @Override
     public void close() throws Exception {
 
+        // Nothing to do
     }
 
     @Override
@@ -73,6 +75,7 @@ public class JpaProjectWriter implements ItemWriter {
 
     @Override
     public Serializable checkpointInfo() throws Exception {
+
         return null;
     }
 

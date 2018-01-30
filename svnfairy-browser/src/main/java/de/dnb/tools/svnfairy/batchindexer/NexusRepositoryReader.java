@@ -56,15 +56,15 @@ public class NexusRepositoryReader implements ItemReader {
 
     private NexusBrowser nexusBrowser;
 
+    public NexusRepositoryReader() {
+
+        // Required by CDI
+    }
+
     @Inject
     public NexusRepositoryReader(JobContext context) {
 
         this.context = context;
-    }
-
-    public NexusRepositoryReader() {
-
-        // Default constructor required by CDI
     }
 
     @Override
@@ -76,6 +76,14 @@ public class NexusRepositoryReader implements ItemReader {
             initFromProperties(getJobParameters());
         }
         createNexusBrowser();
+    }
+
+    private Properties getJobParameters() {
+
+        final JobOperator jobOperator = BatchRuntime.getJobOperator();
+        final Properties parameters = jobOperator.getParameters(context.getExecutionId());
+        log.info("Job parameters: {}", parameters);
+        return parameters;
     }
 
     private void initFromCheckpoint(Checkpoint checkpoint) {
@@ -98,16 +106,8 @@ public class NexusRepositoryReader implements ItemReader {
         foldersToProcess.add(jobProperties.getProperty("base-path"));
         filesToProcess = new ArrayDeque<>();
 
-        log.info("({}, {}) Starting new batch. Next folder is {}",
+        log.info("({}, {}) Starting new batch. First folder is {}",
                 nexusUrl, repositoryId, foldersToProcess.peek());
-    }
-
-    private Properties getJobParameters() {
-
-        final JobOperator jobOperator = BatchRuntime.getJobOperator();
-        final Properties parameters = jobOperator.getParameters(context.getExecutionId());
-        log.info("Job parameters: {}", parameters);
-        return parameters;
     }
 
     private void createNexusBrowser() {
@@ -128,7 +128,7 @@ public class NexusRepositoryReader implements ItemReader {
     }
 
     @Override
-    public Object readItem() throws Exception {
+    public PomFile readItem() throws Exception {
 
         loadSomeFilesToProcess();
         if (filesToProcess.isEmpty()) {
@@ -141,6 +141,7 @@ public class NexusRepositoryReader implements ItemReader {
     }
 
     private void loadSomeFilesToProcess() {
+
         while (filesToProcess.isEmpty() && !foldersToProcess.isEmpty()) {
             final String nextFolderToLoad = foldersToProcess.remove();
             loadFolder(nextFolderToLoad);
@@ -188,7 +189,6 @@ public class NexusRepositoryReader implements ItemReader {
         return new Checkpoint(nexusUrl, repositoryId, filesToProcess,
                 foldersToProcess);
     }
-
 
     private static final class Checkpoint implements Serializable {
 
