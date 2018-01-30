@@ -33,7 +33,9 @@ import org.apache.maven.model.building.ModelBuildingException;
 import org.apache.maven.model.building.ModelBuildingRequest;
 import org.apache.maven.model.building.ModelBuildingResult;
 import org.apache.maven.model.building.ModelSource;
+import org.apache.maven.model.building.ModelSource2;
 import org.apache.maven.model.resolution.ModelResolver;
+import org.apache.maven.model.resolution.UnresolvableModelException;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectModelResolver;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -66,6 +68,7 @@ import org.slf4j.LoggerFactory;
 import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Classifier;
+import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Packaging;
 import de.dnb.tools.svnfairy.browser.model.Parent;
@@ -80,12 +83,17 @@ import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 public class ExtractInformation {
 
     private static final Logger log = LoggerFactory.getLogger(
-            ProcessPomFile.class);
+            ExtractInformation.class);
 
     private ManageSettings manageSettings;
     private Configuration configuration;
 
     private ModelResolver modelResolver;
+
+    public ExtractInformation() {
+
+        // Required by CDI
+    }
 
     @Inject
     public ExtractInformation(ManageSettings manageSettings,
@@ -95,21 +103,30 @@ public class ExtractInformation {
         this.configuration = configuration;
     }
 
-    public ExtractInformation() {
-
-        // Required by CDI
-    }
-
     @PostConstruct
     public void init() {
+
         final Settings settings = readSettings();
         modelResolver = createModelResolver(settings);
     }
 
     public Project fromPom(PomFile pomFile) {
 
-        final ModelSource modelSource = new ByteArrayModelSource(
+        final ModelSource2 modelSource = new ByteArrayModelSource(
                 pomFile.getName(), pomFile.getContents());
+        return makeEffectivePom(modelSource);
+    }
+
+    public Project fromProject(Gav gav) {
+
+        final ModelSource modelSource;
+        try {
+            modelSource = modelResolver.resolveModel(gav.getGroupId().toString(),
+                    gav.getArtifactId().toString(), gav.getVersion().toString());
+        } catch (UnresolvableModelException e) {
+            log.error("Failed to retrieve resource");
+            return null;
+        }
         return makeEffectivePom(modelSource);
     }
 

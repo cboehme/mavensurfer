@@ -34,7 +34,7 @@ import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
 import de.dnb.tools.svnfairy.browser.Find;
-import de.dnb.tools.svnfairy.browser.ProcessPomFile;
+import de.dnb.tools.svnfairy.browser.ImportProject;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
@@ -49,7 +49,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
     @Inject
     private Find find;
     @Inject
-    private ProcessPomFile processPomFile;
+    private ImportProject importProject;
 
     @Inject
     private JsonMapper map;
@@ -66,7 +66,7 @@ public class ProjectsResourceImpl implements ProjectsResource {
         log.debug("POM: {}", new String(pomFile.getContents(),
                 StandardCharsets.UTF_8));
 
-        processPomFile.processPomFile(pomFile);
+        importProject.from(pomFile);
 
         return Response.ok().build();
     }

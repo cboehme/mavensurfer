@@ -28,7 +28,7 @@ import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.browser.Find;
-import de.dnb.tools.svnfairy.browser.ProcessPomFile;
+import de.dnb.tools.svnfairy.browser.ImportProject;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
@@ -40,7 +40,7 @@ public class ProjectResourceImpl implements ProjectResource {
     @Inject
     private Find find;
     @Inject
-    private ProcessPomFile processPomFile;
+    private ImportProject importProject;
 
     @Inject
     private JsonMapper map;
@@ -58,16 +58,13 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public Response indexProject(String groupIdString,
-                                 String artifactIdString,
-                                 String versionString) {
+    public Response indexProject(String groupId,
+                                 String artifactId,
+                                 String version) {
 
-        final GroupId groupId = GroupId.of(groupIdString);
-        final ArtifactId artifactId = ArtifactId.of(artifactIdString);
-        final Version version = Version.of(versionString);
+        final Gav gav = Gav.of(groupId, artifactId, version);
 
-        processPomFile.process(groupId, artifactId, version);
-
+        importProject.with(gav);
         return Response.ok().build();
     }
 
