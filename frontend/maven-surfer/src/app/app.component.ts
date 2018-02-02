@@ -11,17 +11,17 @@ import { ProjectsService } from './projects.service';
 export class AppComponent {
   title = 'Welcome my app';
 
-  project: Project = new Project();
+  projects: Project[] = [];
 
   constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
-    this.getProject();
+    this.getProjects();
   }
 
-  getProject(): void {
-    this.projectsService.getProject()
-      .subscribe(project => this.project = project);
+  getProjects(): void {
+    this.projectsService.getProjects()
+      .subscribe(projects => this.projects = projects.member);
   }
 
 }
