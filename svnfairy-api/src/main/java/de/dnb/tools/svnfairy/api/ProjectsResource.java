@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
 
@@ -50,7 +51,7 @@ public interface ProjectsResource {
     @GET
     @Path("/{groupId}/{artifactId}")
     @Produces(MediaType.APPLICATION_JSON)
-    JsonCollection<JsonVersion> listVersionsFor(@PathParam("groupId") @NotNull String groupId,
+    JsonCollection<JsonProject> listVersionsFor(@PathParam("groupId") @NotNull String groupId,
                                                 @PathParam("artifactId") @NotNull String artifactId);
 
 }

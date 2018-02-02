@@ -31,6 +31,7 @@ import de.dnb.tools.svnfairy.api.ProjectsResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
+import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
 import de.dnb.tools.svnfairy.browser.Find;
@@ -38,6 +39,7 @@ import de.dnb.tools.svnfairy.browser.ImportProject;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
+import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
 @RequestScoped
@@ -90,17 +92,17 @@ public class ProjectsResourceImpl implements ProjectsResource {
     }
 
     @Override
-    public JsonCollection<JsonVersion> listVersionsFor(String groupIdString,
+    public JsonCollection<JsonProject> listVersionsFor(String groupIdString,
                                                        String artifactIdString) {
 
         final GroupId groupId = GroupId.of(groupIdString);
         final ArtifactId artifactId = ArtifactId.of(artifactIdString);
 
-        final List<Version> versions = find.versionsOf(groupId, artifactId);
-        if (versions.isEmpty()) {
+        final List<Project> projects = find.versionsOf(groupId, artifactId);
+        if (projects.isEmpty()) {
             throw new NotFoundException();
         }
-        return map.toJson(groupId, artifactId, versions);
+        return map.toJson(groupId, artifactId, projects);
     }
 
 }

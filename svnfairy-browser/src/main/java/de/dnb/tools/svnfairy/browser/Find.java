@@ -18,6 +18,7 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,12 +49,10 @@ public class Find {
         return repository.findArtifactIdsIn(groupId);
     }
 
-    public java.util.List<Version> versionsOf(GroupId groupId,
+    public java.util.List<Project> versionsOf(GroupId groupId,
                                               ArtifactId artifactId) {
 
-        return repository.findProjectsWith(groupId, artifactId).stream()
-                .map(Project::getVersion)
-                .collect(toList());
+        return repository.findProjectsWith(groupId, artifactId);
     }
 
     public Optional<Project> projectWith(Gav gav) {

@@ -76,14 +76,14 @@ public class JsonMapper {
         return jsonArtifactId;
     }
 
-    public JsonCollection<JsonVersion> toJson(GroupId groupId,
+    public JsonCollection<JsonProject> toJson(GroupId groupId,
                                               ArtifactId artifactId,
-                                              List<Version> versions) {
+                                              List<Project> projects) {
 
-        final List<JsonVersion> jsonVersions = versions.stream()
-                .map(version -> toJson(groupId, artifactId, version))
+        final List<JsonProject> jsonProjects = projects.stream()
+                .map(this::toJson)
                 .collect(toList());
-        return toJson(jsonVersions, uris.getListVersionsUri(groupId, artifactId));
+        return toJson(jsonProjects, uris.getListVersionsUri(groupId, artifactId));
     }
 
     private JsonVersion toJson(GroupId groupId,
