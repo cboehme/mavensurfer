@@ -1,12 +1,14 @@
 <clr-main-container>
   <clr-header>
-    Maven-Surfer
+    <div class="branding">
+      <span class="title">Maven-Surfer</span>
+    </div>
   </clr-header>
   <div class="content-container">
     <main class="content-area">
     </main>
     <nav class="sidenav">
-      <ul>
+      <ul class="list-unstyled">
         <li *ngFor="let project of projects">
           {{ project.groupId }}:{{ project.artifactId }}:{{ project.version }}
         </li>
