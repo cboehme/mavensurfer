@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http'
 
 import { AppComponent } from './app.component';
 import {ProjectsService} from './projects.service'
+import {ClarityModule} from "@clr/angular";
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import {ProjectsService} from './projects.service'
   ],
   imports: [
     BrowserModule,
+    ClarityModule,
     HttpClientModule
   ],
   providers: [

@@ -1,7 +1,16 @@
-<h1>{{ title }}</h1>
-
-<ul>
-  <li *ngFor="let project of projects">
-    {{ project.groupId }}:{{ project.artifactId }}:{{ project.version }}
-  </li>
-</ul>
+<clr-main-container>
+  <clr-header>
+    Maven-Surfer
+  </clr-header>
+  <div class="content-container">
+    <main class="content-area">
+    </main>
+    <nav class="sidenav">
+      <ul>
+        <li *ngFor="let project of projects">
+          {{ project.groupId }}:{{ project.artifactId }}:{{ project.version }}
+        </li>
+      </ul>
+    </nav>
+  </div>
+</clr-main-container>
