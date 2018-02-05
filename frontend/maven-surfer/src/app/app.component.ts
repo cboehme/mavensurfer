@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { Project } from './project';
 import { ProjectsService } from './projects.service';
+import {Group} from "./group";
 
 @Component({
   selector: 'app-root',
@@ -9,19 +10,18 @@ import { ProjectsService } from './projects.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Welcome my app';
 
-  projects: Project[] = [];
+  groups: Group[] = [];
 
   constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
-    this.getProjects();
+    this.getGroups();
   }
 
-  getProjects(): void {
-    this.projectsService.getProjects()
-      .subscribe(projects => this.projects = projects.member);
+  getGroups(): void {
+    this.projectsService.getGroups()
+      .subscribe(groups => this.groups = groups.member);
   }
 
 }

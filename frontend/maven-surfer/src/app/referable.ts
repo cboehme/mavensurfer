@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-import {Referable} from "./referable";
+export class Referable {
 
-export class Project extends Referable {
-
-  groupId: string;
-  artifactId: string;
-  version: string;
+  '@id': string;
 
 }

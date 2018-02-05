@@ -16,10 +16,8 @@
 
 import {Referable} from "./referable";
 
-export class Project extends Referable {
+export class Artifact extends Referable {
 
-  groupId: string;
   artifactId: string;
-  version: string;
 
 }

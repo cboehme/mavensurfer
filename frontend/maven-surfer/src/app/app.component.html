@@ -8,11 +8,12 @@
     <main class="content-area">
     </main>
     <nav class="sidenav">
-      <ul class="list-unstyled">
-        <li *ngFor="let project of projects">
-          {{ project.groupId }}:{{ project.artifactId }}:{{ project.version }}
-        </li>
-      </ul>
+      <clr-tree-node *ngFor="let group of groups">
+        {{group.groupId}}
+        <ng-template clrIfExpanded>
+          <app-nav-group></app-nav-group>
+        </ng-template>
+      </clr-tree-node>
     </nav>
   </div>
 </clr-main-container>
