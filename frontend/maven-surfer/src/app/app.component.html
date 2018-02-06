@@ -8,12 +8,14 @@
     <main class="content-area">
     </main>
     <nav class="sidenav">
-      <clr-tree-node *ngFor="let group of groups">
-        {{group.groupId}}
-        <ng-template clrIfExpanded>
-          <app-nav-group [groupIdUrl]="group['@id']"></app-nav-group>
-        </ng-template>
-      </clr-tree-node>
+      <section class="sidenav-content">
+        <clr-tree-node *ngFor="let group of groups">
+          {{group.groupId}}
+          <ng-template clrIfExpanded>
+            <app-nav-group [groupIdUrl]="group['@id']"></app-nav-group>
+          </ng-template>
+        </clr-tree-node>
+      </section>
     </nav>
   </div>
 </clr-main-container>
