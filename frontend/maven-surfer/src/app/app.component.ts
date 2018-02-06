@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
-import { Project } from './project';
-import { ProjectsService } from './projects.service';
+import '@clr/icons';
+import '@clr/icons/shapes/technology-shapes'
+
+import {ProjectsService} from './projects.service';
 import {Group} from "./group";
 
 @Component({

@@ -8,7 +8,7 @@ import {log} from "util";
   template: `
     <ng-container [clrLoading]="loading">
       <clr-tree-node *ngFor="let artifact of artifacts">
-        {{artifact.artifactId}}
+        <clr-icon shape="block"></clr-icon> {{artifact.artifactId}}
       </clr-tree-node>
     </ng-container>
   `,
