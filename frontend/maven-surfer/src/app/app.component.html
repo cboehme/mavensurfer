@@ -11,7 +11,7 @@
       <clr-tree-node *ngFor="let group of groups">
         {{group.groupId}}
         <ng-template clrIfExpanded>
-          <app-nav-group></app-nav-group>
+          <app-nav-group [groupIdUrl]="group['@id']"></app-nav-group>
         </ng-template>
       </clr-tree-node>
     </nav>

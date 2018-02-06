@@ -19,8 +19,8 @@ export class ProjectsService {
     return this.http.get<Collection<Group>>(this.baseUrl);
   }
 
-  getArtifacts(): Observable<Collection<Artifact>> {
-    return this.http.get<Collection<Artifact>>(this.baseUrl + "/de.dnb.tools.test.import-scope");
+  getArtifacts(groupIdUrl: string): Observable<Collection<Artifact>> {
+    return this.http.get<Collection<Artifact>>(groupIdUrl);
 
   }
 
