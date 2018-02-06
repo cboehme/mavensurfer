@@ -11,7 +11,7 @@ import {Artifact} from "./artifact";
 export class ProjectsService {
 
   private baseUrl = 'http://localhost:8080/api/projects';
-  private projectsUrl = 'http://localhost:8080/api/projects/de.dnb.tools.test.multiple-versions/project';
+
 
   constructor(private http: HttpClient) { }
 
@@ -24,7 +24,8 @@ export class ProjectsService {
 
   }
 
-  getProjects(): Observable<Collection<Project>> {
-    return this.http.get<Collection<Project>>(this.projectsUrl);
+  getProjects(artifactIdUrl: string): Observable<Collection<Project>> {
+    return this.http.get<Collection<Project>>(artifactIdUrl);
   }
+
 }

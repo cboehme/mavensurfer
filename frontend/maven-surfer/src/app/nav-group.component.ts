@@ -8,7 +8,10 @@ import {log} from "util";
   template: `
     <ng-container [clrLoading]="loading">
       <clr-tree-node *ngFor="let artifact of artifacts">
-        <clr-icon shape="block"></clr-icon> {{artifact.artifactId}}
+        <clr-icon shape="bundle"></clr-icon> {{artifact.artifactId}}
+        <ng-template clrIfExpanded>
+          <app-nav-project [artifactIdUrl]="artifact['@id']"></app-nav-project>
+        </ng-template>
       </clr-tree-node>
     </ng-container>
   `,
@@ -26,12 +29,14 @@ export class NavGroupComponent implements OnInit {
     log("GroupIdUrl: " + this.groupIdUrl);
     this.loading = true;
     this.fetchArtifacts();
-    this.loading = false;
   }
 
   private fetchArtifacts() {
     this.projectsService.getArtifacts(this.groupIdUrl)
-      .subscribe(artifacts => this.artifacts = artifacts.member);
+      .subscribe(artifacts => {
+        this.artifacts = artifacts.member;
+        this.loading = false;
+      });
   }
 
 }

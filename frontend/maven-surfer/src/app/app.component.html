@@ -10,7 +10,7 @@
     <nav class="sidenav">
       <section class="sidenav-content">
         <clr-tree-node *ngFor="let group of groups">
-          <clr-icon shape="blocks-group"></clr-icon> {{group.groupId}}
+          <clr-icon shape="folder"></clr-icon> {{group.groupId}}
           <ng-template clrIfExpanded>
             <app-nav-group [groupIdUrl]="group['@id']"></app-nav-group>
           </ng-template>

@@ -8,11 +8,13 @@ import {ProjectsService} from './projects.service'
 import {ClarityModule} from "@clr/angular";
 import { NavGroupComponent } from './nav-group.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { NavProjectComponent } from './nav-project.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavGroupComponent
+    NavGroupComponent,
+    NavProjectComponent
   ],
   imports: [
     BrowserModule,
