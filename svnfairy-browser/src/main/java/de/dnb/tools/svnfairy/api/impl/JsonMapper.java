@@ -128,6 +128,9 @@ public class JsonMapper {
         jsonProject.setArtifactId(project.getArtifactId().toString());
         jsonProject.setGroupId(project.getGroupId().toString());
         jsonProject.setVersion(project.getVersion().toString());
+        jsonProject.setParents(uris.getParentsUri(project.getGav()));
+        jsonProject.setChildren(uris.getChildrenUri(project.getGav()));
+        jsonProject.setDependants(uris.getDependantsUri(project.getGav()));
         return jsonProject;
     }
 

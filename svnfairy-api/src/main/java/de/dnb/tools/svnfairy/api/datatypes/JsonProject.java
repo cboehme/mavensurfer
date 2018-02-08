@@ -15,11 +15,16 @@
  */
 package de.dnb.tools.svnfairy.api.datatypes;
 
+import java.net.URI;
+
 public class JsonProject extends  Referable {
 
     private String groupId;
     private String artifactId;
     private String version;
+    private URI parents;
+    private URI children;
+    private URI dependants;
 
     public String getGroupId() {
         return groupId;
@@ -43,6 +48,30 @@ public class JsonProject extends  Referable {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public URI getParents() {
+        return parents;
+    }
+
+    public void setParents(URI parents) {
+        this.parents = parents;
+    }
+
+    public URI getChildren() {
+        return children;
+    }
+
+    public void setChildren(URI children) {
+        this.children = children;
+    }
+
+    public URI getDependants() {
+        return dependants;
+    }
+
+    public void setDependants(URI dependants) {
+        this.dependants = dependants;
     }
 
 }
