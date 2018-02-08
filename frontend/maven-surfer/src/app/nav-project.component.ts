@@ -10,7 +10,11 @@ import {ProjectsService} from './projects.service';
     <ng-container [clrLoading]="loading">
       <clr-tree-node *ngFor="let project of projects">
         <clr-icon shape="tag"></clr-icon>
-        {{project.version}}
+        <a class="clr-treenode-link" 
+           routerLink="projects/{{project.groupId}}/{{project.artifactId}}/{{project.version}}" 
+           routerLinkActive="active">
+          {{project.version}}
+        </a>
       </clr-tree-node>
     </ng-container>
   `,

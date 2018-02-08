@@ -28,4 +28,8 @@ export class ProjectsService {
     return this.http.get<Collection<Project>>(artifactIdUrl);
   }
 
+  getProject(groupdId: string, artifactId: string, version: string): Observable<Project> {
+    return this.http.get<Project>(this.baseUrl + "/" + groupdId + "/" + artifactId + "/" + version);
+  }
+
 }
