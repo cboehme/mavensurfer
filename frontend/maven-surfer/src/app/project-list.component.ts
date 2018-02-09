@@ -9,7 +9,9 @@ import {isUndefined, log} from "util";
     <h1>{{heading}}</h1>
     <ul>
       <li *ngFor="let project of projects">
-        {{project.groupId}}:{{project.artifactId}}:{{project.version}}
+        <a routerLink="/projects/{{project.groupId}}/{{project.artifactId}}/{{project.version}}">
+          {{project.groupId}}:{{project.artifactId}}:{{project.version}}
+        </a>
       </li>
     </ul>
   `,
