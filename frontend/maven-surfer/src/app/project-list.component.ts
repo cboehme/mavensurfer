@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Project} from './project';
 import {ProjectsService} from "./projects.service";
-import {log} from "util";
+import {isUndefined, log} from "util";
 
 @Component({
   selector: 'app-project-list',
@@ -16,26 +16,25 @@ import {log} from "util";
   styles: [],
   inputs: ["heading", "projectListUrl"]
 })
-export class ProjectListComponent {
+export class ProjectListComponent implements OnChanges {
 
   @Input() heading: string;
   @Input() projectListUrl: string;
-  private projectListUrlOld: string = "";
   projects: Project[] = [];
 
   constructor(private projectsService: ProjectsService) { }
 
-  ngDoCheck() {
-    if (this.projectListUrlOld != this.projectListUrl) {
-      log("fetchProjects URL: " + this.projectListUrl);
+  ngOnChanges() {
       this.fetchProjects();
-      this.projectListUrlOld = this.projectListUrl;
-    }
   }
 
   private fetchProjects() {
-    this.projectsService.getProjects(this.projectListUrl)
-      .subscribe(projects => this.projects = projects.member);
+    if (isUndefined(this.projectListUrl)) {
+      this.projects = [];
+    } else {
+      this.projectsService.getProjects(this.projectListUrl)
+        .subscribe(projects => this.projects = projects.member);
+    }
   }
 
 }
