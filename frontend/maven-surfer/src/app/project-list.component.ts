@@ -1,4 +1,10 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from '@angular/core';
 import {Project} from './project';
 import {ProjectsService} from "./projects.service";
 import {isUndefined, log} from "util";
@@ -26,7 +32,7 @@ export class ProjectListComponent implements OnChanges {
 
   constructor(private projectsService: ProjectsService) { }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
       this.fetchProjects();
   }
 
