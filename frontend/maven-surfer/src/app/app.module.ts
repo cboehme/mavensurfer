@@ -14,6 +14,7 @@ import {appRoutes} from "./routes";
 import { ProjectComponent } from './project.component';
 import { DashboardComponent } from './dashboard.component';
 import { ProjectListComponent } from './project-list.component';
+import { DependantsListComponent } from './dependants-list.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ProjectListComponent } from './project-list.component';
     NavProjectComponent,
     ProjectComponent,
     DashboardComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    DependantsListComponent
   ],
   imports: [
     BrowserModule,
