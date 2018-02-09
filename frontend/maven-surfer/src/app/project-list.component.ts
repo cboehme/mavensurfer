@@ -13,13 +13,13 @@ import {isUndefined, log} from "util";
       </li>
     </ul>
   `,
-  styles: [],
-  inputs: ["heading", "projectListUrl"]
+  styles: []
 })
 export class ProjectListComponent implements OnChanges {
 
   @Input() heading: string;
-  @Input() projectListUrl: string;
+  @Input() listUrl: string;
+
   projects: Project[] = [];
 
   constructor(private projectsService: ProjectsService) { }
@@ -29,10 +29,10 @@ export class ProjectListComponent implements OnChanges {
   }
 
   private fetchProjects() {
-    if (isUndefined(this.projectListUrl)) {
+    if (isUndefined(this.listUrl)) {
       this.projects = [];
     } else {
-      this.projectsService.getProjects(this.projectListUrl)
+      this.projectsService.getProjects(this.listUrl)
         .subscribe(projects => this.projects = projects.member);
     }
   }

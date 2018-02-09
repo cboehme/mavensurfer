@@ -13,12 +13,12 @@ import {ProjectsService} from "./projects.service";
         </ng-template>
       </clr-tree-node>
     </ng-container>
-  `,
-  inputs: ["groupIdUrl"]
+  `
 })
 export class NavGroupComponent implements OnInit {
 
   @Input() groupIdUrl: string;
+
   loading: boolean;
   artifacts: Artifact[];
 

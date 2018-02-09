@@ -17,12 +17,12 @@ import {ProjectsService} from './projects.service';
         </a>
       </clr-tree-node>
     </ng-container>
-  `,
-  inputs: ["artifactIdUrl"]
+  `
 })
 export class NavProjectComponent implements OnInit {
 
   @Input() artifactIdUrl: string;
+
   loading: boolean;
   projects: Project[];
 
