@@ -13,6 +13,7 @@ import {RouterModule} from "@angular/router";
 import {appRoutes} from "./routes";
 import { ProjectComponent } from './project.component';
 import { DashboardComponent } from './dashboard.component';
+import { ProjectListComponent } from './project-list.component';
 
 @NgModule({
   declarations: [
@@ -20,12 +21,13 @@ import { DashboardComponent } from './dashboard.component';
     NavGroupComponent,
     NavProjectComponent,
     ProjectComponent,
-    DashboardComponent
+    DashboardComponent,
+    ProjectListComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(appRoutes, {enableTracing: true}),
+    RouterModule.forRoot(appRoutes, {enableTracing: false}),
     ClarityModule,
     HttpClientModule
   ],

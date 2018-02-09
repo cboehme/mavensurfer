@@ -22,4 +22,7 @@ export class Project extends Referable {
   artifactId: string;
   version: string;
 
+  parents: string;
+  children: string;
+  dependants: string;
 }

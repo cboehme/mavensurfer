@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Artifact} from "./artifact";
 import {ProjectsService} from "./projects.service";
-import {log} from "util";
 
 @Component({
   selector: 'app-nav-group',
@@ -26,7 +25,6 @@ export class NavGroupComponent implements OnInit {
   constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
-    log("GroupIdUrl: " + this.groupIdUrl);
     this.loading = true;
     this.fetchArtifacts();
   }
