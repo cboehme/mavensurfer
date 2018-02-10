@@ -1,10 +1,12 @@
 package de.dnb.tools.svnfairy.browser.db;
 
+import static java.util.stream.Collectors.maxBy;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
@@ -89,6 +91,31 @@ public class JpaRepository {
         return find.getResultList().stream()
                 .map(ArtifactId::of)
                 .collect(toList());
+    }
+
+    @Transactional
+    public Collection<Dependency> getDependenciesOf(Project project) {
+
+        final ProjectBean projectBean = findProjectBean(project);
+
+        return findDependencyBeans(projectBean).stream()
+                .map(this::mapBeanToDependency)
+                .collect(toList());
+    }
+
+    private ProjectBean findProjectBean(Project project) {
+
+        return findProjectBeanByGav(project.getGroupId(),
+                project.getArtifactId(), project.getVersion()).orElse(null);
+    }
+
+    private Collection<DependencyBean> findDependencyBeans(ProjectBean projectBean) {
+
+        final TypedQuery<DependencyBean> findDependencies =
+                entityManager.createNamedQuery("Dependency.findByOwner",
+                        DependencyBean.class);
+        findDependencies.setParameter("owner", projectBean);
+        return findDependencies.getResultList();
     }
 
     @Transactional
@@ -208,5 +235,4 @@ public class JpaRepository {
         dependency.setOptional(dependencyBean.optional);
         return dependency;
     }
-
 }

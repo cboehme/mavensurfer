@@ -21,17 +21,20 @@ import static java.util.stream.Collectors.toList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
+import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
 @ApplicationScoped
 public class Find {
@@ -78,15 +81,32 @@ public class Find {
                 .collect(toList());
     }
 
+    public List<Project> dependenciesOf(Project project) {
+
+        return repository.getDependenciesOf(project).stream()
+                .map(d -> findMatchingProjects(d.getGroupId(),
+                        d.getArtifactId(), d.getVersion()))
+                .flatMap(List::stream)
+                .collect(toList());
+    }
+
     public List<Project> parentsOf(Project project) {
 
         if (!project.getParent().isPresent()) {
             return emptyList();
         }
         final Parent parent = project.getParent().get();
-        return repository.findProjectsWith(parent.getGroupId(), parent.getArtifactId())
+        return findMatchingProjects(parent.getGroupId(), parent.getArtifactId(),
+                parent.getVersionRange());
+    }
+
+    private List<Project> findMatchingProjects(GroupId groupId,
+                                               ArtifactId artifactId,
+                                               VersionRequirement versionRange) {
+
+        return repository.findProjectsWith(groupId, artifactId)
                 .stream()
-                .filter(p -> parent.getVersionRange().containsVersion(p.getVersion()))
+                .filter(p -> versionRange.containsVersion(p.getVersion()))
                 .collect(toList());
     }
 
