@@ -15,23 +15,13 @@
  */
 package de.dnb.tools.svnfairy.browser.model;
 
-import java.util.Objects;
-
-import de.dnb.tools.svnfairy.browser.Util;
-
-public final class Parent {
-
-    private final GroupId groupId;
-    private final ArtifactId artifactId;
-    private final VersionRequirement version;
+public final class Parent extends Reference {
 
     private Parent(GroupId groupId,
                    ArtifactId artifactId,
-                   VersionRequirement version) {
+                   VersionRequirement versionRange) {
 
-        this.groupId = groupId;
-        this.artifactId = artifactId;
-        this.version = version;
+        super(groupId, artifactId, versionRange);
     }
 
     public static Parent of(GroupId groupdId,
@@ -39,37 +29,6 @@ public final class Parent {
                             VersionRequirement version) {
 
         return new Parent(groupdId, artifactId, version);
-    }
-
-    public GroupId getGroupId() {
-        return groupId;
-    }
-
-    public ArtifactId getArtifactId() {
-        return artifactId;
-    }
-
-    public VersionRequirement getVersionRange() {
-        return version;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        return Util.equals(this, obj, (a, b) ->
-                Objects.equals(a.groupId, b.groupId)
-                && Objects.equals(a.artifactId, b.artifactId)
-                && Objects.equals(a.version, b.version));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(groupId, artifactId, version);
-    }
-
-    @Override
-    public String toString() {
-        return groupId + ":" + artifactId + ":" + version;
     }
 
 }

@@ -25,9 +25,9 @@ public class Reference {
     private final ArtifactId artifactId;
     private final VersionRequirement versionRange;
 
-    public Reference(GroupId groupId,
-                     ArtifactId artifactId,
-                     VersionRequirement versionRange) {
+    protected Reference(GroupId groupId,
+                        ArtifactId artifactId,
+                        VersionRequirement versionRange) {
 
         this.groupId = groupId;
         this.artifactId = artifactId;
