@@ -18,22 +18,19 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
-import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
-import de.dnb.tools.svnfairy.browser.model.Version;
+import de.dnb.tools.svnfairy.browser.model.Reference;
 import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
 @ApplicationScoped
@@ -100,12 +97,17 @@ public class Find {
                 parent.getVersionRange());
     }
 
+    public List<Project> matchingProjects(Reference reference) {
+
+        return findMatchingProjects(reference.getGroupId(),
+                reference.getArtifactId(), reference.getVersionRange());
+    }
+
     private List<Project> findMatchingProjects(GroupId groupId,
                                                ArtifactId artifactId,
                                                VersionRequirement versionRange) {
 
-        return repository.findProjectsWith(groupId, artifactId)
-                .stream()
+        return repository.findProjectsWith(groupId, artifactId).stream()
                 .filter(p -> versionRange.containsVersion(p.getVersion()))
                 .collect(toList());
     }
