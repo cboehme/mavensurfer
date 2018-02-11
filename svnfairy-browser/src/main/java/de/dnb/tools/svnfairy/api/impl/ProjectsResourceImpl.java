@@ -32,15 +32,15 @@ import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonGroupId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
-import de.dnb.tools.svnfairy.api.datatypes.JsonVersion;
 import de.dnb.tools.svnfairy.api.datatypes.Pom;
+import de.dnb.tools.svnfairy.browser.FilterProjects;
 import de.dnb.tools.svnfairy.browser.Find;
 import de.dnb.tools.svnfairy.browser.ImportProject;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
-import de.dnb.tools.svnfairy.browser.model.Version;
+import de.dnb.tools.svnfairy.browser.model.VersionRequirement;
 
 @RequestScoped
 public class ProjectsResourceImpl implements ProjectsResource {
@@ -50,6 +50,8 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
     @Inject
     private Find find;
+    @Inject
+    private FilterProjects filterProjects;
     @Inject
     private ImportProject importProject;
 
@@ -93,16 +95,22 @@ public class ProjectsResourceImpl implements ProjectsResource {
 
     @Override
     public JsonCollection<JsonProject> listVersionsFor(String groupIdString,
-                                                       String artifactIdString) {
+                                                       String artifactIdString,
+                                                       String versionRangeString) {
 
         final GroupId groupId = GroupId.of(groupIdString);
         final ArtifactId artifactId = ArtifactId.of(artifactIdString);
+        final VersionRequirement versionRange = versionRangeString != null
+                ? VersionRequirement.of(versionRangeString)
+                : VersionRequirement.allVersions();
 
-        final List<Project> projects = find.versionsOf(groupId, artifactId);
+        final List<Project> projects = find.allVersionsOf(groupId, artifactId);
         if (projects.isEmpty()) {
             throw new NotFoundException();
         }
-        return map.toJson(groupId, artifactId, projects);
+        final List<Project> projectsInVersionRange =
+                filterProjects.byVersionRange(projects, versionRange);
+        return map.toJson(groupId, artifactId, projectsInVersionRange);
     }
 
 }

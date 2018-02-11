@@ -49,8 +49,8 @@ public class Find {
         return repository.findArtifactIdsIn(groupId);
     }
 
-    public java.util.List<Project> versionsOf(GroupId groupId,
-                                              ArtifactId artifactId) {
+    public java.util.List<Project> allVersionsOf(GroupId groupId,
+                                                 ArtifactId artifactId) {
 
         return repository.findProjectsWith(groupId, artifactId);
     }
@@ -95,12 +95,6 @@ public class Find {
         final Parent parent = project.getParent().get();
         return findMatchingProjects(parent.getGroupId(), parent.getArtifactId(),
                 parent.getVersionRange());
-    }
-
-    public List<Project> matchingProjects(Reference reference) {
-
-        return findMatchingProjects(reference.getGroupId(),
-                reference.getArtifactId(), reference.getVersionRange());
     }
 
     private List<Project> findMatchingProjects(GroupId groupId,

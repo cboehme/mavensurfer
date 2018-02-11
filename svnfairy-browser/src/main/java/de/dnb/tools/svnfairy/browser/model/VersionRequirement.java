@@ -26,6 +26,9 @@ import de.dnb.tools.svnfairy.browser.Util;
 
 public final class VersionRequirement {
 
+    private static final VersionRequirement allVersions =
+            new VersionRequirement("");
+
     private final String versionRequirement;
 
     private VersionRequirement(String versionRequirement) {
@@ -41,8 +44,15 @@ public final class VersionRequirement {
         return new VersionRequirement(versionRequirement);
     }
 
+    public static VersionRequirement allVersions() {
+        return allVersions;
+    }
+
     public boolean containsVersion(Version version) {
 
+        if (this == allVersions) {
+            return true;
+        }
         try {
             final VersionRange versionRange =
                     VersionRange.createFromVersionSpec(versionRequirement);
