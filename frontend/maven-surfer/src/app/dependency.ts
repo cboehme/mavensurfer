@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-import {Referable} from "./referable";
-import {Parent} from "./parent";
-import {Dependency} from "./dependency";
-import {Collection} from "./collection";
-
-export class Project extends Referable {
+export class Dependency {
 
   groupId: string;
   artifactId: string;
-  version: string;
+  versionRange: string;
+  classifier: string;
+  type: string;
 
-  parent: Parent;
-
-  dependencies: Collection<Dependency>;
-
-  children: string;
-  dependants: string;
+  scope: string;
+  optional: boolean;
 
 }

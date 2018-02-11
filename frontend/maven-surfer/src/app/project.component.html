@@ -27,6 +27,13 @@
   </dl>
 </section>
 
+<h1>Dependencies</h1>
+<ul>
+  <li *ngFor="let dependency of project.dependencies">
+    {{dependency.groupId}}:{{dependency.artifactId}}:{{dependency.versionRange}}:{{dependency.type}}:{{dependency.classifier}} (Scope: {{dependency.scope}}{{dependency.optional ? ", optional" : ""}})
+  </li>
+</ul>
+
 <app-project-list heading="Children" [listUrl]="project.children"></app-project-list>
 
 <app-dependants-list heading="Dependants" [listUrl]="project.dependants"></app-dependants-list>
