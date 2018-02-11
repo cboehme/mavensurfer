@@ -15,7 +15,17 @@
   -->
 <p>Project {{project.groupId}}:{{project.artifactId}}:{{project.version}}</p>
 
-<app-project-list heading="Parents" [listUrl]="project.parents"></app-project-list>
+<section *ngIf="project.parent != null">
+  <h1>Parent</h1>
+  <dl>
+    <dt>Group Id</dt>
+    <dd>{{project.parent.groupId}}</dd>
+    <dt>Artifact Id</dt>
+    <dd>{{project.parent.artifactId}}</dd>
+    <dt>Version Range</dt>
+    <dd>{{project.parent.versionRange}}</dd>
+  </dl>
+</section>
 
 <app-project-list heading="Children" [listUrl]="project.children"></app-project-list>
 

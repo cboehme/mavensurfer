@@ -3,3 +3,18 @@
 nav.sidenav {
   width: 25%;
 }
+
+dt {
+  display: inline-block;
+  width: 8em;
+}
+
+dd {
+  display: inline;
+  margin-left: 0em;
+}
+
+dd::after {
+  content: "\A";
+  white-space: pre;
+}

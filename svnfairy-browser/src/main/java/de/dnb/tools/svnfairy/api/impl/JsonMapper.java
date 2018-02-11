@@ -23,6 +23,7 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import de.dnb.tools.svnfairy.api.datatypes.JsonParent;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonDependant;
@@ -33,6 +34,7 @@ import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.Project;
 import de.dnb.tools.svnfairy.browser.model.Version;
 
@@ -128,10 +130,21 @@ public class JsonMapper {
         jsonProject.setArtifactId(project.getArtifactId().toString());
         jsonProject.setGroupId(project.getGroupId().toString());
         jsonProject.setVersion(project.getVersion().toString());
-        jsonProject.setParents(uris.getParentsUri(project.getGav()));
+        project.getParent()
+                .map(this::toJson)
+                .ifPresent(jsonProject::setParent);
         jsonProject.setChildren(uris.getChildrenUri(project.getGav()));
         jsonProject.setDependants(uris.getDependantsUri(project.getGav()));
         return jsonProject;
+    }
+
+    private JsonParent toJson(Parent parent) {
+
+        final JsonParent jsonParent = new JsonParent();
+        jsonParent.setGroupId(parent.getGroupId().toString());
+        jsonParent.setArtifactId(parent.getArtifactId().toString());
+        jsonParent.setVersionRange(parent.getVersionRange().toString());
+        return jsonParent;
     }
 
     public JsonCollection<JsonDependant> toJson(Gav gav,
