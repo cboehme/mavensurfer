@@ -1,0 +1,7 @@
+<h1>Dependencies</h1>
+
+<ul>
+  <li *ngFor="let dependency of dependencies">
+    {{dependency.groupId}}:{{dependency.artifactId}}:{{dependency.versionRange}}:{{dependency.type}}:{{dependency.classifier}} (Scope: {{dependency.scope}}{{dependency.optional ? ", optional" : ""}})
+  </li>
+</ul>

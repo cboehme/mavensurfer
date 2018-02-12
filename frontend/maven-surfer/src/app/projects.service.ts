@@ -7,6 +7,7 @@ import {Collection} from "./collection";
 import {Group} from "./group";
 import {Artifact} from "./artifact";
 import {Dependant} from "./dependant";
+import {Dependency} from "./dependency";
 
 @Injectable()
 export class ProjectsService {
@@ -35,6 +36,10 @@ export class ProjectsService {
 
   getDependants(listUrl: string) {
     return this.http.get<Collection<Dependant>>(listUrl);
+  }
+
+  getDependencies(listUrl: string) {
+    return this.http.get<Collection<Dependency>>(listUrl);
   }
 
 }
