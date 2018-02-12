@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonDependant;
+import de.dnb.tools.svnfairy.api.datatypes.JsonDependency;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 
 @Path("/projects/{groupId}/{artifactId}/{version}")
@@ -48,6 +49,13 @@ public interface ProjectResource {
     JsonCollection<JsonProject> getParents(@PathParam("groupId") @NotNull String groupId,
                                            @PathParam("artifactId") @NotNull String artifactId,
                                            @PathParam("version") @NotNull String version);
+
+    @GET
+    @Path("/dependencies")
+    @Produces(MediaType.APPLICATION_JSON)
+    JsonCollection<JsonDependency> getDependencies(@PathParam("groupId") @NotNull String groupId,
+                                                   @PathParam("artifactId") @NotNull String artifactId,
+                                                   @PathParam("version") @NotNull String version);
 
     @GET
     @Path("/children")

@@ -23,6 +23,8 @@ public class JsonProject extends  Referable {
     private String artifactId;
     private String version;
     private JsonParent parent;
+
+    private URI dependencies;
     private URI children;
     private URI dependants;
 
@@ -56,6 +58,14 @@ public class JsonProject extends  Referable {
 
     public void setParent(JsonParent parent) {
         this.parent = parent;
+    }
+
+    public URI getDependencies() {
+        return dependencies;
+    }
+
+    public void setDependencies(URI dependencies) {
+        this.dependencies = dependencies;
     }
 
     public URI getChildren() {

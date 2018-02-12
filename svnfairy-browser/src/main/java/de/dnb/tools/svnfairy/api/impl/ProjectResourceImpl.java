@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonDependant;
+import de.dnb.tools.svnfairy.api.datatypes.JsonDependency;
 import de.dnb.tools.svnfairy.api.datatypes.JsonProject;
 import de.dnb.tools.svnfairy.browser.Find;
 import de.dnb.tools.svnfairy.browser.ImportProject;
@@ -75,6 +76,19 @@ public class ProjectResourceImpl implements ProjectResource {
         return find.projectWith(gav)
                 .map(find::parentsOf)
                 .map(projects -> map.toJson(gav, parent, projects))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public JsonCollection<JsonDependency> getDependencies(String groupId,
+                                                          String artifactId,
+                                                          String version) {
+
+        final Gav gav = Gav.of(groupId, artifactId, version);
+
+        return find.projectWith(gav)
+                .map(find::dependenciesOf)
+                .map(dependencies -> map.toJsonDependencies(gav, dependencies))
                 .orElseThrow(NotFoundException::new);
     }
 

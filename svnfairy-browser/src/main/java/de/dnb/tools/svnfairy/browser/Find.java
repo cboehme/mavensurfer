@@ -18,6 +18,7 @@ package de.dnb.tools.svnfairy.browser;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
+import de.dnb.tools.svnfairy.browser.model.Dependency;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
 import de.dnb.tools.svnfairy.browser.model.Parent;
@@ -78,13 +80,9 @@ public class Find {
                 .collect(toList());
     }
 
-    public List<Project> dependenciesOf(Project project) {
+    public Collection<Dependency> dependenciesOf(Project project) {
 
-        return repository.getDependenciesOf(project).stream()
-                .map(d -> findMatchingProjects(d.getGroupId(),
-                        d.getArtifactId(), d.getVersion()))
-                .flatMap(List::stream)
-                .collect(toList());
+        return repository.getDependenciesOf(project);
     }
 
     public List<Project> parentsOf(Project project) {

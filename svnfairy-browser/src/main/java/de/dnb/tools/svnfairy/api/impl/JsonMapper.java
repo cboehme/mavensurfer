@@ -18,11 +18,13 @@ package de.dnb.tools.svnfairy.api.impl;
 import static java.util.stream.Collectors.toList;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import de.dnb.tools.svnfairy.api.datatypes.JsonDependency;
 import de.dnb.tools.svnfairy.api.datatypes.JsonParent;
 import de.dnb.tools.svnfairy.api.datatypes.JsonArtifactId;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
@@ -133,6 +135,7 @@ public class JsonMapper {
         project.getParent()
                 .map(this::toJson)
                 .ifPresent(jsonProject::setParent);
+        jsonProject.setDependencies(uris.getDependenciesUri(project.getGav()));
         jsonProject.setChildren(uris.getChildrenUri(project.getGav()));
         jsonProject.setDependants(uris.getDependantsUri(project.getGav()));
         return jsonProject;
@@ -145,6 +148,28 @@ public class JsonMapper {
         jsonParent.setArtifactId(parent.getArtifactId().toString());
         jsonParent.setVersionRange(parent.getVersionRange().toString());
         return jsonParent;
+    }
+
+    public JsonCollection<JsonDependency> toJsonDependencies(Gav gav,
+                                                             Collection<Dependency> dependencies) {
+
+        final List<JsonDependency> jsonDependencies = dependencies.stream()
+                .map(this::toJson)
+                .collect(toList());
+        return toJson(jsonDependencies, uris.getDependenciesUri(gav));
+    }
+
+    private JsonDependency toJson(Dependency dependency) {
+
+        final JsonDependency jsonDependency = new JsonDependency();
+        jsonDependency.setGroupId(dependency.getGroupId().toString());
+        jsonDependency.setArtifactId(dependency.getArtifactId().toString());
+        jsonDependency.setVersionRange(dependency.getVersion().toString());
+        jsonDependency.setClassifier(dependency.getClassifier().toString());
+        jsonDependency.setType(dependency.getType().toString());
+        jsonDependency.setScope(dependency.getScope().toString());
+        jsonDependency.setOptional(dependency.isOptional());
+        return jsonDependency;
     }
 
     public JsonCollection<JsonDependant> toJson(Gav gav,

@@ -58,7 +58,7 @@ public class ResourceUris {
                 .build(groupId, artifactId);
     }
 
-    public URI getParentsUri(Gav gav) {
+    URI getParentsUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
@@ -66,7 +66,15 @@ public class ResourceUris {
                 .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 
-    public URI getChildrenUri(Gav gav) {
+    URI getDependenciesUri(Gav gav) {
+
+        return uriInfo.getBaseUriBuilder()
+                .path(ProjectResource.class)
+                .path(ProjectResource.class, "getDependencies")
+                .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
+    }
+
+    URI getChildrenUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
@@ -74,7 +82,7 @@ public class ResourceUris {
                 .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
 
-    public URI getDependantsUri(Gav gav) {
+    URI getDependantsUri(Gav gav) {
 
         return uriInfo.getBaseUriBuilder()
                 .path(ProjectResource.class)
@@ -88,4 +96,5 @@ public class ResourceUris {
                 .path(ProjectResource.class)
                 .build(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
     }
+
 }
