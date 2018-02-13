@@ -42,4 +42,8 @@ export class ProjectsService {
     return this.http.get<Collection<Dependency>>(listUrl);
   }
 
+  findProjects(searchUrl: string) {
+    return this.http.get<Collection<Project>>(this.baseUrl + "/" + searchUrl);
+  }
+
 }

@@ -1,9 +1,8 @@
 <clr-dropdown>
-  <a clrDropdownTrigger class="dropdown-toggle"
+  <a clrDropdownTrigger
      style="color: #007cbb; cursor: pointer;">{{reference.groupId}}:{{reference.artifactId}}</a>
   <clr-dropdown-menu *clrIfOpen>
-    <a clrDropdownItem>Version 1</a>
-    <a clrDropdownItem>Version 2</a>
+    <app-project-selector [reference]="reference"></app-project-selector>
   </clr-dropdown-menu>
 </clr-dropdown><br>
 <span style="margin-left: 2em;">Classifier: {{reference.classifier || 'none'}}</span>
