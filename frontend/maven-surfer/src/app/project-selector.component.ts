@@ -22,24 +22,35 @@ import {isUndefined} from "util";
 @Component({
   selector: 'app-project-selector',
   template: `
+    <div style="text-align: center;">
+      <span *ngIf="loading" class="spinner spinner-inline"></span>
+    </div>
     <a *ngFor="let project of projects" clrDropdownItem routerLink="/projects/{{project.groupId}}/{{project.artifactId}}/{{project.version}}">{{project.version}}</a>
   `,
   styles: []
 })
-export class ProjectSelectorComponent implements OnChanges {
+export class ProjectSelectorComponent implements OnInit, OnChanges {
 
   @Input() reference: Dependency;
 
+  loading: boolean;
   projects: Project[] = [];
 
   constructor(private projectsService: ProjectsService) { }
+
+  ngOnInit() {
+    this.loading = true;
+  }
 
   ngOnChanges() {
     if (isUndefined(this.reference)) {
       this.projects = [];
     } else {
       this.projectsService.findProjects(this.reference.groupId + "/" + this.reference.artifactId + "?version-range=" + this.reference.versionRange)
-        .subscribe(projects => this.projects = projects.member);
+        .subscribe(projects => {
+          this.projects = projects.member;
+          this.loading = false;
+        });
     }
   }
 
