@@ -17,14 +17,9 @@
 
 <section *ngIf="project.parent != null">
   <h1>Parent</h1>
-  <dl>
-    <dt>Group Id</dt>
-    <dd>{{project.parent.groupId}}</dd>
-    <dt>Artifact Id</dt>
-    <dd>{{project.parent.artifactId}}</dd>
-    <dt>Version Range</dt>
-    <dd>{{project.parent.versionRange}}</dd>
-  </dl>
+  <p>{{project.parent.groupId}}:{{project.parent.artifactId}}<br>
+  <span style="margin-left: 2em;">Version range: {{project.parent.versionRange || 'any'}}</span>
+  </p>
 </section>
 
 <app-dependencies-list [listUrl]="project.dependencies"></app-dependencies-list>
