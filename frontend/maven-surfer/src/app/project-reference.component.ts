@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Dependency} from "./dependency";
+import {log} from "util";
 
 @Component({
   selector: 'app-project-reference',
@@ -13,6 +14,10 @@ export class ProjectReferenceComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  resolve() {
+    log("Resolve!");
   }
 
 }
