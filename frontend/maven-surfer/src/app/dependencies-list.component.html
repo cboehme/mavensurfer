@@ -2,11 +2,6 @@
 
 <ul>
   <li *ngFor="let dependency of dependencies">
-    {{dependency.groupId}}:{{dependency.artifactId}}<br>
-    <span style="margin-left: 2em;">Classifier: {{dependency.classifier || 'none'}}</span>
-    <span style="margin-left: 1em;">Type: {{dependency.type || 'none'}}</span>
-    <span style="margin-left: 1em;">Version range: {{dependency.versionRange || 'any'}}</span>
-    <span style="margin-left: 1em;">Scope: {{dependency.scope | lowercase}}</span>
-    <span style="margin-left: 1em;">{{dependency.optional ? 'Optional' : ''}}</span>
+    <app-project-reference [reference]="dependency"></app-project-reference>
   </li>
 </ul>

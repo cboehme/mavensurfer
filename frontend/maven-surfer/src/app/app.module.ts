@@ -16,6 +16,7 @@ import { DashboardComponent } from './dashboard.component';
 import { ProjectListComponent } from './project-list.component';
 import { DependantsListComponent } from './dependants-list.component';
 import { DependenciesListComponent } from './dependencies-list.component';
+import { ProjectReferenceComponent } from './project-reference.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { DependenciesListComponent } from './dependencies-list.component';
     DashboardComponent,
     ProjectListComponent,
     DependantsListComponent,
-    DependenciesListComponent
+    DependenciesListComponent,
+    ProjectReferenceComponent
   ],
   imports: [
     BrowserModule,
