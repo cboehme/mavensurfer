@@ -15,15 +15,37 @@
   -->
 <p>Project {{project.groupId}}:{{project.artifactId}}:{{project.version}}</p>
 
-<section *ngIf="project.parent != null">
-  <h1>Parent</h1>
-  <p>{{project.parent.groupId}}:{{project.parent.artifactId}}<br>
-  <span style="margin-left: 2em;">Version range: {{project.parent.versionRange || 'any'}}</span>
-  </p>
-</section>
+<clr-tabs>
+  <clr-tab>
+    <button clrTabLink>Parent</button>
+    <clr-tab-content>
+      <section *ngIf="project.parent != null">
+        <h1>Parent</h1>
+        <p>{{project.parent.groupId}}:{{project.parent.artifactId}}<br>
+        <span style="margin-left: 2em;">Version range: {{project.parent.versionRange || 'any'}}</span>
+        </p>
+      </section>
+    </clr-tab-content>
+  </clr-tab>
 
-<app-dependencies-list [listUrl]="project.dependencies"></app-dependencies-list>
+  <clr-tab>
+    <button clrTabLink>Children</button>
+    <clr-tab-content>
+      <app-project-list heading="Children" [listUrl]="project.children"></app-project-list>
+    </clr-tab-content>
+  </clr-tab>
 
-<app-project-list heading="Children" [listUrl]="project.children"></app-project-list>
+  <clr-tab>
+    <button clrTabLink>Dependencies</button>
+    <clr-tab-content>
+      <app-dependencies-list [listUrl]="project.dependencies"></app-dependencies-list>
+    </clr-tab-content>
+  </clr-tab>
 
-<app-dependants-list heading="Dependants" [listUrl]="project.dependants"></app-dependants-list>
+  <clr-tab>
+    <button clrTabLink>Dependants</button>
+    <clr-tab-content>
+      <app-dependants-list heading="Dependants" [listUrl]="project.dependants"></app-dependants-list>
+    </clr-tab-content>
+  </clr-tab>
+</clr-tabs>
