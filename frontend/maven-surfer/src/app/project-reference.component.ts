@@ -16,8 +16,4 @@ export class ProjectReferenceComponent implements OnInit {
   ngOnInit() {
   }
 
-  resolve() {
-    log("Resolve!");
-  }
-
 }

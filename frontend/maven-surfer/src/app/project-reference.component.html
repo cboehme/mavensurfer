@@ -1,4 +1,11 @@
-<a (click)="resolve()" style="color: #007cbb; cursor: pointer;">{{reference.groupId}}:{{reference.artifactId}}</a><br>
+<clr-dropdown>
+  <a clrDropdownTrigger class="dropdown-toggle"
+     style="color: #007cbb; cursor: pointer;">{{reference.groupId}}:{{reference.artifactId}}</a>
+  <clr-dropdown-menu *clrIfOpen>
+    <a clrDropdownItem>Version 1</a>
+    <a clrDropdownItem>Version 2</a>
+  </clr-dropdown-menu>
+</clr-dropdown><br>
 <span style="margin-left: 2em;">Classifier: {{reference.classifier || 'none'}}</span>
 <span style="margin-left: 1em;">Type: {{reference.type || 'none'}}</span>
 <span style="margin-left: 1em;">Version range: {{reference.versionRange || 'any'}}</span>
