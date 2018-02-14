@@ -6,7 +6,6 @@ import {isUndefined} from "util";
 @Component({
   selector: 'app-dependants-list',
   template: `
-    <h1>{{heading}}</h1>
     <ul>
       <li *ngFor="let dependant of dependants">
         <a routerLink="/projects/{{dependant.project.groupId}}/{{dependant.project.artifactId}}/{{dependant.project.version}}">

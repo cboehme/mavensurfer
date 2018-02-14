@@ -12,7 +12,6 @@ import {isUndefined, log} from "util";
 @Component({
   selector: 'app-project-list',
   template: `
-    <h1>{{heading}}</h1>
     <ul>
       <li *ngFor="let project of projects">
         <a routerLink="/projects/{{project.groupId}}/{{project.artifactId}}/{{project.version}}">
