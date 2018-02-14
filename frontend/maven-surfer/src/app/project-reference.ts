@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-import {ProjectReference} from "./project-reference";
+export class ProjectReference {
 
-export class Dependency extends ProjectReference {
-
-  classifier: string;
-  type: string;
-
-  scope: string;
-  optional: boolean;
+  groupId: string;
+  artifactId: string;
+  versionRange: string;
 
 }

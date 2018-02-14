@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-export class Parent {
+import {ProjectReference} from "./project-reference";
 
-  groupId: String;
-  artifactId: String;
-  versionRange: String;
+export class Parent extends ProjectReference {
 
 }

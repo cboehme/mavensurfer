@@ -5,8 +5,10 @@
     <app-project-selector [reference]="reference"></app-project-selector>
   </clr-dropdown-menu>
 </clr-dropdown><br>
-<span style="margin-left: 2em;">Classifier: {{reference.classifier || 'none'}}</span>
-<span style="margin-left: 1em;">Type: {{reference.type || 'none'}}</span>
-<span style="margin-left: 1em;">Version range: {{reference.versionRange || 'any'}}</span>
-<span style="margin-left: 1em;">Scope: {{reference.scope | lowercase}}</span>
-<span style="margin-left: 1em;">{{reference.optional ? 'Optional' : ''}}</span>
+<ng-container *ngIf="asDependency() != null">
+  <span style="margin-left: 2em;">Classifier: {{asDependency().classifier || 'none'}}</span>
+  <span style="margin-left: 1em;">Type: {{asDependency().type || 'none'}}</span>
+  <span style="margin-left: 1em;">Version range: {{asDependency().versionRange || 'any'}}</span>
+  <span style="margin-left: 1em;">Scope: {{asDependency().scope | lowercase}}</span>
+  <span style="margin-left: 1em;">{{asDependency().optional ? 'Optional' : ''}}</span>
+</ng-container>
