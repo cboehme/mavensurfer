@@ -18,3 +18,7 @@ dd::after {
   content: "\A";
   white-space: pre;
 }
+
+clr-tab-content article {
+  padding-top: 1em;
+}

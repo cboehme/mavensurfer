@@ -1,24 +1,21 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges
-} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Project} from './project';
 import {ProjectsService} from "./projects.service";
-import {isUndefined, log} from "util";
+import {isUndefined} from "util";
 
 @Component({
   selector: 'app-project-list',
   template: `
-    <ul>
-      <li *ngFor="let project of projects">
-        <a routerLink="/projects/{{project.groupId}}/{{project.artifactId}}/{{project.version}}">
-          {{project.groupId}}:{{project.artifactId}}:{{project.version}}
-        </a>
-      </li>
-    </ul>
+    <article>
+      <ul class="list-unstyled">
+        <li *ngFor="let project of projects">
+          <a
+            routerLink="/projects/{{project.groupId}}/{{project.artifactId}}/{{project.version}}">
+            {{project.groupId}}:{{project.artifactId}}:{{project.version}}
+          </a>
+        </li>
+      </ul>
+    </article>
   `,
   styles: []
 })
