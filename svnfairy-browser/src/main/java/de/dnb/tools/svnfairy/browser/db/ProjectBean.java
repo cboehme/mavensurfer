@@ -41,6 +41,9 @@ class ProjectBean {
 
     String packaging;
 
+    String name;
+    String description;
+
     String parentGroupId;
     String parentArtifactId;
     String parentVersionRange;

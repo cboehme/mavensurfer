@@ -135,6 +135,8 @@ public class JsonMapper {
         project.getParent()
                 .map(this::toJson)
                 .ifPresent(jsonProject::setParent);
+        jsonProject.setName(project.getName());
+        jsonProject.setDescription(project.getDescription());
         jsonProject.setDependencies(uris.getDependenciesUri(project.getGav()));
         jsonProject.setChildren(uris.getChildrenUri(project.getGav()));
         jsonProject.setDependants(uris.getDependantsUri(project.getGav()));

@@ -183,6 +183,8 @@ public class JpaRepository {
         project.setArtifactId(ArtifactId.of(projectBean.artifactId));
         project.setVersion(Version.of(projectBean.version));
         project.setPackaging(Packaging.of(projectBean.packaging));
+        project.setName(projectBean.name);
+        project.setDescription(projectBean.description);
         if (projectBean.parentGroupId != null
                 && projectBean.parentArtifactId != null) {
             Parent parent = Parent.of(
@@ -204,6 +206,8 @@ public class JpaRepository {
         if (project.getPackaging() != null) {
             projectBean.packaging = project.getPackaging().toString();
         }
+        projectBean.name = project.getName();
+        projectBean.description = project.getDescription();
         project.getParent()
                 .ifPresent(projectBean::setParentCoordinates);
         return projectBean;

@@ -24,6 +24,9 @@ public class JsonProject extends  Referable {
     private String version;
     private JsonParent parent;
 
+    private String name;
+    private String description;
+
     private URI dependencies;
     private URI children;
     private URI dependants;
@@ -58,6 +61,22 @@ public class JsonProject extends  Referable {
 
     public void setParent(JsonParent parent) {
         this.parent = parent;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public URI getDependencies() {

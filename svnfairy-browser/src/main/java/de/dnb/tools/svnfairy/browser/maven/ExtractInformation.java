@@ -253,6 +253,9 @@ public class ExtractInformation {
         project.setVersion(Version.of(fullyProcessedModel.getVersion()));
         project.setPackaging(Packaging.of(fullyProcessedModel.getPackaging()));
 
+        project.setName(fullyProcessedModel.getName());
+        project.setDescription(fullyProcessedModel.getDescription());
+
         if (fullyProcessedModel.getParent() != null) {
             final GroupId parentGroupId = GroupId.of(
                     fullyProcessedModel.getParent().getGroupId());

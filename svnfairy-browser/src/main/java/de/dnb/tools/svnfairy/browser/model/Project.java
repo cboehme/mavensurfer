@@ -36,6 +36,9 @@ public class Project {
     private Version version;
     private Packaging packaging;
 
+    private String name;
+    private String description;
+
     private final List<Dependency> dependencyManagement = new ArrayList<>();
     private final List<Dependency> dependencies = new ArrayList<>();
 
@@ -94,6 +97,22 @@ public class Project {
         this.packaging = packaging;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public List<Dependency> getDependencyManagement() {
         return Collections.unmodifiableList(dependencyManagement);
     }
@@ -127,4 +146,5 @@ public class Project {
     public String toString() {
         return groupId + ":" + artifactId + ":" + version;
     }
+
 }
