@@ -25,6 +25,9 @@ export class Project extends Referable {
   artifactId: string;
   version: string;
 
+  name: string;
+  description: string;
+
   parent: Parent;
 
   dependencies: Collection<Dependency>;

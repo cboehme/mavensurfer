@@ -13,7 +13,9 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<h1>Project {{project.groupId}}:{{project.artifactId}}:{{project.version}}</h1>
+<h1>{{project.name || project.artifactId}} {{project.version}}</h1>
+
+<p *ngIf="project.description">{{project.description}}</p>
 
 <clr-tabs>
   <clr-tab>
