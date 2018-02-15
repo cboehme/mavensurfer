@@ -11,12 +11,8 @@ import {isUndefined} from "util";
         <li *ngFor="let dependant of dependants">
           <a
             routerLink="/projects/{{dependant.project.groupId}}/{{dependant.project.artifactId}}/{{dependant.project.version}}">
-            {{dependant.project.groupId}}:{{dependant.project.artifactId}}:{{dependant.project.version}}
-          </a><br>
-          <span style="margin-left: 2em;">Classifier: {{dependant.classifier || 'none'}}</span>
-          <span style="margin-left: 1em;">Type: {{dependant.type || 'none'}}</span>
-          <span style="margin-left: 1em;">Scope: {{dependant.scope | lowercase}}</span>
-          <span style="margin-left: 1em;">{{dependant.optional ? 'Optional' : ''}}</span>
+            {{dependant.project.groupId}}:{{dependant.project.artifactId}}:{{dependant.type}}:{{dependant.classifier}}:{{dependant.project.version}}
+          </a> (Scope: {{dependant.scope | lowercase}}{{dependant.optional ? ', optional' : ''}})
         </li>
       </ul>
     </article>
