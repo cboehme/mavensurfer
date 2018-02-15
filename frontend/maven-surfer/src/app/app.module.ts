@@ -18,6 +18,7 @@ import { DependantsListComponent } from './dependants-list.component';
 import { DependenciesListComponent } from './dependencies-list.component';
 import { ProjectReferenceComponent } from './project-reference.component';
 import { ProjectSelectorComponent } from './project-selector.component';
+import {SettingsModule} from "./settings/settings.module";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ProjectSelectorComponent } from './project-selector.component';
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes, {enableTracing: false}),
     ClarityModule,
-    HttpClientModule
+    HttpClientModule,
+    SettingsModule
   ],
   providers: [
     ProjectsService
