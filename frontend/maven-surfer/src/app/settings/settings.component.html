@@ -1,11 +1,27 @@
+<clr-alert clrAlertType="alert-danger" [(clrAlertClosed)]="!saveFailed">
+  <clr-alert-item>
+        <span class="alert-text">
+          Could not save settings XML
+        </span>
+  </clr-alert-item>
+</clr-alert>
+
+<clr-alert clrAlertType="alert-success" [(clrAlertClosed)]="!saveOk">
+  <clr-alert-item>
+        <span class="alert-text">
+          Saved settings
+        </span>
+  </clr-alert-item>
+</clr-alert>
+
 <h1>Settings</h1>
 
-<form>
+<form #settingsForm="ngForm" (ngSubmit)="saveSettings()">
   <section class="form-block">
     <label>Maven Settings</label>
     <div class="form-group">
       <label for="settingsXml">Settings XML</label>
-      <textarea id="settingsXml"></textarea>
+      <textarea [(ngModel)]="model.settingsXml" name="settingsXml" id="settingsXml"></textarea>
     </div>
     <button class="btn btn-primary">Save</button>
   </section>
