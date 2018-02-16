@@ -21,6 +21,7 @@ import {SettingsComponent} from "./settings/settings.component";
 
 export const appRoutes: Routes = [
   { path: '', component: DashboardComponent },
+  { path: 'projects', component: DashboardComponent },
   { path: 'projects/:groupId/:artifactId/:version', component: ProjectComponent },
   { path: 'settings', component: SettingsComponent }
 ];
