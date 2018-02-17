@@ -21,11 +21,7 @@ import { ProjectComponent } from "./project.component";
 
 const appRoutes: Routes = [
   { path: '', component: DashboardComponent },
-  { path: 'projects', component: DashboardComponent },
-  {
-    path: 'projects/:groupId/:artifactId/:version',
-    component: ProjectComponent
-  }
+  { path: '**', component: DashboardComponent }
 ];
 
 @NgModule({

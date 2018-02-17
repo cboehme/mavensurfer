@@ -5,6 +5,9 @@ import {HttpClientModule} from '@angular/common/http'
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from "./app-routing.module";
 
+import {SettingsModule} from "./settings/settings.module";
+import { ProjectsModule } from "./projects/projects.module";
+
 import {ProjectsService} from './projects.service'
 import {ClarityModule} from "@clr/angular";
 import {NavGroupComponent} from './nav-group.component';
@@ -17,7 +20,6 @@ import {DependantsListComponent} from './dependants-list.component';
 import {DependenciesListComponent} from './dependencies-list.component';
 import {ProjectReferenceComponent} from './project-reference.component';
 import {ProjectSelectorComponent} from './project-selector.component';
-import {SettingsModule} from "./settings/settings.module";
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import {SettingsModule} from "./settings/settings.module";
     BrowserAnimationsModule,
     ClarityModule,
     HttpClientModule,
+    ProjectsModule,
     SettingsModule,
     AppRoutingModule
   ],
