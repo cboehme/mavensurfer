@@ -13,25 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from "@angular/router";
+import { Component } from '@angular/core';
 
-import { DashboardComponent } from "./projects/dashboard.component";
-import { ProjectComponent } from "./projects/project.component";
-import { PageNotFoundComponent } from "./page-not-found.component";
-
-const appRoutes: Routes = [
-  { path: '', redirectTo: '/projects', pathMatch: 'full' },
-  { path: '**', component: PageNotFoundComponent }
-];
-
-@NgModule({
-  imports: [
-    RouterModule.forRoot(appRoutes, { enableTracing: true }),
-  ],
-  exports: [
-    RouterModule
-  ]
+@Component({
+  selector: 'app-dashboard',
+  template: `
+    <p>
+      dashboard works!
+    </p>
+  `
 })
-export class AppRoutingModule {
+export class DashboardComponent {
 }

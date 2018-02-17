@@ -1,50 +1,29 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http'
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import {AppComponent} from './app.component';
-import {AppRoutingModule} from "./app-routing.module";
+import { ClarityModule } from "@clr/angular";
 
-import {SettingsModule} from "./settings/settings.module";
+import { AppRoutingModule } from "./app-routing.module";
+
+import { AppComponent } from './app.component';
+import { PageNotFoundComponent } from "./page-not-found.component";
+
+import { SettingsModule } from "./settings/settings.module";
 import { ProjectsModule } from "./projects/projects.module";
-
-import {ProjectsService} from './projects.service'
-import {ClarityModule} from "@clr/angular";
-import {NavGroupComponent} from './nav-group.component';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NavProjectComponent} from './nav-project.component';
-import {ProjectComponent} from './project.component';
-import {DashboardComponent} from './dashboard.component';
-import {ProjectListComponent} from './project-list.component';
-import {DependantsListComponent} from './dependants-list.component';
-import {DependenciesListComponent} from './dependencies-list.component';
-import {ProjectReferenceComponent} from './project-reference.component';
-import {ProjectSelectorComponent} from './project-selector.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavGroupComponent,
-    NavProjectComponent,
-    ProjectComponent,
-    DashboardComponent,
-    ProjectListComponent,
-    DependantsListComponent,
-    DependenciesListComponent,
-    ProjectReferenceComponent,
-    ProjectSelectorComponent
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ClarityModule,
-    HttpClientModule,
     ProjectsModule,
     SettingsModule,
     AppRoutingModule
-  ],
-  providers: [
-    ProjectsService
   ],
   bootstrap: [AppComponent]
 })

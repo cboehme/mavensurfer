@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
-import {ProjectsService} from "./projects.service";
-import {Project} from "./project";
-import {Dependency} from './dependency';
-import {isUndefined} from "util";
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { ProjectsService } from "./projects.service";
+import { Project } from "./project";
+import { Dependency } from './dependency';
+import { isUndefined } from "util";
 
 @Component({
   selector: 'app-project-selector',

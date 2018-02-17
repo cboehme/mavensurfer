@@ -13,9 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Component, OnInit } from '@angular/core';
 
-import {Routes} from "@angular/router";
-import {DashboardComponent} from "./dashboard.component";
-import {ProjectComponent} from "./project.component";
-import {SettingsEditorComponent} from "./settings/settings-editor.component";
+@Component({
+  template: `
+    <h1>Page not found</h1>
+    <p>The requested page does not exist.</p>
+  `
+})
+export class PageNotFoundComponent {
 
+}

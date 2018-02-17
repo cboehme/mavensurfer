@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  template: `
-    <router-outlet></router-outlet>
-  `,
+  templateUrl: './settings.component.html',
   styles: []
 })
 export class SettingsComponent { }
