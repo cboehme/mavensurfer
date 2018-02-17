@@ -9,8 +9,9 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from "./page-not-found.component";
 
-import { SettingsModule } from "./settings/settings.module";
 import { ProjectsModule } from "./projects/projects.module";
+import { ImportModule } from "./import/import.module";
+import { SettingsModule } from "./settings/settings.module";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { ProjectsModule } from "./projects/projects.module";
     BrowserAnimationsModule,
     ClarityModule,
     ProjectsModule,
+    ImportModule,
     SettingsModule,
     AppRoutingModule
   ],
