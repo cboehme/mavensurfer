@@ -37,8 +37,8 @@ import {SettingsModule} from "./settings/settings.module";
     BrowserAnimationsModule,
     ClarityModule,
     HttpClientModule,
-    AppRoutingModule,
-    SettingsModule
+    SettingsModule,
+    AppRoutingModule
   ],
   providers: [
     ProjectsService
