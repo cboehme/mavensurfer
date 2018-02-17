@@ -17,11 +17,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
-  template: `
-    <p>
-      dashboard works!
-    </p>
-  `
+  template: `<p>&larr; Select a project from the list</p>`
 })
 export class DashboardComponent {
 }
