@@ -4,11 +4,11 @@ import {ConfigurationService} from "./configuration.service";
 import {log} from "util";
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
+  selector: 'app-settings-editor',
+  templateUrl: './settings-editor.component.html',
   styles: []
 })
-export class SettingsComponent implements OnInit {
+export class SettingsEditorComponent implements OnInit {
 
   model: Settings = new Settings();
 

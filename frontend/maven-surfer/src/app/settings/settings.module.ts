@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {BrowserModule} from "@angular/platform-browser";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ClarityModule} from "@clr/angular";
-import { SettingsComponent } from './settings.component';
+import { SettingsEditorComponent } from './settings-editor.component';
 import {ConfigurationService} from './configuration.service';
 
 @NgModule({
@@ -15,7 +15,7 @@ import {ConfigurationService} from './configuration.service';
     BrowserAnimationsModule,
     ClarityModule
   ],
-  declarations: [SettingsComponent],
+  declarations: [SettingsEditorComponent],
   providers: [ConfigurationService]
 })
 export class SettingsModule { }
