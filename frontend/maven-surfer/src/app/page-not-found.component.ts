@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   template: `
-    <h1>Page not found</h1>
-    <p>The requested page does not exist.</p>
+    <div class="content-container">
+      <main class="content-area">
+        <h1>Page not found</h1>
+        <p>The requested page does not exist.</p>
+      </main>
+    </div>
   `
 })
 export class PageNotFoundComponent {
