@@ -13,9 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from "@angular/router";
 
-import {Routes} from "@angular/router";
 import {DashboardComponent} from "./dashboard.component";
 import {ProjectComponent} from "./project.component";
 import {SettingsEditorComponent} from "./settings/settings-editor.component";
 
+const appRoutes: Routes = [
+  {path: '', component: DashboardComponent},
+  {path: 'projects', component: DashboardComponent},
+  {path: 'projects/:groupId/:artifactId/:version', component: ProjectComponent},
+  {path: 'settings', component: SettingsEditorComponent}
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot(appRoutes, {enableTracing: true}),
+  ],
+  exports: [
+    RouterModule
+  ]
+})
+export class AppRoutingModule { }
