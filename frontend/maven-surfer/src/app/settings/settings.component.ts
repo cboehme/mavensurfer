@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
+  selector: 'app-settings',
   templateUrl: './settings.component.html',
-  styles: []
+  host: { 'class': 'content-container' }
 })
 export class SettingsComponent { }

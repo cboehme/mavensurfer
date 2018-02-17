@@ -16,14 +16,14 @@
 import { Component } from '@angular/core';
 
 @Component({
+  selector: 'app-page-not-found',
   template: `
-    <div class="content-container">
-      <main class="content-area">
-        <h1>Page not found</h1>
-        <p>The requested page does not exist.</p>
-      </main>
-    </div>
-  `
+    <main class="content-area">
+      <h1>Page not found</h1>
+      <p>The requested page does not exist.</p>
+    </main>
+  `,
+  host: { 'class': 'content-container' }
 })
 export class PageNotFoundComponent {
 

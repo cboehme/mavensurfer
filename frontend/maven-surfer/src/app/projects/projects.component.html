@@ -13,19 +13,17 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<div class="content-container">
-  <main class="content-area">
-    <router-outlet></router-outlet>
-  </main>
-  <nav class="sidenav">
-    <section class="sidenav-content">
-      <clr-tree-node *ngFor="let group of groups">
-        <clr-icon shape="folder"></clr-icon>
-        {{group.groupId}}
-        <ng-template clrIfExpanded>
-          <app-nav-group [groupIdUrl]="group['@id']"></app-nav-group>
-        </ng-template>
-      </clr-tree-node>
-    </section>
-  </nav>
-</div>
+<main class="content-area">
+  <router-outlet></router-outlet>
+</main>
+<nav class="sidenav">
+  <section class="sidenav-content">
+    <clr-tree-node *ngFor="let group of groups">
+      <clr-icon shape="folder"></clr-icon>
+      {{group.groupId}}
+      <ng-template clrIfExpanded>
+        <app-nav-group [groupIdUrl]="group['@id']"></app-nav-group>
+      </ng-template>
+    </clr-tree-node>
+  </section>
+</nav>

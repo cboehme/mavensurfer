@@ -5,7 +5,9 @@ import { ProjectsService } from "./projects.service";
 import { Group } from "./group";
 
 @Component({
-  templateUrl: './projects.component.html'
+  selector: 'app-projects',
+  templateUrl: './projects.component.html',
+  host: { 'class': 'content-container' }
 })
 export class ProjectsComponent {
 
