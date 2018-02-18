@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ProjectsService } from "../projects/projects.service";
+import { log } from "util";
 
 class ProjectImporterModel {
 
@@ -35,7 +37,13 @@ export class ProjectImporterComponent {
 
   model: ProjectImporterModel = new ProjectImporterModel();
 
+  constructor(private projectsService: ProjectsService) { }
+
   import() {
+    log("Import");
+    this.projectsService.importProject(this.model.groupId, this.model.artifactId, this.model.version)
+      .subscribe(() => log("Sucess"),
+        () => log("Error"));
   }
 
 }

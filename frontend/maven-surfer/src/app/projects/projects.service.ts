@@ -61,4 +61,8 @@ export class ProjectsService {
     return this.http.get<Collection<Project>>(this.baseUrl + "/" + searchUrl);
   }
 
+  importProject(groupId: string, artifactId: string, version: string): Observable<any> {
+    return this.http.post<any>(this.baseUrl + "/" + groupId + "/" + artifactId + "/" + version, null);
+  }
+
 }
