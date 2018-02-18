@@ -6,21 +6,21 @@
     <label>Project Coordinates</label>
     <div class="form-group">
       <label for="groupId">Groud ID</label>
-      <input type="text" [(ngModel)]="model.groupId" name="groupId" id="groupId">
+      <input type="text"id="groupId" [(ngModel)]="model.groupId" name="groupId" size="30">
     </div>
     <div class="form-group">
       <label for="artifactId">Artifact ID</label>
-      <input type="text" [(ngModel)]="model.artifactId" name="artifactId" id="artifactId">
+      <input type="text" id="artifactId" [(ngModel)]="model.artifactId" name="artifactId"size="30">
     </div>
     <div class="form-group">
       <label for="version">Version</label>
-      <input type="text" [(ngModel)]="model.version" name="version" id="version">
+      <input type="text" id="version"[(ngModel)]="model.version" name="version" size="30">
     </div>
   </section>
   <section class="form-block">
     <div class="form-group">
       <label for="gav">GAV</label>
-      <input type="text" [(ngModel)]="model.gav" name="gav" id="gav" size="50">
+      <input type="text" id="gav" [(ngModel)]="model.gav" name="gav" size="30">
     </div>
     <button class="btn btn-primary">Import</button>
   </section>
