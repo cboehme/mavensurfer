@@ -1,15 +1,18 @@
 <nav class="subnav">
   <clr-tabs>
     <clr-tab>
-      <button clrTabLink>Single Project</button>
+      <button clrTabLink routerLink="/import/project" routerLinkActive="active">Import Project</button>
     </clr-tab>
     <clr-tab>
-      <button clrTabLink>Scan Repository</button>
+      <button clrTabLink>Import File</button>
+    </clr-tab>
+    <clr-tab>
+      <button clrTabLink>Import Repository</button>
     </clr-tab>
   </clr-tabs>
 </nav>
 <div class="content-container">
   <main class="content-area">
-    <p>import-component works!</p>
+    <router-outlet></router-outlet>
   </main>
 </div>
