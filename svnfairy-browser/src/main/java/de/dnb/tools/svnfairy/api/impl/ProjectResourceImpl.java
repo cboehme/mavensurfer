@@ -63,7 +63,7 @@ public class ProjectResourceImpl implements ProjectResource {
         final Gav gav = Gav.of(groupId, artifactId, version);
 
         importProject.with(gav)
-                .onErrorThrow(result -> new BadRequestException());
+                .onErrorThrow(e -> new BadRequestException(e.getMessage(), e.getCause()));
     }
 
     @Override

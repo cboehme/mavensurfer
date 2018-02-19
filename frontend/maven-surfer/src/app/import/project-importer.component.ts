@@ -36,14 +36,17 @@ class ProjectImporterModel {
 export class ProjectImporterComponent {
 
   model: ProjectImporterModel = new ProjectImporterModel();
+  importError: string;
+  importOk: boolean;
 
   constructor(private projectsService: ProjectsService) { }
 
   import() {
-    log("Import");
+    this.importError = null;
+    this.importOk = false;
     this.projectsService.importProject(this.model.groupId, this.model.artifactId, this.model.version)
-      .subscribe(() => log("Sucess"),
-        () => log("Error"));
+      .subscribe(() => this.importOk = true,
+        () => this.importError = "Could not import project");
   }
 
 }

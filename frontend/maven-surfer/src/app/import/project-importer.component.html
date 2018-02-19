@@ -1,6 +1,22 @@
 
 <h1>Import Project</h1>
 
+<clr-alert clrAlertType="alert-danger" [(clrAlertClosed)]="!importError">
+  <clr-alert-item>
+        <span class="alert-text">
+          {{importError}}
+        </span>
+  </clr-alert-item>
+</clr-alert>
+
+<clr-alert clrAlertType="alert-success" [(clrAlertClosed)]="!importOk">
+  <clr-alert-item>
+        <span class="alert-text">
+          Imported {{model.gav}} successfully
+        </span>
+  </clr-alert-item>
+</clr-alert>
+
 <form #importForm="ngForm" (ngSubmit)="import()">
   <section class="form-block">
     <label>Project Coordinates</label>
