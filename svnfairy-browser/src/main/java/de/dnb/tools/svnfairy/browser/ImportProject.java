@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.maven.ExtractInformation;
 import de.dnb.tools.svnfairy.browser.model.Gav;
+import de.dnb.tools.svnfairy.browser.model.ImportResult;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
@@ -51,12 +52,13 @@ public class ImportProject {
         }
     }
 
-    public void with(Gav gav) {
+    public ImportResult with(Gav gav) {
 
         final Project project = extractInformation.fromProject(gav);
         if (project != null) {
             jpaRepository.create(project);
         }
+        return ImportResult.noErrors();
     }
 
 }

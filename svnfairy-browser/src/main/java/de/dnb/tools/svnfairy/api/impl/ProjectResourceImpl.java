@@ -20,8 +20,8 @@ import static de.dnb.tools.svnfairy.api.impl.Relation.parent;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Response;
 
 import de.dnb.tools.svnfairy.api.ProjectResource;
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
@@ -56,14 +56,14 @@ public class ProjectResourceImpl implements ProjectResource {
     }
 
     @Override
-    public Response indexProject(String groupId,
-                                 String artifactId,
-                                 String version) {
+    public void indexProject(String groupId,
+                             String artifactId,
+                             String version) {
 
         final Gav gav = Gav.of(groupId, artifactId, version);
 
-        importProject.with(gav);
-        return Response.ok().build();
+        importProject.with(gav)
+                .onErrorThrow(result -> new BadRequestException());
     }
 
     @Override

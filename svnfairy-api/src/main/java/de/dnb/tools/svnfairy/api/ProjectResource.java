@@ -22,7 +22,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import de.dnb.tools.svnfairy.api.datatypes.JsonCollection;
 import de.dnb.tools.svnfairy.api.datatypes.JsonDependant;
@@ -39,9 +38,9 @@ public interface ProjectResource {
                            @PathParam("version") @NotNull String version);
 
     @POST
-    Response indexProject(@PathParam("groupId") @NotNull String groupId,
-                          @PathParam("artifactId") @NotNull String artifactId,
-                          @PathParam("version") @NotNull String version);
+    void indexProject(@PathParam("groupId") @NotNull String groupId,
+                      @PathParam("artifactId") @NotNull String artifactId,
+                      @PathParam("version") @NotNull String version);
 
     @GET
     @Path("/parents")
@@ -68,7 +67,7 @@ public interface ProjectResource {
     @Path("/dependants")
     @Produces(MediaType.APPLICATION_JSON)
     JsonCollection<JsonDependant> getDependants(@PathParam("groupId") @NotNull String groupId,
-                                              @PathParam("artifactId") @NotNull String artifactId,
-                                              @PathParam("version") @NotNull String version);
+                                                @PathParam("artifactId") @NotNull String artifactId,
+                                                @PathParam("version") @NotNull String version);
 
 }
