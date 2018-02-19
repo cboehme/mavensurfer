@@ -20,8 +20,9 @@ import javax.inject.Inject;
 
 import de.dnb.tools.svnfairy.browser.db.JpaRepository;
 import de.dnb.tools.svnfairy.browser.maven.ExtractInformation;
+import de.dnb.tools.svnfairy.browser.model.ExtractionFailed;
 import de.dnb.tools.svnfairy.browser.model.Gav;
-import de.dnb.tools.svnfairy.browser.model.ImportResult;
+import de.dnb.tools.svnfairy.browser.model.Outcome;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
 import de.dnb.tools.svnfairy.browser.model.Project;
 
@@ -52,13 +53,11 @@ public class ImportProject {
         }
     }
 
-    public ImportResult with(Gav gav) {
+    public Outcome<Void, ExtractionFailed> with(Gav gav) {
 
-        final Project project = extractInformation.fromProject(gav);
-        if (project != null) {
-            jpaRepository.create(project);
-        }
-        return ImportResult.noErrors();
+        return extractInformation.fromProject(gav)
+                .onSuccess(jpaRepository::create)
+                .mapOutcome(r -> (Void) null, e -> e);
     }
 
 }

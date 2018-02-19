@@ -15,42 +15,22 @@
  */
 package de.dnb.tools.svnfairy.browser.model;
 
-import java.util.function.Function;
+public class ExtractionFailed {
 
-public class ImportResult {
-
-    private final Throwable cause;
     private final String message;
+    private final Throwable cause;
 
-    public ImportResult(Throwable cause, String message) {
-        this.cause = cause;
+    public ExtractionFailed(String message, Throwable cause) {
         this.message = message;
-    }
-
-    public static ImportResult noErrors() {
-
-        return new ImportResult(null, "");
-    }
-
-    public boolean succeeded() {
-        return cause == null;
-    }
-
-    public boolean failed() {
-        return !succeeded();
-    }
-
-    public <T extends Throwable> ImportResult onErrorThrow(Function<ImportResult, T> exceptionProducer)
-            throws T {
-
-        if (failed()) {
-            throw exceptionProducer.apply(this);
-        }
-        return this;
+        this.cause = cause;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public Throwable getCause() {
+        return cause;
     }
 
 }

@@ -69,8 +69,10 @@ import de.dnb.tools.svnfairy.browser.Configuration;
 import de.dnb.tools.svnfairy.browser.configuration.ManageSettings;
 import de.dnb.tools.svnfairy.browser.model.ArtifactId;
 import de.dnb.tools.svnfairy.browser.model.Classifier;
+import de.dnb.tools.svnfairy.browser.model.ExtractionFailed;
 import de.dnb.tools.svnfairy.browser.model.Gav;
 import de.dnb.tools.svnfairy.browser.model.GroupId;
+import de.dnb.tools.svnfairy.browser.model.Outcome;
 import de.dnb.tools.svnfairy.browser.model.Packaging;
 import de.dnb.tools.svnfairy.browser.model.Parent;
 import de.dnb.tools.svnfairy.browser.model.PomFile;
@@ -115,10 +117,10 @@ public class ExtractInformation {
 
         final ModelSource2 modelSource = new InMemoryModelSource(
                 pomFile.getName(), pomFile.getContents());
-        return makeEffectivePom(modelSource);
+        return makeEffectivePom(modelSource).orElse(null);
     }
 
-    public Project fromProject(Gav gav) {
+    public Outcome<Project, ExtractionFailed> fromProject(Gav gav) {
 
         final ModelSource modelSource;
         try {
@@ -126,12 +128,12 @@ public class ExtractInformation {
                     gav.getArtifactId().toString(), gav.getVersion().toString());
         } catch (UnresolvableModelException e) {
             log.error("Failed to retrieve resource");
-            return null;
+            return Outcome.error(new ExtractionFailed(e.getMessage(), e));
         }
         return makeEffectivePom(modelSource);
     }
 
-    private Project makeEffectivePom(ModelSource modelSource) {
+    private Outcome<Project, ExtractionFailed> makeEffectivePom(ModelSource modelSource) {
 
         final ModelBuildingRequest request = createModelBuildingRequest(
                 modelSource, modelResolver);
@@ -148,11 +150,12 @@ public class ExtractInformation {
 
         } catch (ModelBuildingException e) {
             log.error("Could not build effective POM", e);
-            return null;
+            return Outcome.error(new ExtractionFailed(e.getMessage(), e));
         }
+        final Project project = mapModelToProject(modelSource.getLocation(),
+                partlyProcessedModel, fullyProcessedModel);
 
-        return mapModelToProject(modelSource.getLocation(), partlyProcessedModel,
-                fullyProcessedModel);
+        return Outcome.success(project);
     }
 
     private ModelBuildingRequest createModelBuildingRequest(ModelSource modelSource,
