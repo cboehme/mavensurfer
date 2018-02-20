@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ProjectsService } from "../projects/projects.service";
-import { log } from "util";
 
 class ProjectImporterModel {
 
