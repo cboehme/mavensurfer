@@ -1,0 +1,36 @@
+<h1>Import Repository</h1>
+
+<clr-alert clrAlertType="alert-danger" [(clrAlertClosed)]="!importError">
+  <clr-alert-item>
+        <span class="alert-text">
+          {{importError}}
+        </span>
+  </clr-alert-item>
+</clr-alert>
+
+<clr-alert clrAlertType="alert-success" [(clrAlertClosed)]="!importOk">
+  <clr-alert-item>
+        <span class="alert-text">
+          Submitted repository {{model.repositoryId}} on {{model.nexusUrl}} for importing.
+        </span>
+  </clr-alert-item>
+</clr-alert>
+
+<form #importForm="ngForm" (ngSubmit)="import()">
+  <section class="form-block">
+    <label>Nexus Repository</label>
+    <div class="form-group">
+      <label for="nexusUrl">Nexus Server URL</label>
+      <input type="text" id="nexusUrl" [(ngModel)]="model.nexusUrl" name="nexusUrl" size="30" required>
+    </div>
+    <div class="form-group">
+      <label for="repositoryId">Repository ID</label>
+      <input type="text" id="repositoryId" [(ngModel)]="model.repositoryId" name="repositoryId" size="30" required>
+    </div>
+    <div class="form-group">
+      <label for="basePath">Base Path</label>
+      <input type="text" id="basePath" [(ngModel)]="model.basePath" name="basePath" size="30" required>
+    </div>
+    <button class="btn btn-primary" [disabled]="!importForm.form.valid">Import</button>
+  </section>
+</form>

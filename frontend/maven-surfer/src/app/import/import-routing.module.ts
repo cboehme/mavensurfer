@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ImportComponent } from "./import.component";
 import { ProjectImporterComponent } from "./project-importer.component";
+import { RepositoryImporterComponent } from "./repository-importer.component";
 
 const routes: Routes = [
   {
@@ -10,7 +11,8 @@ const routes: Routes = [
     component: ImportComponent,
     children: [
       { path: '', redirectTo: '/import/project', pathMatch: 'full' },
-      { path: 'project', component: ProjectImporterComponent }
+      { path: 'project', component: ProjectImporterComponent },
+      { path: 'repository', component: RepositoryImporterComponent }
     ]
   }
 ];

@@ -8,6 +8,9 @@ import { ImportRoutingModule } from "./import-routing.module";
 
 import { ImportComponent } from './import.component';
 import { ProjectImporterComponent } from './project-importer.component';
+import { RepositoryImporterComponent } from './repository-importer.component';
+
+import { SubmissionService } from "./submission.service";
 
 @NgModule({
   imports: [
@@ -18,7 +21,11 @@ import { ProjectImporterComponent } from './project-importer.component';
   ],
   declarations: [
     ImportComponent,
-    ProjectImporterComponent
+    ProjectImporterComponent,
+    RepositoryImporterComponent
+  ],
+  providers: [
+    SubmissionService
   ]
 })
 export class ImportModule { }
