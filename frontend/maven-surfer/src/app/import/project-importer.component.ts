@@ -30,7 +30,7 @@ class ProjectImporterModel {
 }
 
 @Component({
-  selector: 'app-single-project',
+  selector: 'app-project-importer',
   templateUrl: './project-importer.component.html'
 })
 export class ProjectImporterComponent {
