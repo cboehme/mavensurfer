@@ -1,9 +1,9 @@
 <clr-main-container>
-  <clr-alert [clrAlertAppLevel]="true" [clrAlertType]="'alert-danger'" [clrAlertClosable]="false" [clrAlertClosed]="true">
+  <clr-alert [clrAlertAppLevel]="true" [clrAlertType]="'alert-danger'" [clrAlertClosable]="true" [(clrAlertClosed)]="showErrorMessage">
     <div class="clr-alert-items">
     <clr-alert-item>
       <div class="alert-text">
-        Could not connect to backend
+        {{errorMessage}}
       </div>
     </clr-alert-item>
     </div>

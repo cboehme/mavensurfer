@@ -5,20 +5,19 @@ import { HttpClientModule } from "@angular/common/http";
 
 import { ClarityModule } from "@clr/angular";
 
+import { ProjectsModule } from "./projects/projects.module";
+import { ImportModule } from "./import/import.module";
+import { SettingsModule } from "./settings/settings.module";
+
 import { AppRoutingModule } from "./app-routing.module";
 
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from "./page-not-found.component";
 
-import { ProjectsModule } from "./projects/projects.module";
-import { ImportModule } from "./import/import.module";
-import { SettingsModule } from "./settings/settings.module";
+import { ErrorService } from "./error.service";
+
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageNotFoundComponent
-  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -28,6 +27,13 @@ import { SettingsModule } from "./settings/settings.module";
     ImportModule,
     SettingsModule,
     AppRoutingModule
+  ],
+  declarations: [
+    AppComponent,
+    PageNotFoundComponent
+  ],
+  providers: [
+    ErrorService
   ],
   bootstrap: [AppComponent]
 })
