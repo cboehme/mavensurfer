@@ -37,19 +37,18 @@ export class NavGroupComponent implements OnInit {
   loading: boolean;
   artifacts: Artifact[];
 
-  constructor(private projectsService: ProjectsService) { }
+  constructor(private projectsService: ProjectsService) {
 
-  ngOnInit() {
-    this.loading = true;
-    this.fetchArtifacts();
-  }
-
-  private fetchArtifacts() {
-    this.projectsService.getArtifacts(this.groupIdUrl)
+    this.projectsService.artifacts$
       .subscribe(artifacts => {
         this.artifacts = artifacts.member;
         this.loading = false;
       });
+  }
+
+  ngOnInit() {
+    this.loading = true;
+    this.projectsService.getArtifacts(this.groupIdUrl);
   }
 
 }

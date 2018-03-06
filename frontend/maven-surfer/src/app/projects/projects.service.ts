@@ -33,8 +33,13 @@ export class ProjectsService {
 
   private groupsSubject: Subject<Collection<Group>>
     = new Subject<Collection<Group>>();
+  private artifactsSubject: Subject<Collection<Artifact>>
+    = new Subject<Collection<Artifact>>();
 
-  groups$: Observable<Collection<Group>> = this.groupsSubject.asObservable();
+  groups$: Observable<Collection<Group>>
+    = this.groupsSubject.asObservable();
+  artifacts$: Observable<Collection<Artifact>>
+    = this.artifactsSubject.asObservable();
 
   constructor(private http: HttpClient,
               private errorService: ErrorService) { }
@@ -52,9 +57,17 @@ export class ProjectsService {
         });
   }
 
-  getArtifacts(groupIdUrl: string): Observable<Collection<Artifact>> {
-    return this.http.get<Collection<Artifact>>(groupIdUrl);
-
+  getArtifacts(groupIdUrl: string): void {
+    this.http.get<Collection<Artifact>>(groupIdUrl)
+      .subscribe(
+        value => this.artifactsSubject.next(value),
+        error => {
+          if (error.error instanceof ErrorEvent) {
+            this.errorService.raiseError(error.error.message);
+          } else {
+            this.errorService.raiseError(error.error + " (" + error.status + ")");
+          }
+        });
   }
 
   getProjects(artifactIdUrl: string): Observable<Collection<Project>> {
