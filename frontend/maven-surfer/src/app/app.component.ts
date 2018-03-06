@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.errorService.error$.subscribe(
       value => {
-        this.showErrorMessage = true;
+        this.showErrorMessage = false;
         this.errorMessage = value;
       }
     );

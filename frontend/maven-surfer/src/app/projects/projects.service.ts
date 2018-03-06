@@ -23,17 +23,33 @@ import { Group } from "./group";
 import { Artifact } from "./artifact";
 import { Dependant } from "./dependant";
 import { Dependency } from "./dependency";
+import { Subject } from "rxjs/Subject";
+import { ErrorService } from "../error.service";
 
 @Injectable()
 export class ProjectsService {
 
   private baseUrl = 'http://localhost:8080/api/projects';
 
+  private groupsSubject: Subject<Collection<Group>>
+    = new Subject<Collection<Group>>();
 
-  constructor(private http: HttpClient) { }
+  groups$: Observable<Collection<Group>> = this.groupsSubject.asObservable();
 
-  getGroups(): Observable<Collection<Group>> {
-    return this.http.get<Collection<Group>>(this.baseUrl);
+  constructor(private http: HttpClient,
+              private errorService: ErrorService) { }
+
+  fetchGroups(): void {
+    this.http.get<Collection<Group>>(this.baseUrl)
+      .subscribe(
+        value => this.groupsSubject.next(value),
+        error => {
+          if (error.error instanceof ErrorEvent) {
+            this.errorService.raiseError(error.error.message);
+          } else {
+            this.errorService.raiseError(error.error + " (" + error.status + ")");
+          }
+        });
   }
 
   getArtifacts(groupIdUrl: string): Observable<Collection<Artifact>> {

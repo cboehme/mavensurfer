@@ -5,11 +5,14 @@ import { Observable } from "rxjs/Observable";
 @Injectable()
 export class ErrorService {
 
-  private errorSubject: Subject<string> = new Subject<string>();
+  private readonly errorSubject: Subject<string>;
 
-  error$: Observable<string> = this.errorSubject.asObservable();
+  readonly error$: Observable<string>;
 
-  constructor() { }
+  constructor() {
+    this.errorSubject = new Subject();
+    this.error$ = this.errorSubject.asObservable();
+  }
 
   public raiseError(value: string): void {
     this.errorSubject.next(value);
