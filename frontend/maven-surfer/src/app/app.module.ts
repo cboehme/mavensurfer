@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientModule } from "@angular/common/http";
@@ -15,6 +15,8 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from "./page-not-found.component";
 
 import { ErrorService } from "./error.service";
+
+import { GlobalErrorHandler } from "./error-handler";
 
 
 @NgModule({
@@ -33,7 +35,11 @@ import { ErrorService } from "./error.service";
     PageNotFoundComponent
   ],
   providers: [
-    ErrorService
+    ErrorService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
   ],
   bootstrap: [AppComponent]
 })
