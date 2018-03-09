@@ -50,10 +50,15 @@ export class NavProjectComponent implements OnInit {
 
   private fetchProjects() {
     this.projectsService.getProjects(this.artifactIdUrl)
-      .subscribe(projects => {
+      .subscribe(
+        projects => {
         this.projects = projects.member;
         this.loading = false;
-      });
+        },
+        error => {
+          this.projects = [];
+          this.loading = false;
+        });
   }
 
 }

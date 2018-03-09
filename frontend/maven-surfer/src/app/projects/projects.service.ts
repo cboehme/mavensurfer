@@ -25,6 +25,8 @@ import { Dependant } from "./dependant";
 import { Dependency } from "./dependency";
 import { Subject } from "rxjs/Subject";
 import { ErrorService } from "../error.service";
+import { catchError } from "rxjs/operators";
+import { of } from "rxjs/observable/of";
 
 @Injectable()
 export class ProjectsService {
@@ -71,7 +73,11 @@ export class ProjectsService {
   }
 
   getProjects(artifactIdUrl: string): Observable<Collection<Project>> {
-    return this.http.get<Collection<Project>>(artifactIdUrl);
+    return this.http.get<Collection<Project>>(artifactIdUrl)
+      .pipe(catchError((err, caught) => {
+        this.errorService.raiseError(err);
+        return Observable.throw(err);
+      }));
   }
 
   getProject(groupdId: string, artifactId: string, version: string): Observable<Project> {
