@@ -52,11 +52,7 @@ export class NavProjectComponent implements OnInit {
     this.projectsService.getProjects(this.artifactIdUrl)
       .subscribe(
         projects => {
-        this.projects = projects.member;
-        this.loading = false;
-        },
-        error => {
-          this.projects = [];
+          this.projects = projects;
           this.loading = false;
         });
   }

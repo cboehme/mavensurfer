@@ -52,7 +52,7 @@ export class ProjectListComponent implements OnChanges {
       this.projects = [];
     } else {
       this.projectsService.getProjects(this.listUrl)
-        .subscribe(projects => this.projects = projects.member);
+        .subscribe(projects => this.projects = projects);
     }
   }
 

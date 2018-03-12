@@ -72,11 +72,12 @@ export class ProjectsService {
         });
   }
 
-  getProjects(artifactIdUrl: string): Observable<Collection<Project>> {
+  getProjects(artifactIdUrl: string): Observable<Project[]> {
     return this.http.get<Collection<Project>>(artifactIdUrl)
+      .map(projects => projects.member)
       .pipe(catchError((err, caught) => {
         this.errorService.raiseError(err);
-        return Observable.throw(err);
+        return of([]);
       }));
   }
 
