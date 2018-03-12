@@ -16,6 +16,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { of as observableOf } from 'rxjs/observable/of'
 
 import { Project } from './project'
 import { Collection } from "./collection";
@@ -26,7 +27,6 @@ import { Dependency } from "./dependency";
 import { Subject } from "rxjs/Subject";
 import { ErrorService } from "../error.service";
 import { catchError } from "rxjs/operators";
-import { of } from "rxjs/observable/of";
 
 @Injectable()
 export class ProjectsService {
@@ -75,10 +75,7 @@ export class ProjectsService {
   getProjects(artifactIdUrl: string): Observable<Project[]> {
     return this.http.get<Collection<Project>>(artifactIdUrl)
       .map(projects => projects.member)
-      .pipe(catchError((err, caught) => {
-        this.errorService.raiseError(err);
-        return of([]);
-      }));
+      .pipe(catchError(this.errorHandlerFor('getProjects', [])));
   }
 
   getProject(groupdId: string, artifactId: string, version: string): Observable<Project> {
@@ -99,6 +96,14 @@ export class ProjectsService {
 
   importProject(groupId: string, artifactId: string, version: string): Observable<any> {
     return this.http.post<any>(this.baseUrl + "/" + groupId + "/" + artifactId + "/" + version, null);
+  }
+
+  private errorHandlerFor<T>(operation: string, response: T) {
+    return (error: any): Observable<T> => {
+      console.log(operation + " failed with " + error);
+      this.errorService.raiseError(error);
+      return observableOf(response);
+    }
   }
 
 }
