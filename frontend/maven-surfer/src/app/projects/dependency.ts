@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {ProjectReference} from "./project-reference";
+import { ProjectReference } from "./project-reference";
 
 export class Dependency extends ProjectReference {
 

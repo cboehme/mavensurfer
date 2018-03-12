@@ -17,7 +17,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ProjectsService } from "./projects.service";
 import { Project } from "./project";
 import { Dependency } from './dependency';
-import { isUndefined } from "util";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: 'app-project-selector',
@@ -43,12 +43,12 @@ export class ProjectSelectorComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (isUndefined(this.reference)) {
+    if (isNullOrUndefined(this.reference)) {
       this.projects = [];
     } else {
       this.projectsService.findProjects(this.reference.groupId + "/" + this.reference.artifactId + "?version-range=" + this.reference.versionRange)
         .subscribe(projects => {
-          this.projects = projects.member;
+          this.projects = projects;
           this.loading = false;
         });
     }

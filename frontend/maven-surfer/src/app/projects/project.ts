@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Referable} from "./referable";
-import {Parent} from "./parent";
-import {Dependency} from "./dependency";
-import {Collection} from "./collection";
+import { Referable } from "./referable";
+import { Parent } from "./parent";
+import { Dependency } from "./dependency";
+import { Collection } from "./collection";
 
 export class Project extends Referable {
 

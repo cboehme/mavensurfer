@@ -32,15 +32,11 @@ export class DependenciesListComponent implements OnChanges {
   constructor(private projectsService: ProjectsService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.fetchDependencies();
-  }
-
-  private fetchDependencies() {
     if (isNullOrUndefined(this.listUrl)) {
       this.dependencies = [];
     } else {
       this.projectsService.getDependencies(this.listUrl)
-        .subscribe(dependencies => this.dependencies = dependencies.member);
+        .subscribe(dependencies => this.dependencies = dependencies);
     }
   }
 

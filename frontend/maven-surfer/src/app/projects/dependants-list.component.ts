@@ -1,7 +1,7 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Dependant} from "./dependant";
-import {ProjectsService} from "./projects.service";
-import {isUndefined} from "util";
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Dependant } from "./dependant";
+import { ProjectsService } from "./projects.service";
+import { isNullOrUndefined } from "util";
 
 @Component({
   selector: 'app-dependants-list',
@@ -29,15 +29,11 @@ export class DependantsListComponent implements OnChanges {
   constructor(private projectsService: ProjectsService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.fetchDependants();
-  }
-
-  private fetchDependants() {
-    if (isUndefined(this.listUrl)) {
+    if (isNullOrUndefined(this.listUrl)) {
       this.dependants = [];
     } else {
       this.projectsService.getDependants(this.listUrl)
-        .subscribe(dependants => this.dependants = dependants.member);
+        .subscribe(dependants => this.dependants = dependants);
     }
   }
 

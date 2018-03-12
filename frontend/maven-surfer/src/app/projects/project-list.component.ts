@@ -51,7 +51,7 @@ export class ProjectListComponent implements OnChanges {
     if (isUndefined(this.listUrl)) {
       this.projects = [];
     } else {
-      this.projectsService.getProjects(this.listUrl)
+      this.projectsService.fetchProjects(this.listUrl)
         .subscribe(projects => this.projects = projects);
     }
   }

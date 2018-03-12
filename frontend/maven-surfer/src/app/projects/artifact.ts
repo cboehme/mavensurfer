@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Referable} from "./referable";
+import { Referable } from "./referable";
 
 export class Artifact extends Referable {
 

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Settings} from "./settings";
-import {ConfigurationService} from "./configuration.service";
-import {log} from "util";
+import { Component, OnInit } from '@angular/core';
+import { Settings } from "./settings";
+import { ConfigurationService } from "./configuration.service";
+import { log } from "util";
 
 @Component({
   selector: 'app-settings-editor',

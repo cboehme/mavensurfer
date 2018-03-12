@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 
-import {Settings} from "./settings";
-import {log} from "util";
+import { Settings } from "./settings";
 
 @Injectable()
 export class ConfigurationService {

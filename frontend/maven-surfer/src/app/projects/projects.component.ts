@@ -13,14 +13,11 @@ export class ProjectsComponent {
 
   groups: Group[] = [];
 
-  constructor(private projectsService: ProjectsService) {
-
-    this.projectsService.groups$
-      .subscribe(groups => this.groups = groups.member);
-  }
+  constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
-    this.projectsService.fetchGroups();
+    this.projectsService.fetchGroups()
+      .subscribe(groups => this.groups = groups);
   }
 
 }

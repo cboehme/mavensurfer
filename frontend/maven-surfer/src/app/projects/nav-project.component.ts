@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, Input, OnInit} from '@angular/core';
-
-import {Artifact} from "./artifact";
-import {Project} from "./project";
-import {ProjectsService} from './projects.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { Project } from "./project";
+import { ProjectsService } from './projects.service';
 
 @Component({
   selector: 'app-nav-project',
@@ -44,12 +42,12 @@ export class NavProjectComponent implements OnInit {
   constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
-    this.loading = true;
     this.fetchProjects();
   }
 
   private fetchProjects() {
-    this.projectsService.getProjects(this.artifactIdUrl)
+    this.loading = true;
+    this.projectsService.fetchProjects(this.artifactIdUrl)
       .subscribe(
         projects => {
           this.projects = projects;

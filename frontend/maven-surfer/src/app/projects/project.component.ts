@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 import "rxjs/add/operator/switchMap";
 import { Project } from "./project";
 import { ProjectsService } from "./projects.service";
@@ -29,14 +29,13 @@ export class ProjectComponent implements OnInit {
   project: Project = new Project();
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private projectsService: ProjectsService) { }
 
   ngOnInit() {
-    this.route.paramMap.switchMap((params: ParamMap) => {
-      return this.projectsService.getProject(params.get("groupId"),
-        params.get("artifactId"), params.get("version"))
-      })
+    this.route.paramMap
+      .switchMap((params: ParamMap) =>
+        this.projectsService.fetchProject(params.get("groupId"),
+          params.get("artifactId"), params.get("version")))
       .subscribe(project => this.project = project);
   }
 

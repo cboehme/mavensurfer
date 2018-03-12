@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SubmissionService } from "./submission.service";
 
 class RepositoryImporterModel {

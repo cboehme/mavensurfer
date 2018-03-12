@@ -17,6 +17,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { of as observableOf } from 'rxjs/observable/of'
+import { catchError } from "rxjs/operators";
+
+import { ErrorService } from "../error.service";
 
 import { Project } from './project'
 import { Collection } from "./collection";
@@ -24,83 +27,56 @@ import { Group } from "./group";
 import { Artifact } from "./artifact";
 import { Dependant } from "./dependant";
 import { Dependency } from "./dependency";
-import { Subject } from "rxjs/Subject";
-import { ErrorService } from "../error.service";
-import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class ProjectsService {
 
   private baseUrl = 'http://localhost:8080/api/projects';
 
-  private groupsSubject: Subject<Collection<Group>>
-    = new Subject<Collection<Group>>();
-  private artifactsSubject: Subject<Collection<Artifact>>
-    = new Subject<Collection<Artifact>>();
-
-  groups$: Observable<Collection<Group>>
-    = this.groupsSubject.asObservable();
-  artifacts$: Observable<Collection<Artifact>>
-    = this.artifactsSubject.asObservable();
-
   constructor(private http: HttpClient,
               private errorService: ErrorService) { }
 
-  fetchGroups(): void {
-    this.http.get<Collection<Group>>(this.baseUrl)
-      .subscribe(
-        value => this.groupsSubject.next(value),
-        error => {
-          if (error.error instanceof ErrorEvent) {
-            this.errorService.raiseError(error.error.message);
-          } else {
-            this.errorService.raiseError(error.error + " (" + error.status + ")");
-          }
-        });
+  fetchGroups(): Observable<Group[]> {
+    return this.fetchCollection(this.baseUrl);
   }
 
-  getArtifacts(groupIdUrl: string): void {
-    this.http.get<Collection<Artifact>>(groupIdUrl)
-      .subscribe(
-        value => this.artifactsSubject.next(value),
-        error => {
-          if (error.error instanceof ErrorEvent) {
-            this.errorService.raiseError(error.error.message);
-          } else {
-            this.errorService.raiseError(error.error + " (" + error.status + ")");
-          }
-        });
+  fetchArtifacts(groupIdUrl: string): Observable<Artifact[]> {
+    return this.fetchCollection(groupIdUrl);
   }
 
-  getProjects(artifactIdUrl: string): Observable<Project[]> {
-    return this.http.get<Collection<Project>>(artifactIdUrl)
-      .map(projects => projects.member)
-      .pipe(catchError(this.errorHandlerFor('getProjects', [])));
+  fetchProjects(artifactIdUrl: string): Observable<Project[]> {
+    return this.fetchCollection(artifactIdUrl);
   }
 
-  getProject(groupdId: string, artifactId: string, version: string): Observable<Project> {
-    return this.http.get<Project>(this.baseUrl + "/" + groupdId + "/" + artifactId + "/" + version);
+  fetchProject(groupdId: string, artifactId: string, version: string): Observable<Project> {
+    return this.http.get<Project>(this.baseUrl + "/" + groupdId + "/" + artifactId + "/" + version)
+      .pipe(catchError(this.errorHandlerFor(null)));
   }
 
-  getDependants(listUrl: string) {
-    return this.http.get<Collection<Dependant>>(listUrl);
+  getDependants(listUrl: string): Observable<Dependant[]> {
+    return this.fetchCollection(listUrl);
   }
 
-  getDependencies(listUrl: string) {
-    return this.http.get<Collection<Dependency>>(listUrl);
+  getDependencies(listUrl: string): Observable<Dependency[]> {
+    return this.fetchCollection(listUrl);
   }
 
-  findProjects(searchUrl: string) {
-    return this.http.get<Collection<Project>>(this.baseUrl + "/" + searchUrl);
+  findProjects(searchUrl: string): Observable<Project[]> {
+    return this.fetchCollection(this.baseUrl + "/" + searchUrl);
   }
 
   importProject(groupId: string, artifactId: string, version: string): Observable<any> {
     return this.http.post<any>(this.baseUrl + "/" + groupId + "/" + artifactId + "/" + version, null);
   }
 
-  private errorHandlerFor<T>(operation: string, response: T) {
+  private fetchCollection<T>(url: string): Observable<T[]> {
+    return this.http.get<Collection<T>>(url)
+      .map(collection => collection.member)
+      .pipe(catchError(this.errorHandlerFor([])));
+  }
+
+  private errorHandlerFor<T>(response: T) {
     return (error: any): Observable<T> => {
-      console.log(operation + " failed with " + error);
       this.errorService.raiseError(error);
       return observableOf(response);
     }

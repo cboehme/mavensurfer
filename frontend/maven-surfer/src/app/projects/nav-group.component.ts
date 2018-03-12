@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {Component, Input, OnInit} from '@angular/core';
-import {Artifact} from "./artifact";
-import {ProjectsService} from "./projects.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { Artifact } from "./artifact";
+import { ProjectsService } from "./projects.service";
 
 @Component({
   selector: 'app-nav-group',
@@ -37,18 +37,15 @@ export class NavGroupComponent implements OnInit {
   loading: boolean;
   artifacts: Artifact[];
 
-  constructor(private projectsService: ProjectsService) {
-
-    this.projectsService.artifacts$
-      .subscribe(artifacts => {
-        this.artifacts = artifacts.member;
-        this.loading = false;
-      });
-  }
+  constructor(private projectsService: ProjectsService) { }
 
   ngOnInit() {
     this.loading = true;
-    this.projectsService.getArtifacts(this.groupIdUrl);
+    this.projectsService.fetchArtifacts(this.groupIdUrl)
+      .subscribe(artifacts => {
+        this.artifacts = artifacts;
+        this.loading = false;
+      });
   }
 
 }
