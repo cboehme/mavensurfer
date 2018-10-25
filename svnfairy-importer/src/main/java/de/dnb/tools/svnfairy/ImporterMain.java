@@ -1,14 +1,9 @@
 package de.dnb.tools.svnfairy;
 
-import java.io.IOException;
 import java.nio.file.Paths;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
 import de.dnb.tools.svnfairy.gateway.PomFileProcessor;
 import de.dnb.tools.svnfairy.model.PomFile;
@@ -30,14 +25,12 @@ public class ImporterMain {
         pomFileProcessor = new PomFileProcessor();
     }
 
-    public static void main(String[] args) throws SAXException,
-            ParserConfigurationException, XPathExpressionException, IOException {
+    public static void main(String[] args) {
 
         new ImporterMain().run();
     }
 
-    private void run() throws SAXException, ParserConfigurationException,
-            XPathExpressionException, IOException {
+    private void run() {
 
         for (PomFile pomFile : pomFileRepository.getPoms()) {
             log.info("Send POM to processing engine: {}", pomFile);
