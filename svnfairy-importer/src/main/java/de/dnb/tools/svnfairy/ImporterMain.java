@@ -27,11 +27,6 @@ public class ImporterMain {
 
         pomFileRepository = new LocalMavenRepository(
                 Paths.get("/home/christoph/Code/svnfairy/svnfairy-importer/testdata"));
-/*
-        pomFileRepository = new NexusRepository(
-                UriBuilder.fromUri("http://nexus.dnb.de/").build(),
-                "releases", "/");
-*/
         pomFileProcessor = new PomFileProcessor();
     }
 
