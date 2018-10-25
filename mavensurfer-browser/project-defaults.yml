@@ -1,0 +1,11 @@
+swarm:
+  ds:
+    connection:
+      url: jdbc:h2:file:~/mavensurfer
+    username: sa
+    password: sa
+
+  logging:
+    loggers:
+      "net.b3e.mavensurfer":
+        level: debug
