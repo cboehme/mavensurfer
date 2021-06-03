@@ -15,7 +15,7 @@
 
     <properties>
         <!-- 3.0.14.Final --><!-- 4.0.0 is required because of https://issues.jboss.org/browse/RESTEASY-1075 -->
-        <version.resteasy>4.0.0.Beta1</version.resteasy>
+        <version.resteasy>4.5.7.Final</version.resteasy>
     </properties>
 
     <dependencyManagement>
